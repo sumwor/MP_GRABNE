@@ -8,7 +8,7 @@ nFiles = size(dataIndex,1);
 for ii = 1:nFiles
     
     % load behavior files
-    fn_beh = dir(fullfile(dataIndex.BehPath{ii},[dataIndex.LogFileName{ii}(1:end-4),'_beh.mat']));
+    fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     load(fullfile(fn_beh.folder,fn_beh.name));
     % load dFF files
     load(fullfile(fn_beh.folder,'dff.mat'));
@@ -44,7 +44,7 @@ for ii = 1:nFiles
         params.window = [-3:0.1:5];
         params.numBootstrapRepeat = 1000;   %number of repeats for bootstrap (for estimating CI)
         params.CI = 0.95;  %confidence interval
-        
+        params.minNumTrial = 50;
         for j=1:numel(cells.dFF)
             psth_output=[];
             for k=1:2

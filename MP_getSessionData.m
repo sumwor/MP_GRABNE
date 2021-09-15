@@ -164,15 +164,15 @@ end
 %if interpulse events are present
 %that means to deliver the reward, we did TTL->interpulse event->TTL->reward
 %event, i.e. deliver 2 consecutive short pulses (instead of 1 long pulse)
-
-if isfield(EVENT,'INTERPULSE')
-    trialData.nInterpulse = sum(strcmp(TYPE,'Nothing') & CODE==EVENT.INTERPULSE);
-    if trialData.nInterpulse > 0
-        rewardCodes = [OUTCOME.REWARDLEFT OUTCOME.REWARDRIGHT];
-        rewardTrials = ismember(trialData.outcome,rewardCodes);
-        trialData.outcomeTimes(rewardTrials) = trialData.outcomeTimes(rewardTrials) - 0.1;  %subtract 100 ms, considering the interpulse event
-    end
-end
+% 
+% if isfield(EVENT,'INTERPULSE')
+%     trialData.nInterpulse = sum(strcmp(TYPE,'Nothing') & CODE==EVENT.INTERPULSE);
+%     if trialData.nInterpulse > 0
+%         rewardCodes = [OUTCOME.REWARDLEFT OUTCOME.REWARDRIGHT];
+%         rewardTrials = ismember(trialData.outcome,rewardCodes);
+%         trialData.outcomeTimes(rewardTrials) = trialData.outcomeTimes(rewardTrials) - 0.1;  %subtract 100 ms, considering the interpulse event
+%     end
+% end
 
 end
 
