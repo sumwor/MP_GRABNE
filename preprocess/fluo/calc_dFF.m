@@ -24,7 +24,7 @@ end
 
 %dF/F = (F(t)-Fo)/Fo
 %to estimate Fo (baseline fluorescence), set moving window for smoothing
-win = 5*60*stackInfo.frameRate;  %window duration = 10 minutes
+win = 2*60*stackInfo.frameRate;  %window duration = 2 minutes
 
 disp(['Calculating dF/F (may take several minutes)...']);
 
