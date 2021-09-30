@@ -125,7 +125,7 @@ for ii = 1:nFiles
             %cumulative reward
             event(:,8)=NaN(size(trials.left));
             for kk = 1:length(trials.left)
-                event(kk,10) = sum(trials.reward(1:kk));
+                event(kk,8) = sum(trials.reward(1:kk));
             end
             event(:,8) = event(:,8)/sum(trials.reward);
             %

@@ -4,7 +4,7 @@ clearvars;
 close all;
 setup_figprop;
 
-root_path = 'E:\data\GRAB_analysis';
+root_path = 'C:\Hongli\data\GRAB_analysis';
 %% matching pennies behavior 
 
 disp('-----------------------------------------------------------');
