@@ -72,7 +72,7 @@ for ii = 1:nFiles
      
                 % find the shortest timeline
                                 
-                psth_panel(1).sig{1} = get_psth(pupil.dia, pupil.t, params.trigTime, 'Pupil change', params );
+                psth_panel(1).sig{1} = get_psth(pupil.dia, pupil.t, params.trigTime(2:end-1), 'Pupil change', params );
            
         
         

@@ -1,0 +1,105 @@
+function fluo_pupil_plots(dataIndex)
+% plot spontaneous pupil & fluorescent dynamics
+
+nFiles = size(dataIndex,1);
+
+for ii = 1:nFiles
+    
+    % load behavior files
+     fn_beh = dir(fullfile(dataIndex.BehPath{ii},'*beh.mat'));
+    load(fullfile(fn_beh.folder,fn_beh.name));
+    
+    % load pupil files
+    date = num2str(dataIndex.DateNumber(ii));
+    pup_name = fullfile(dataIndex.BehPath{ii},['*',date(1:6),'*_pup.mat']);
+    dff_name = fullfile(fn_beh.folder,'dff.mat');
+    
+    fn_pup = dir(pup_name);
+    fn_dff = dir(dff_name);
+    if length(fn_pup) == 1 & length(fn_dff) == 1
+        load(fullfile(fn_pup.folder,fn_pup.name));
+        load(fullfile(fn_dff.folder,fn_dff.name));
+        % make folders to save analysis and plots
+        savematpath = fullfile(dataIndex.BehPath{ii},'analysis-pupil');
+        if ~exist(savematpath,'dir')
+            mkdir(savematpath);
+        end
+        savepupilfigpath = fullfile(dataIndex.BehPath{ii},[date(1:6),'_figs-pupil']);
+        if ~exist(savepupilfigpath,'dir')
+            mkdir(savepupilfigpath);
+        end
+        
+        cd(savepupilfigpath);
+        
+        %% Plot pupil for all trials
+        
+        % MP_plot_pupil( pupil, trialData );
+        
+        %% Plot cue-aligned pupil
+        
+        % plot a single trace, create a gif
+        
+       
+        % tCue = trialData.cueTimes(1):trialData.cueTimes(2);
+        
+        corrCoeff = zeros(1, length(cells.dFF));
+        pupili = interp1(pupil.t,pupil.dia,cells.t);
+        
+        % paper plot 
+%         avedFF = zeros(length(cells.t),1);
+%         for jj  =1:length(cells.dFF)
+%             avedFF = avedFF+cells.dFF{jj}/length(cells.dFF);
+%         end
+%         % plot the last 10 mins of recordings
+%         tstart = pupil.t(end) - 11*60;
+%         tend = pupil.t(end);
+%         pupilPlotInd = pupil.t<tend & pupil.t>=tstart;
+%         figure;
+%         plot(pupil.t(pupilPlotInd),smooth(pupil.dia(pupilPlotInd),120));
+%        
+%         ylim([-2.1,3.9]);
+%         ax1 = gca;   
+%         ax1.YAxis.Visible = 'off'; % remove y-axis
+%         yyaxis right
+%         fluoPlotInd = cells.t<tend & cells.t>=tstart;
+%         hold on; plot(cells.t(fluoPlotInd), smooth(avedFF(fluoPlotInd),120));
+%         ylim([0.045 0.145]);
+%          ax1 = gca;   
+%             ax1.YAxis(2).Visible = 'off'; % remove y-axis
+%              ax1.XAxis.Visible = 'off'; % remove y-axis
+%              set(gca,'box','off');
+%              
+%              % plot scale bar
+%              hold on;
+%              plot([tend-30 tend], [0.1 0.1],'k-');
+%              hold on;
+%              plot([tend-30 tend-30],[0.1 0.12],'k-');
+%              
+%              print(gcf,'-dpng',['spon_pupil_ave' int2str(jj)]);
+%              saveas(gcf, 'spon_pupil_ave', 'fig');
+%              saveas(gcf, 'spon_pupil_ave', 'svg');
+        % plot the whole session
+        for jj = 1:length(cells.dFF)
+           figure('Renderer', 'painters', 'Position', [10 10 2000 600]);
+            plot(pupil.t(end-12000:end),smooth(pupil.dia(end-12000:end),60)); ylabel('Pupil z-score');
+           
+            %ax1.XAxis.Visible = 'off'; % remove x-axis
+            yyaxis right
+            hold on; plot(cells.t(end-18000:end), smooth(cells.dFF{jj}(end-18000:end),100));
+            ylabel('df/f (smoothed)');
+           
+            set(gca,'box','off');
+            print(gcf,'-dpng',['spon_pupil_grid' int2str(jj)]);
+            % calculate correlation
+            cor = corrcoef(pupili,cells.dFF{jj},'Rows','pairwise');
+            corrCoeff(jj) = cor(1,2);
+            close all;
+        end
+        
+        figure;plot(corrCoeff);
+        
+    end
+
+end
+
+end
