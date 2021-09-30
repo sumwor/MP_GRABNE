@@ -48,7 +48,7 @@ for ii = 1:nFiles
         for j=1:numel(cells.dFF)
             psth_output=[];
             
-            psth_panel(1).sig{1} = get_psth( cells.dFF{j}, cells.t, params.trigTime, 'df/f', params );
+            psth_panel(1).sig{1} = get_psth( cells.dFF{j}, cells.t, params.trigTime(2:end), 'df/f', params );
            
             tlabel = ['Cell #',num2str(j)];
             plot_psth(psth_panel,tlabel,params.xtitle);

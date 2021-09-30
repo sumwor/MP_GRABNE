@@ -10,6 +10,13 @@ analysispath = fullfile(root_path,'analysis');
 dataIndex = makeDataIndex(logfilepath, analysispath);
 dataIndex = audi_createBehMatFiles(dataIndex);
 
+%% pupil
+
+createPupilFiles(dataIndex);
+
+% plot pupil-tone PSTH
+audi_pupil_plots(dataIndex);
+%% fluo
 MP_GRAB_preprocess(dataIndex);
 audi_GRAB_plots(dataIndex);
 

@@ -60,9 +60,9 @@ time = logData.values{5}-time_0;   %time starts at first instance of startExpt
 time = double(time)/10000;         %time as double in seconds
 
 % Stimlus trials - which occurred and when?
-cueCodes = STIM; %stimlus-associated codes as vector
+cueCodes = [SPON,STIM]; %stimlus-associated codes as vector
 trialData.cue =  CODE(ismember(CODE,cueCodes));
-trialData.cueTimes = time(CODE==STIM);
+trialData.cueTimes = time(ismember(CODE,cueCodes));
 
 
 
