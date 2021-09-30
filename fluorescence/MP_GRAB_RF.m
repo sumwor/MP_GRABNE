@@ -96,16 +96,24 @@ for ii = 1:nFiles
             %             params_future.trigEvent8 = [NaN;NaN;reward(1:end-2)]; % R(n-2)
             
             % interaction
-            event(:,5) = event(:,1) .* event(:,3);
-            event(:,6) = event(:,2) .* event(:,4);
+            %event(:,5) = event(:,1) .* event(:,3);
+            %event(:,6) = event(:,2) .* event(:,4);
             %             params_future.trigEvent9 = params_future.trigEvent1 .* params_future.trigEvent5;
             %             params_future.trigEvent10 = params_future.trigEvent2 .* params_future.trigEvent6;
             %             params_future.trigEvent11 = params_future.trigEvent3 .* params_future.trigEvent7;
             %             params_future.trigEvent12 = params_future.trigEvent4 .* params_future.trigEvent8;
             
-            % average reward rate on 20 trials window, results shows not
+           
+            
+            % c(n+1)
+            event(:,5) = categorical([choice(2:end);NaN]);  % C(n+1)
+            % r(n+1)
+            event(:,6) = categorical([reward(2:end);NaN]);  % C(n+1)
+            
+             % average reward rate on 20 trials window, results shows not
             % important
-            event(:,7) = NaN(size(trials.go));
+           
+             event(:,7) = NaN(size(trials.go));
             for kk = 1:length(trials.left)
                 if kk <= 20
                     event(kk,7) = sum(trials.reward(1:kk))/kk;
@@ -114,20 +122,16 @@ for ii = 1:nFiles
                 end
             end
             
-            % c(n+1)
-            event(:,8) = categorical([choice(2:end);NaN]);  % C(n+1)
-            % r(n+1)
-            event(:,9) = categorical([reward(2:end);NaN]);  % C(n+1)
             %cumulative reward
-            event(:,10)=NaN(size(trials.left));
+            event(:,8)=NaN(size(trials.left));
             for kk = 1:length(trials.left)
                 event(kk,10) = sum(trials.reward(1:kk));
             end
-            event(:,10) = event(:,10)/sum(trials.reward);
+            event(:,8) = event(:,8)/sum(trials.reward);
             %
             X = array2table(event);
             % first 6 predictors are categorical predictors
-            for uu = [1:6,8:9]
+            for uu = [1:6]
                 X.(uu) = categorical(X.(uu));
             end
             
@@ -210,12 +214,12 @@ for ii = 1:nFiles
 %                             subplot(2,5,mm)
 %                             plot(rf_cr{1}.regr_time, meanPredImp(:,mm))
 %                         end
-            xtitle = {'c(n)','c(n-1)','r(n)','r(n-1)','x(n)','x(n-1)','aveR','c(n+1)','r(n+1)','Cum.R'};
+            xtitle = {'c(n)','c(n-1)','r(n)','r(n-1)','c(n+1)','r(n+1)','aveR','Cum.R'};
             maxValue = max(max(meanPredImp));
             minValue = min(min(meanPredImp));
             figure;
-            for mm = 1:10
-                subplot(2,5,mm)
+            for mm = 1:8
+                subplot(2,4,mm)
                 plot(rf_cr{1}.regr_time, meanPredImp(:,mm))
                 title(xtitle{mm});
                 set(gca,'box','off');
