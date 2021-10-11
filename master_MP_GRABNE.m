@@ -5,6 +5,7 @@ close all;
 setup_figprop;
 
 root_path = 'C:\Hongli\data\GRAB_analysis';
+
 %% matching pennies behavior 
 
 disp('-----------------------------------------------------------');
@@ -33,6 +34,23 @@ for ii = 1:nFiles
     savematpath = dataIndex.BehPath{ii};
     MP_session(dataIndex.BehPath{ii},dataIndex.LogFileName{ii},savematpath);
 end
+save_path = fullfile(root_path,'summary','figs_summary');
+
+
+MP_behaviorPerAnimal(dataIndex,save_path);
+
+MP_behaviorAll(dataIndex(dataIndex.pupil==1,:), save_path);
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% Behavior - Model fitting
+
+model_path = fullfile(root_path,'mat_models');
+
+
+MP_fittingPerAnimal(dataIndex,model_path);
+
+% save the predicted latent variable into each behavior mat files
+MP_saveLatent(dataIndex, model_path);
 
 %% fluorescent signal preprocessing
 MP_GRAB_preprocess(dataIndex);

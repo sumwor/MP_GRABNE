@@ -58,10 +58,13 @@ errorshade(fc(2:end),cxyAll_Ach.bootlow(2:end),cxyAll_Ach.boothigh(2:end),c_Ach,
 hold on;
 plot(fc(2:end),cxyAll_Ach.coeff_bootave(2:end),'-','Color',c_Ach);
 
-xlim([0.01, 0.2]);
+xlim([0.001, 1]);
 set(gca,'box','off')
 set(gca, 'XScale', 'log')
-print(gcf,'-dpng',['spon_pupil_All']);
-saveas(gcf, 'spon_pupil_All', 'fig');
-saveas(gcf, 'spon_pupil_All', 'svg');
+
+xlabel('Coherence (with pupil)');
+
+print(gcf,'-dpng',['spon_pupil_NE_Ach']);
+saveas(gcf, 'spon_pupil_NE_Ach', 'fig');
+saveas(gcf, 'spon_pupil_NE_Ach', 'svg');
 end
