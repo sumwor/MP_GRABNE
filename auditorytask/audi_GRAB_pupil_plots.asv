@@ -72,16 +72,16 @@ for ii = 1:nFiles
         % 0.95 CI is too large
        hold on; plot(psthpupil_panel(1).sig{1}.t,psthpupil_panel(1).sig{1}.signal,'-','Color',[0 0.4470 0.7410]);
        hold on; 
-       ylim([-0.3 0.6]);
+       ylim([-0.3 0.3]);
        ax1 = gca; 
        ax1.YAxis(2).Visible = 'off'; % remove y-axis
        ax1.XAxis.Visible = 'off'; % remove y-axis
         set(gca,'box','off');
         
          hold on;
-             plot([2.5 2.7], [0.18 0.18],'k-');
+             plot([2.5 2.7], [0.13 0.13],'k-');
              hold on;
-             plot([2.7 2.7],[0.18 0.2],'k-');
+             plot([2.7 2.7],[0.13 0.14],'k-');
              hold on;
              plot([0 0],[-0.5 0.5],'k--');
                 print(gcf,'-dpng',['tone-fluo_pupil_ave' ]);
