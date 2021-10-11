@@ -155,12 +155,14 @@ for ii = 1:nFiles
             %
             % reg_cr_future=linear_regr( fluo.dia, fluo.t, future_event, params.trigTime, trialMask, params );
             
-            for j=1:numel(cells.dFF)
+            RF_t = cells.t;
+            RF_dFF = cells.dFF;
+            parfor j=1:numel(RF_dFF)
                 %                 for mm = 1:20
-                if length(cells.t) > length(cells.dFF{1})
-                    rf_cr{j}=random_forest( cells.dFF{j}, cells.t(1:length(cells.dFF{1})), X, params.trigTime, trialMask, params );
+                if length(RF_t) > length(RF_dFF{1})
+                    rf_cr{j}=random_forest( RF_dFF{j}, RF_t(1:length(RF_dFF{1})), X, params.trigTime, trialMask, params );
                 else
-                    rf_cr{j}=random_forest( cells.dFF{j}, cells.t, X, params.trigTime, trialMask, params );
+                    rf_cr{j}=random_forest( RF_dFF{j}, RF_t, X, params.trigTime, trialMask, params );
                 end
                 %                 end
             end

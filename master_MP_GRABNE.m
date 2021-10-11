@@ -47,16 +47,22 @@ MP_GRAB_rawplots(dataIndex);
 %% regression: observable variable, choice, outcome, average reward, cumulative reward
 %% save path
 model_path = fullfile(root_path,'mat_models');
-save_path_pupil = fullfile(root_path,'summary','figs_summary_pupil');
 
+save_path_fluo = fullfile(root_path,'summary','figs_summary_fluo');
 %% Linear regression with choice and reward
 % running regression (choice and reward) on individual sessions
 MP_GRAB_MLR(dataIndex);
 % regression results seems unstable, try amount of variance explained?
 MP_GRAB_MLR_analysis(dataIndex);
+MP_GRAB_MLR_acrossSessions(dataIndex, save_path_fluo)
 
-% random forest is better in estimating weak signals
+%% random forest is better in estimating weak signals
 MP_GRAB_RF(dataIndex);
+MP_GRAB_RF_acrossSessions(dataIndex, save_path_fluo)
 
+%% GLM
+MP_GRAB_GLM(dataIndex);
+% bayesian linear regression
+MP_GRAB_BLM(dataIndex);
 %% PCA
 MP_GRAB_PCA(dataIndex);
