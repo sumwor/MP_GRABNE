@@ -40,6 +40,7 @@ output.signal=nan(numel(output.t),nCells);
 %% find average (by binning/histogram)
 %find the segment of signal and its relative time, around each event
 tempSig=[]; tempTime=[]; tempEvent=[];
+nEvent = numel(eventTime);
 for j=1:numel(eventTime)
     relTime=t-eventTime(j);     %time relative to the event
     
@@ -80,6 +81,7 @@ if ~isnan(CI)
     output.bootavg=squeeze(nanmean(bootSig,2));
     output.bootlow=prctile(bootSig,0.5*(1-CI)*100,2);
     output.boothigh=prctile(bootSig,(1-0.5*(1-CI))*100,2);
+    output.nEvent = nEvent;
 end
 
 end

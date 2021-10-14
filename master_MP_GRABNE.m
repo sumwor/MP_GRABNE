@@ -4,7 +4,7 @@ clearvars;
 close all;
 setup_figprop;
 
-root_path = 'C:\Hongli\data\GRAB_analysis';
+root_path = 'Y:\HongliWang\GRAB_analysis';
 %% matching pennies behavior 
 
 disp('-----------------------------------------------------------');
@@ -49,6 +49,9 @@ MP_GRAB_rawplots(dataIndex);
 model_path = fullfile(root_path,'mat_models');
 
 save_path_fluo = fullfile(root_path,'summary','figs_summary_fluo');
+
+% choice/reward selevitivty
+MP_GRAB_selectivity(dataIndex);
 %% Linear regression with choice and reward
 % running regression (choice and reward) on individual sessions
 MP_GRAB_MLR(dataIndex);
