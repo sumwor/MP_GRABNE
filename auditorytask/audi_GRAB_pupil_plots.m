@@ -46,7 +46,7 @@ for ii = 1:nFiles
             %close;
         end
         params.window = [-1:0.1:3];
-        psthpupil_panel(1).sig{1} = get_psth(pupil.dia, pupil.t, params.trigTime(2:end), 'Pupil change', params );
+        psthpupil_panel(1).sig{1} = get_psth(pupil.dia, pupil.t, params.trigTime(2:end-1), 'Pupil change', params );
           
         gray=[0.7 0.7 0.7];
         avePsth = zeros(size(psth_panel(1).sig{1}.signal,1),1);
@@ -55,28 +55,33 @@ for ii = 1:nFiles
             hold on; 
             t=psth_panel(tt).sig{1}.t;
 
-             plot(t,psth_panel(tt).sig{1}.signal,'Color',gray,'LineWidth',0.5);
+             plot(t,psth_panel(tt).sig{1}.signal,'Color',[0.8500 0.3250 0.0980 0.2],'LineWidth',0.5);
              avePsth = avePsth + psth_panel(tt).sig{1}.signal/length(cells.dFF);
              %errorshade(t,psth_panel(tt).sig{1}.bootlow,psth_panel(tt).sig{1}.boothigh,gray);
         end
         ax1 = gca; 
         ax1.YAxis(1).Visible = 'off'; % remove y-axis
-        
-        hold on; plot(t, avePsth,'k-');
-        ylim([0.05 0.2]);
+        ax1.XAxis.Visible = 'off';
+        hold on; plot(t, avePsth,'-','Color',[0.8500 0.3250 0.0980]);
+        ylim([0.05 0.25]);
         % get average psth
         yyaxis right
-       hold on; plot(psthpupil_panel(1).sig{1}.t,psthpupil_panel(1).sig{1}.signal);
-       ylim([-0.15 0.15]);
+        hold on; 
+        
+       errorshade(psthpupil_panel(1).sig{1}.t,psthpupil_panel(1).sig{1}.bootlow,psthpupil_panel(1).sig{1}.boothigh,[0 0.4470 0.7410], 0.2);
+        % 0.95 CI is too large
+       hold on; plot(psthpupil_panel(1).sig{1}.t,psthpupil_panel(1).sig{1}.signal,'-','Color',[0 0.4470 0.7410]);
+       hold on; 
+       ylim([-0.3 0.6]);
        ax1 = gca; 
        ax1.YAxis(2).Visible = 'off'; % remove y-axis
        ax1.XAxis.Visible = 'off'; % remove y-axis
         set(gca,'box','off');
         
          hold on;
-             plot([2.5 2.7], [0.13 0.13],'k-');
+             plot([2.5 2.7], [0.18 0.18],'k-');
              hold on;
-             plot([2.5 2.5],[0.13 0.15],'k-');
+             plot([2.7 2.7],[0.18 0.2],'k-');
              hold on;
              plot([0 0],[-0.5 0.5],'k--');
                 print(gcf,'-dpng',['tone-fluo_pupil_ave' ]);

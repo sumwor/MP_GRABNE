@@ -2,7 +2,7 @@ function fluo_pupil_plots(dataIndex)
 % plot spontaneous pupil & fluorescent dynamics
 
 nFiles = size(dataIndex,1);
-
+ cxyAll.coeff = [];
 for ii = 1:nFiles
     
     % load behavior files
@@ -16,6 +16,8 @@ for ii = 1:nFiles
     
     fn_pup = dir(pup_name);
     fn_dff = dir(dff_name);
+   
+    
     if length(fn_pup) == 1 & length(fn_dff) == 1
         load(fullfile(fn_pup.folder,fn_pup.name));
         load(fullfile(fn_dff.folder,fn_dff.name));
@@ -57,13 +59,13 @@ for ii = 1:nFiles
 %         figure;
 %         plot(pupil.t(pupilPlotInd),smooth(pupil.dia(pupilPlotInd),120));
 %        
-%         ylim([-2.1,3.9]);
+%         ylim([-2.3,3.7]);
 %         ax1 = gca;   
 %         ax1.YAxis.Visible = 'off'; % remove y-axis
 %         yyaxis right
 %         fluoPlotInd = cells.t<tend & cells.t>=tstart;
 %         hold on; plot(cells.t(fluoPlotInd), smooth(avedFF(fluoPlotInd),120));
-%         ylim([0.045 0.145]);
+%         ylim([-0.05 0.45]);
 %          ax1 = gca;   
 %             ax1.YAxis(2).Visible = 'off'; % remove y-axis
 %              ax1.XAxis.Visible = 'off'; % remove y-axis
@@ -71,35 +73,88 @@ for ii = 1:nFiles
 %              
 %              % plot scale bar
 %              hold on;
-%              plot([tend-30 tend], [0.1 0.1],'k-');
+%              plot([tend-30 tend], [0.3 0.3],'k-');
 %              hold on;
-%              plot([tend-30 tend-30],[0.1 0.12],'k-');
+%              plot([tend tend],[0.3 0.4],'k-');
 %              
 %              print(gcf,'-dpng',['spon_pupil_ave' int2str(jj)]);
 %              saveas(gcf, 'spon_pupil_ave', 'fig');
 %              saveas(gcf, 'spon_pupil_ave', 'svg');
         % plot the whole session
-        for jj = 1:length(cells.dFF)
-           figure('Renderer', 'painters', 'Position', [10 10 2000 600]);
-            plot(pupil.t(end-12000:end),smooth(pupil.dia(end-12000:end),60)); ylabel('Pupil z-score');
-           
-            %ax1.XAxis.Visible = 'off'; % remove x-axis
-            yyaxis right
-            hold on; plot(cells.t(end-18000:end), smooth(cells.dFF{jj}(end-18000:end),100));
-            ylabel('df/f (smoothed)');
-           
-            set(gca,'box','off');
-            print(gcf,'-dpng',['spon_pupil_grid' int2str(jj)]);
-            % calculate correlation
-            cor = corrcoef(pupili,cells.dFF{jj},'Rows','pairwise');
-            corrCoeff(jj) = cor(1,2);
-            close all;
-        end
+%         for jj = 1:length(cells.dFF)
+%            figure('Renderer', 'painters', 'Position', [10 10 2000 600]);
+%             plot(pupil.t,smooth(pupil.dia,60)); ylabel('Pupil z-score');
+%            
+%             %ax1.XAxis.Visible = 'off'; % remove x-axis
+%             yyaxis right
+%             hold on; plot(cells.t, smooth(cells.dFF{jj},100));
+%             ylabel('df/f (smoothed)');
+%            
+%             set(gca,'box','off');
+%             print(gcf,'-dpng',['spon_pupil_grid' int2str(jj)]);
+%             % calculate correlation
+%             cor = corrcoef(pupili,cells.dFF{jj},'Rows','pairwise');
+%             corrCoeff(jj) = cor(1,2);
+%             close all;
+%         end
         
         figure;plot(corrCoeff);
         
-    end
+        % coherence analysis
+        pupInt = interp1(pupil.t,pupil.dia, cells.t);
+        % get rid of the NaN
+        pupI = pupInt(~isnan(pupInt));
+        % sample rate
+        fs = 1/mean(diff(cells.t));
+        [cxy,fc] = mscohere(pupI, cells.dFF{1}(~isnan(pupInt)),[],[],[],fs);
+        cxyList = zeros(length(cells.dFF),length(cxy));
+        for tt = 1:length(cells.dFF)
+        %[cxy,fc] = mscohere(pupI, cells.dFF{1}(~isnan(pupInt)));
+            [cxyList(tt,:),fc] = mscohere(pupI, cells.dFF{tt}(~isnan(pupInt)),[],[],[],fs);
+        end
+        cxyBoot.coeff = cxyList;
+        cxy = getBootstrp(cxyBoot, 0, 0.05);
+        aveCxy = mean(cxyList);
+        figure;
+        plot(fc(2:end),cxy.coeff_bootave(2:end),'k');
+        hold on;
+        gray = [0.7, 0.7, 0.7];
+        %patch([fc fliplr(fc)], [cxy.boothigh  fliplr(cxy.bootlow)], [0.7 0.7 0.7])
+        hold on;
+        errorshade(fc(2:end),cxy.bootlow(2:end),cxy.boothigh(2:end),gray);
+        hold on;plot(fc(2:end),cxy.coeff_bootave(2:end),'k');
+        
+        xlim([0.01, 0.2]);
+        set(gca,'box','off')
+        set(gca, 'XScale', 'log')
+                     print(gcf,'-dpng',['spon_pupil_coh']);
+             saveas(gcf, 'spon_pupil_coh', 'fig');
+             saveas(gcf, 'spon_pupil_coh', 'svg');
 
+        savematname='coherence.mat';
+        save(fullfile(savematpath,savematname),'cxy','fc');
+        
+        cxyAll.coeff = [cxyAll.coeff; cxy.coeff];
+    end
+        
 end
 
+% plot total of 588 grids
+cxyAll = getBootstrp(cxyAll, 0, 0.05);
+        
+        figure;
+        plot(fc(2:end),cxyAll.coeff_bootave(2:end),'k');
+        hold on;
+        gray = [0.7, 0.7, 0.7];
+        %patch([fc fliplr(fc)], [cxy.boothigh  fliplr(cxy.bootlow)], [0.7 0.7 0.7])
+        hold on;
+        errorshade(fc(2:end),cxyAll.bootlow(2:end),cxyAll.boothigh(2:end),gray);
+        hold on;plot(fc(2:end),cxyAll.coeff_bootave(2:end),'k');
+        
+        xlim([0.01, 0.2]);
+        set(gca,'box','off')
+        set(gca, 'XScale', 'log')
+                     print(gcf,'-dpng',['spon_pupil_All']);
+             saveas(gcf, 'spon_pupil_All', 'fig');
+             saveas(gcf, 'spon_pupil_All', 'svg');
 end

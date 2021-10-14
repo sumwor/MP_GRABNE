@@ -3,7 +3,7 @@ clearvars;
 close all;
 setup_figprop;
 
-root_path = 'E:\data\grabne_audi';
+root_path = 'E:\data\grabne_audi\grabne_audi';
 
 logfilepath = fullfile(root_path,'data');
 analysispath = fullfile(root_path,'analysis');
@@ -18,10 +18,12 @@ createPupilFiles(dataIndex);
 audi_pupil_plots(dataIndex(4:6,:));
 %% fluo
 MP_GRAB_preprocess(dataIndex);
-audi_GRAB_plots(dataIndex(4:6,:));
+audi_GRAB_plots(dataIndex(11,:));
 
 %% plot pupil and fluorescence signal together
 % use subject 902
-audi_GRAB_pupil_plots(dataIndex(6,:));
+audi_GRAB_pupil_plots(dataIndex(8,:));
 %% spontaneous recordings
-fluo_pupil_plots(dataIndex(1:3,:));
+fluo_pupil_plots(dataIndex([1:3,5,6],:));
+% coherence
+coherence_plots(dataIndex([1:3,5,6],:));

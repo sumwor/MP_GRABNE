@@ -1,4 +1,4 @@
-function MP_GRAB_RF_acrossSessions(dataIndex, savefigpath)
+function MP_GRABRL_MLR_acrossSessions(dataIndex, savefigpath)
 
 %% reference to Sul et al.2011
 % averaged within subject
@@ -10,7 +10,8 @@ subject_mask = [];
 animalList = unique(dataIndex.Animal);
 
 % load the first file to get some parameters
-all_predImp = [];
+all_coeff = [];
+all_pval= [];
 
 
 % all_coeff_iti_1 = [];
@@ -25,7 +26,7 @@ for ii = 1:nFiles
     % load behavior files
        fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     
-     saveRegName = fullfile(savematpath,'RF_CR_100.mat');  % regression for fluo change
+     saveRegName = fullfile(savematpath,'regRL.mat');  % regression for fluo change
    
     if exist(saveRegName)
         load(saveRegName)
@@ -33,33 +34,23 @@ for ii = 1:nFiles
         subject_mask(end+1) = find(strcmp(animalList, dataIndex.Animal{ii}));
         
         % load choice and reward regression
-%          reg_all.regr_time = rf_cr_change.regr_time;
-%         reg_all.numPredictor = rf_cr_change.numPredictor;
-%         reg_all.nback = rf_cr_change.nback;
-%         reg_all.interaction = rf_cr_change.interaction;
-%           all_coeff = cat(3,all_coeff, rf_cr_change.coeff);
-%         all_pval = cat(3,all_pval, rf_cr_change.pval);
+%          reg_all.regr_time = reg_cr_change.regr_time;
+%         reg_all.numPredictor = reg_cr_change.numPredictor;
+%         reg_all.nback = reg_cr_change.nback;
+%         reg_all.interaction = reg_cr_change.interaction;
+%           all_coeff = cat(3,all_coeff, reg_cr_change.coeff);
+%         all_pval = cat(3,all_pval, reg_cr_change.pval);
         
     
     % load the MLR with C(n+1)
-        for rr = 1:length(rf_cr) 
-            all_predImp = cat(3,all_predImp, rf_cr{rr}.predImp);
-            %all_pval_future = cat(3, all_pval_future, rf_cr{rr}.pval);
+        for rr = 1:length(reg_cr) 
+            all_coeff = cat(3,all_coeff, reg_cr{rr}.coeff);
+            all_pval = cat(3, all_pval, reg_cr{rr}.pval);
         end
-        reg_all.regr_time = rf_cr{1}.regr_time;
-        reg_all.numPredictor = size(rf_cr{1}.predImp,2);
-    
-        % analysis of individual session
-        % plot predImp of c(n) and r(n) in the same plot
-        % merge with ROI-FOV figure
-%         for tt = 81:100
-%             figure; plot(reg_all.regr_time,all_predImp(:,1,tt));hold on;plot(reg_all.regr_time,all_predImp(:,3,tt));
-%         end
-            %all_pval_future = cat(3, all_pval_future, reg_cr{rr}.pval);
-        end
-        reg_all.regr_time = rf_cr{1}.regr_time;
-        reg_all.numPredictor = size(rf_cr{1}.predImp,2);
-  
+        reg_all.regr_time = reg_cr{1}.regr_time;
+        reg_all.numPredictor = reg_cr{1}.numPredictor;
+        reg_all.nback = reg_cr{1}.nback;
+        reg_all.interaction = reg_cr{1}.interaction;
      % load the ITI regression (n+1 and n)
         
        
@@ -78,29 +69,29 @@ for ii = 1:nFiles
         %%  load control regression for choice and reward regression
         %no control for now
 %         
-%         if ~exist('all_coeff_ctrl') && exist('rf_cr_change_ctrl')
+%         if ~exist('all_coeff_ctrl') && exist('reg_cr_change_ctrl')
 %             % initialize the control matrix
-%             fieldsName = fieldnames(rf_cr_change_ctrl);
+%             fieldsName = fieldnames(reg_cr_change_ctrl);
 %             for tt = 1:length(fieldsName)
 %                 all_coeff_ctrl.(fieldsName{tt}) = [];
 %                 all_pval_ctrl.(fieldsName{tt}) = [];
 %             end
 %             
 %         end
-%         if exist('rf_cr_change_ctrl')
+%         if exist('reg_cr_change_ctrl')
 %         % load the regression results
-%             fieldsName = fieldnames(rf_cr_change_ctrl);
+%             fieldsName = fieldnames(reg_cr_change_ctrl);
 %             for uu = 1:length(fieldsName)
-%                 all_coeff_ctrl.(fieldsName{uu}) = cat(3, all_coeff_ctrl.(fieldsName{uu}), rf_cr_change_ctrl.(fieldsName{uu}).coeff);
-%                 all_pval_ctrl.(fieldsName{uu}) = cat(3, all_pval_ctrl.(fieldsName{uu}), rf_cr_change_ctrl.(fieldsName{uu}).pval);
+%                 all_coeff_ctrl.(fieldsName{uu}) = cat(3, all_coeff_ctrl.(fieldsName{uu}), reg_cr_change_ctrl.(fieldsName{uu}).coeff);
+%                 all_pval_ctrl.(fieldsName{uu}) = cat(3, all_pval_ctrl.(fieldsName{uu}), reg_cr_change_ctrl.(fieldsName{uu}).pval);
 %             end
 %             
 %         end   
 %       
 %         % load future control
-%         if ~exist('all_coeff_future_ctrl')  && exist('rf_cr_future_change_ctrl')
+%         if ~exist('all_coeff_future_ctrl')  && exist('reg_cr_future_change_ctrl')
 %             % initialize the control matrix
-%             fieldsName_future = fieldnames(rf_cr_future_change_ctrl);
+%             fieldsName_future = fieldnames(reg_cr_future_change_ctrl);
 %             for tt = 1:length(fieldsName_future)
 %                 all_coeff_future_ctrl.(fieldsName_future{tt}) = [];
 %                 all_pval_future_ctrl.(fieldsName_future{tt}) = [];
@@ -108,11 +99,11 @@ for ii = 1:nFiles
 %         end
 %         % load the regression results
 %         
-%         if exist('rf_cr_future_change_ctrl')
-%             fieldsName_future = fieldnames(rf_cr_future_change_ctrl);
+%         if exist('reg_cr_future_change_ctrl')
+%             fieldsName_future = fieldnames(reg_cr_future_change_ctrl);
 %             for uu = 1:length(fieldsName_future)
-%                 all_coeff_future_ctrl.(fieldsName_future{uu}) = cat(3, all_coeff_future_ctrl.(fieldsName_future{uu}), rf_cr_future_change_ctrl.(fieldsName_future{uu}).coeff);
-%                 all_pval_future_ctrl.(fieldsName_future{uu}) = cat(3, all_pval_future_ctrl.(fieldsName_future{uu}), rf_cr_future_change_ctrl.(fieldsName_future{uu}).pval);
+%                 all_coeff_future_ctrl.(fieldsName_future{uu}) = cat(3, all_coeff_future_ctrl.(fieldsName_future{uu}), reg_cr_future_change_ctrl.(fieldsName_future{uu}).coeff);
+%                 all_pval_future_ctrl.(fieldsName_future{uu}) = cat(3, all_pval_future_ctrl.(fieldsName_future{uu}), reg_cr_future_change_ctrl.(fieldsName_future{uu}).pval);
 %             end
 %         end
     end
@@ -248,34 +239,30 @@ cd(savefigpath);
 % saveas(gcf, 'MLR-change_posneg5_sigSession','svg');
 % 
 %%  linear regression with C(n+1)
-
-
-reg_cr_all.coeff= all_predImp(:,1:8,:);
-
+reg_cr_all.coeff= all_coeff;
 
 % use bootstrp to get coefficient
-rf_cr_all = getBootstrp(rf_cr_all, 0, 0.05);
+reg_cr_all = getBootstrp(reg_cr_all, 0, 0.05);
 
 if ~exist(savefigpath)
     mkdir(savefigpath)
 end
 cd(savefigpath);
-
-
 reg_cr_all.regr_time = reg_all.regr_time;
-reg_cr_all.numPredictor = size(reg_cr_all.coeff,2);
-reg_cr_all.interaction = 0;
+reg_cr_all.numPredictor = reg_all.numPredictor;
+reg_cr_all.nback = reg_all.nback;
+reg_cr_all.interaction = reg_all.interaction;
 reg_cr_all.pvalThresh= 0.01;
 
 % 
 % figure;
 % xAxis = 1:8;
-% bar(xAxis(2:8),rf_cr_future.coeff_bootave(2:8),'FaceColor',[0.7,0.7,0.7])                
+% bar(xAxis(2:8),reg_cr_future.coeff_bootave(2:8),'FaceColor',[0.7,0.7,0.7])                
 % 
 % hold on
-% erneg = rf_cr_future.coeff_bootave(2:8)-rf_cr_future.bootlow(2:8);
-% erpos =rf_cr_future.boothigh(2:8)-rf_cr_future.coeff_bootave(2:8);
-% er = errorbar(xAxis(2:8),rf_cr_future.coeff_bootave(2:8),erneg,erpos);    
+% erneg = reg_cr_future.coeff_bootave(2:8)-reg_cr_future.bootlow(2:8);
+% erpos =reg_cr_future.boothigh(2:8)-reg_cr_future.coeff_bootave(2:8);
+% er = errorbar(xAxis(2:8),reg_cr_future.coeff_bootave(2:8),erneg,erpos);    
 % 
 % er.Color = [0 0 0];                            
 % er.LineStyle = 'none';  
@@ -286,40 +273,37 @@ reg_cr_all.pvalThresh= 0.01;
 % ylabel('Coefficients (a.u.)');
 % title('Coefficient for pupil change - choice and reward');
 xtitle='Time from cue (s)';
- tlabel = {'c(n)','c(n-1)','r(n)','r(n-1)','c(n+1)','r(n+1)','aveR','Cum.R'};
-pvalThresh=0.01;
-
-
-MP_plot_rfImp_fluo(reg_cr_all,pvalThresh,tlabel,xtitle);
-print(gcf,'-dpng','RF_CR_averageSession');    %png format
-saveas(gcf, 'RF_CR_averageSession', 'fig');
-saveas(gcf, 'RF_CR_averageSession','svg');
+tlabel={'C(n)','R(n)','C(n)xR(n)','C(n-1)','R(n-1)', 'C(n-1)xR(n-1)','QL-QR', 'ChosenQ', 'QLC-QRC', 'ChosenQC','Reward Rate', 'Cumulavtive reward'};
+            pvalThresh=0.01;
+MP_plot_regrcoef_fluo(reg_cr_all,pvalThresh,tlabel,xtitle);
+print(gcf,'-dpng','MLR-choiceselection_averageSession');    %png format
+saveas(gcf, 'MLR-choiceselection_averageSession', 'fig');
+saveas(gcf, 'MLR-choiceselection_averageSession','svg');
 
 % plot the figure as number of session that is significant
-% reg_sig.coeff = all_coeff_future;
-% reg_sig.pval = all_pval_future;
-% reg_sig.regr_time = reg_all.regr_time;
-% reg_sig.numPredictor = reg_all.numPredictor;
-% reg_sig.nback = reg_all.nback;
-% reg_sig.interaction = reg_all.interaction;
-% reg_sig.pvalThresh= 0.01;
-% 
-% % preprocessing the control coefficient and pval: bootstrap the pval to
-% % determine a baseline percentage of significant session
-% %reg_pval_futurectrl = getBootstrp(all_pval_futurectrl, 0.01);
-% 
-% if exist('all_pval_future_ctrl')
-%     reg_pval_future_ctrl = getBootstrp(all_pval_future_ctrl, 0.01, 0.05);
-% 
-% % MP_plot_regr(reg_sig,reg_sig.pvalThresh,tlabel,xtitle,[all_pval_sC; all_pval_sR]);
-%     MP_plot_regr_fluo(reg_sig,reg_pval_future_ctrl, reg_sig.pvalThresh,tlabel,xtitle);
-% else
-%     MP_plot_regr_fluo(reg_sig,[], reg_sig.pvalThresh,tlabel,xtitle);
-% end
-% print(gcf,'-dpng','MLR-change-choiceoutcome_future_sigSession');    %png format
-% saveas(gcf, 'MLR-change-choiceoutcome_future_sigSession', 'fig');
-% saveas(gcf, 'MLR-change-choiceoutcome_future_sigSession','svg');
+reg_sig.coeff = all_coeff;
+reg_sig.pval = all_pval;
+reg_sig.regr_time = reg_all.regr_time;
+reg_sig.numPredictor = reg_all.numPredictor;
+reg_sig.nback = reg_all.nback;
+reg_sig.interaction = reg_all.interaction;
+reg_sig.pvalThresh= 0.01;
 
+% preprocessing the control coefficient and pval: bootstrap the pval to
+% determine a baseline percentage of significant session
+%reg_pval_futurectrl = getBootstrp(all_pval_futurectrl, 0.01);
+
+if exist('all_pval_future_ctrl')
+    reg_pval_future_ctrl = getBootstrp(all_pval_future_ctrl, 0.01, 0.05);
+
+% MP_plot_regr(reg_sig,reg_sig.pvalThresh,tlabel,xtitle,[all_pval_sC; all_pval_sR]);
+    MP_plot_regr_fluo(reg_sig,reg_pval_future_ctrl, reg_sig.pvalThresh,tlabel,xtitle);
+else
+    MP_plot_regr_fluo(reg_sig,[], reg_sig.pvalThresh,tlabel,xtitle);
+end
+print(gcf,'-dpng','MLR-choiceselection_sigSession');    %png format
+saveas(gcf, 'MLR-choiceselection_sigSession', 'fig');
+saveas(gcf, 'MLR-choiceselection_sigSession','svg');
 
 
 

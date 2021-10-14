@@ -21,18 +21,18 @@ function [ output ] = random_forest ( signal, t, event, eventTime, trialSubset, 
 
 %% determine levels in Predictors
 % replace undefined with inf to work with function unique()
-temp_event = event;
-for ii = size(event,2)
-    temp =temp_event.(ii);
-    if iscategorical(temp)
-        temp(isundefined(temp)) =  categorical(inf);
-    else % if continuous
-        temp(isnan(temp)) = inf;
-    end
-   temp_event.(ii) = temp;
-end
-countLevels = @(x)numel(categories(categorical(x)));
-numLevels = varfun(countLevels,temp_event,'OutputFormat','uniform');
+% temp_event = event;
+% for ii = size(event,2)
+%     temp =temp_event.(ii);
+%     if iscategorical(temp)
+%         temp(isundefined(temp)) =  categorical(inf);
+%     else % if continuous
+%         temp(isnan(temp)) = inf;
+%     end
+%    temp_event.(ii) = temp;
+% end
+% countLevels = @(x)numel(categories(categorical(x)));
+% numLevels = varfun(countLevels,temp_event,'OutputFormat','uniform');
 
 %% interpolate signal
 
