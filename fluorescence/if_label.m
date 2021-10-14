@@ -18,7 +18,7 @@ if nPred == 8  % for dQ and chosen Q
     if currPred-1 >= 5
         if_xlabel = 1;
     else
-        if_xlaebl = 0;
+        if_xlabel = 0;
     end
     
 elseif nPred == 9 % for control plot

@@ -1,4 +1,4 @@
-function MP_plot_regrcoef_fluo(input,pvalThresh,tlabel,xtitle)
+function MP_plot_rfImp_fluo(input,pvalThresh,tlabel,xtitle)
 % % plot_regr %
 %PURPOSE:   Plot the average coefficients from multiple linear regression
 %AUTHORS:   AC Kwan 170515
@@ -47,41 +47,41 @@ end
 h = figure;
 
 % determine the y limits, ignore the bias term
-ymax = max(max(input.boothigh(:,2:end)));
-ymin = min(min(input.bootlow(:,2:end)));
+ymax = max(max(input.boothigh(:,1:end)));
+ymin = min(min(input.bootlow(:,1:end)));
 
 % ceil to 0.5
 upperLimit = ceil(ymax*2)/2;
 lowerLimit = floor(ymin*2)/2;
 for l=1:nPredictor
     for k=1:1+nback
-        currPredictor=1+k+(l-1)*(1+nback); %first +1 because first term is bias
+        currPredictor=k+(l-1)*(1+nback); %first +1 because first term is bias
         
         % determine whether to put x/y labels
         if nPredictor == 8  % for dQ and chosen Q
-            subplot(2,4,currPredictor-1);hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+            subplot(2,4,currPredictor);hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor+1, nPredictor, nback);
         elseif nPredictor == 9 % for control plot
-            subplot(3,3, currPredictor-1);hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+            subplot(3,3, currPredictor);hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor+1, nPredictor, nback);
         elseif nPredictor == 7  % for RPE/chosenQ regression
-            subplot(2,4,currPredictor-1); hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+            subplot(2,4,currPredictor); hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor+1, nPredictor, nback);
         elseif nPredictor == 2 & nback == 0% for pos/neg RPE
-            subplot(1,2, currPredictor-1); hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+            subplot(1,2, currPredictor); hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor+1, nPredictor, nback);
         elseif nPredictor == 14 % for future choice and reward
-            subplot(4,4, currPredictor-1); hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+            subplot(4,4, currPredictor); hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor+1, nPredictor, nback);
         elseif nPredictor == 5  % for reward 
-            subplot(2,3, currPredictor-1); hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+            subplot(2,3, currPredictor); hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor+1, nPredictor, nback);
         elseif nPredictor == 12 % for dQ and dC
-            subplot(4,3, currPredictor-1); hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+            subplot(4,3, currPredictor); hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor+1, nPredictor, nback);
         else
-            subplot(panelv,1+nback,currPredictor-1); hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+            subplot(panelv,1+nback,currPredictor); hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor+1, nPredictor, nback);
         end
         % patch([t(1) t(end) t(end) t(1)],[0 0 100*pvalThresh 100*pvalThresh],[0.7 0.7 0.7],'EdgeColor','none');
         plot(t,input.coeff_bootave(:,currPredictor),'k.-','MarkerSize',15);
@@ -92,14 +92,14 @@ for l=1:nPredictor
 %         plot(t,input.coeff_bootave(:,currPredictor),'k.-','MarkerSize',15);
         xlim([floor(t(1)) ceil(t(end))]);
         xticks([floor(t(1)):1:ceil(t(end))]);
-        title(tlabel{currPredictor-1});
+        title(tlabel{currPredictor});
         if if_xlabel == 1
             xlabel(xtitle);
         end
         if if_ylabel == 1
-            ylabel('Coefficients');
+            ylabel('Predictor Importance');
         end
-        %yl = ylim;
+        yl = ylim;
         % get significant point
         if isfield(input, 'pval') & ~isfield(input,'bootlow')  % if there is a pvalue and there is no bootstrap
             for ii = 1:length(pval(:,currPredictor,:))
@@ -122,8 +122,8 @@ for l=1:nPredictor
         % plot the vertical line aligned to the cue
         
         % find the right limit
-        %ylim([lowerLimit upperLimit]);
-        %plot([0 0],[lowerLimit upperLimit],'k','LineWidth',1);
+        ylim([lowerLimit upperLimit]);
+        plot([0 0],[lowerLimit upperLimit],'k','LineWidth',1);
     end
 end
 
@@ -144,7 +144,7 @@ if nInteraction > 0
                 xlabel(xtitle);
             end
             if if_ylabel == 1
-                ylabel('Coefficients');
+                ylabel('Predictor Importance');
             end
             yl = ylim;
             % get significant point
