@@ -95,7 +95,13 @@ MP_GRAB_RF(dataIndex);
 MP_GRAB_RF_acrossSessions(dataIndex, save_path_fluo)
 
 MP_GRAB_RF_RL(dataIndex);
+
 MP_GRAB_RF_RL_acrossSessions(dataIndex, save_path_fluo)
+
+MP_GRAB_RF_acrossSessions(dataIndex, save_path_fluo)
+
+
+% motion kernel?
 
 %% GLM
 MP_GRAB_GLM(dataIndex);

@@ -94,28 +94,28 @@ for jj=1:numel(output.regr_time)
    greg.coeff = coeff;
    greg = getBootstrp(greg, 0, 0.001);
     % save the fitted coefficient
-%      figure;plot(greg.coeff_bootave)
-%       hold on;plot(greg.boothigh);
-%        hold on;plot(greg.bootlow);
-%        
+     figure;plot(greg.coeff_bootave)
+      hold on;plot(greg.boothigh);
+       hold on;plot(greg.bootlow);
+       
         for kk=1:size(event,2)
             output.coeff(jj,kk)=greg.coeff_bootave(kk);        %coefficient
-            output.pval(jj,kk)=signtest(greg.coeff(:,kk),0);   %pvalue for coefficient
-            %output.rsquare(jj,kk) = stats.rsquare;
-            %output.adjrsquare(jj,kk) = stats.adjrsquare;
-%             if kk == 1
-%                 output.SumSq(jj,kk) = tbl.SumSq(end);  % last one is error term
-%             else
-%                 output.SumSq(jj,kk) = tbl.SumSq(kk-1);
-%             end
+            output.pval(jj,kk)=sum(greg.bootSig(1,kk,:)>;   %pvalue for coefficient
+            output.rsquare(jj,kk) = stats.rsquare;
+            output.adjrsquare(jj,kk) = stats.adjrsquare;
+            if kk == 1
+                output.SumSq(jj,kk) = tbl.SumSq(end);  % last one is error term
+            else
+                output.SumSq(jj,kk) = tbl.SumSq(kk-1);
+            end
         end
 %evaluate fit using test set
-%     ytest_fit=predict(MDl,event(testIdx,:));
-% 
-%     output_fit.ytest = nan(size(tempsig));
-%     output_fit.ytest(testIdx) = signal(testIdx);  %the test signal, measured
-%     output_fit.ytest_fit = nan(size(signal));
-%     output_fit.ytest_fit(testIdx) = ytest_fit;    %the test signal, predicted
+    ytest_fit=predict(MDl,event(testIdx,:));
+
+    output_fit.ytest = nan(size(tempsig));
+    output_fit.ytest(testIdx) = signal(testIdx);  %the test signal, measured
+    output_fit.ytest_fit = nan(size(signal));
+    output_fit.ytest_fit(testIdx) = ytest_fit;    %the test signal, predicted
 
 end
 warning('on','MATLAB:singularMatrix');

@@ -80,12 +80,15 @@ MP_GRAB_prev_selectivity(dataIndex);
 MP_GRAB_MLR(dataIndex);
 % regression results seems unstable, try amount of variance explained?
 MP_GRAB_MLR_analysis(dataIndex);
+MP_GRAB_MLR_acrossAnimals(dataIndex,save_path_fluo);
 MP_GRAB_MLR_acrossSessions(dataIndex, save_path_fluo)
 
 % latent variable
 MP_GRABRL_MLR(dataIndex)
 MP_GRABRL_MLR_acrossSessions(dataIndex, save_path_fluo)
 
+MP_GRABRL_sumQ_MLR(dataIndex)
+MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex, save_path_fluo)
 
 MP_GRABRL_RPE_MLR(dataIndex);
 MP_GRABRL_RPE_MLR_acrossSessions(dataIndex, save_path_fluo)
@@ -97,8 +100,15 @@ MP_GRAB_RF_acrossSessions(dataIndex, save_path_fluo)
 MP_GRAB_RF_RL(dataIndex);
 MP_GRAB_RF_RL_acrossSessions(dataIndex, save_path_fluo)
 
+% motion kernel?
+% df/f - reward rate/latent variable (sum of Q etc. )
+MP_GRAB_tonic(dataIndex)
+
 %% GLM
-MP_GRAB_GLM(dataIndex);
+MP_GRAB_GLM_findlambda(dataIndex);
+
+lambda = 0.2;  % manually picking lambda = 0.2 for every session for now
+MP_GRAB_GLM(dataIndex,lambda);
 % bayesian linear regression
 MP_GRAB_BLM(dataIndex);
 %% PCA

@@ -1,10 +1,13 @@
-function MP_GRAB_GLM(dataIndex,lambda)
+function MP_GRAB_GLM_findlambda(dataIndex)
 
-%% build a random forest regressor to estimate the variable importance
+%% manuelly find lambda by looking at the average correlation plot
 
-% how to determine whether the coefficient is signficant?
-
-% ridge regression
+% 1. OOB-predictor importance -- how to compare them. mean/std. make sense
+% to compare them
+% 2. add/delete predictors: based on the pred importance.
+% 3. multiple random forest to see how the predictor importance varied: done.
+% The estimation is stable
+% 4. add more variable (c(n+1), r(n+1),cumulative reward)
 nFiles = size(dataIndex,1);
 
 
@@ -126,7 +129,6 @@ for ii = 1:nFiles
             params.interaction = false;
             params.ifplot = 0;
             params.trigTime = trialData.cueTimes;
-            params.lambda = lambda; % lambda for ridge regression
             %only perform analysis on this subset of trials
             %
             %             tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
@@ -137,65 +139,34 @@ for ii = 1:nFiles
             glm_t = cells.t;
             glm_dFF = cells.dFF;
             %parfor j=1:numel(glm_dFF)
-            
-            for j=1:numel(glm_dFF)
+            % randomly pick 20 ROIs for determining lambda
+            runningInd = randsample(numel(glm_dFF),40);
+            tic
+            parfor j=1:numel(runningInd)
                 %                 for mm = 1:20
                 if length(glm_t) > length(glm_dFF{1})
-                    greg_cr{j}=generalized_linear( glm_dFF{j}, glm_t(1:length(glm_dFF{1})), future_event, params.trigTime, trialMask, params );
+                    greg_cr{j}=generalized_linear_lambda( glm_dFF{runningInd(j)}, glm_t(1:length(glm_dFF{1})), future_event, params.trigTime, trialMask, params );
                 else
-                    greg_cr{j}=generalized_linear( glm_dFF{j}, glm_t, future_event, params.trigTime, trialMask, params );
+                    greg_cr{j}=generalized_linear_lambda( glm_dFF{runningInd(j)}, glm_t, future_event, params.trigTime, trialMask, params );
                 end
                 %                 end
             end
-          
-            tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
-                'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward'};
-            pvalThresh = 0.01;
-            
-            coeff = [];
-            
-            for gg = 1:length(greg_cr)
-                 coeff = cat(3,coeff, greg_cr{gg}.coeff);
-            end
-        reg_cr_all.coeff= coeff;
-
-% use bootstrp to get coefficient
-reg_cr_all = getBootstrp(reg_cr_all, 0, 0.05);
-
-
-reg_cr_all.regr_time = greg_cr{1}.regr_time;
-reg_cr_all.numPredictor = greg_cr{1}.numPredictor;
-reg_cr_all.nback =  greg_cr{1}.nback;
-reg_cr_all.interaction =  greg_cr{1}.interaction;
-reg_cr_all.pvalThresh= 0.01;
-
-            MP_plot_regrcoef_fluo(reg_cr_all,pvalThresh,tlabel,params.xtitle);
-           MP_plot_regr(greg_cr,[],params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','GMLR-choiceoutcome');    %png format
-            saveas(gcf, 'GMLR-choiceoutcome', 'fig');
-           
- 
             toc
+            testLambda=[0.05:0.05:0.6];
+            meanCorr = zeros(numel(testLambda),1);
+            for j = 1:numel(runningInd)
+%                 
+%                 figure;
+%                 plot(testLambda,mean(greg_cr{j},2))
+                meanCorr = (meanCorr + mean(greg_cr{j},2)/numel(runningInd));
+            end
             
-%             figure;
-%             for mm = 1:10
-%                 subplot(2,5,mm)
-%                 plot(rf_cr{1}.regr_time, rf_cr{1}.predImp(:,mm))
-%                 title(xtitle{mm});
-%                 set(gca,'box','off');
-%                 ylim([minValue-0.05,maxValue+0.05]);
-%             end
-            %% save all regression into one mat file
-            % save all these in a structure
-            %save(saveRegName, 'reg_cr', 'reg_cr1','reg_cr2','reg_cr3','reg_cr_future','reg_cr_future_ctrl','reg_cr_ctrl');
-            save(saveRFName,'greg_cr');
-            %save(saveRegName_ITI,'reg_cr1_change_1','reg_cr2_change_1','reg_cr3_change_1');
-            close all;
-            %         else
-            %             display('Random forest already done');
-            %         end
-        %else
-        %    display('Random forest already computed');
+            figure;plot(testLambda,meanCorr);
+xlabel('Lambda');
+ylabel('Average correlation of y and yhat');
+print(gcf,'-dpng','ridge-lambda');    %png format
+
+            
         %end
     end
 end

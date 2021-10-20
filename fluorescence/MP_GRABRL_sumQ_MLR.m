@@ -1,4 +1,4 @@
-function MP_GRABRL_MLR(dataIndex)
+function MP_GRABRL_sumQ_MLR(dataIndex)
 
 % add the cutpoint later
 
@@ -35,7 +35,7 @@ for ii = 1:nFiles
             mkdir(savematpath);
         end
         %saveMLRmatpath = fullfile(savematpath,[fn_beh.name(1:end-7),'regRL_CK.mat']);
-        saveRegName = fullfile(savematpath,'regRL.mat');  % regression for fluo changehange
+        saveRegName = fullfile(savematpath,'regRL_sumQ.mat');  % regression for fluo changehange
         % saveMLRmatpath_outcome = fullfile(dataIndex.BehPath{ii},[fn_beh.name(1:end-7),'regRL_lag0_outcome_cut_fitall.mat']);
         
         %if ~exist(saveRegName)
@@ -64,35 +64,33 @@ for ii = 1:nFiles
             % delta Q
             params.trigEvent7=stats_new.ql-stats_new.qr;
             
-            % chosen Q
-            params.trigEvent8 = NaN(length(stats_new.ql),1);
-            params.trigEvent8(stats.c(:,1)==-1) = stats_new.ql(stats.c(:,1)==-1);
-            params.trigEvent8(stats.c(:,1) == 1) = stats_new.qr(stats.c(:,1) == 1);
-            
-            % delta choice kernel
-            params.trigEvent9 = stats_new.ckl - stats_new.ckr;
-            
-            % chosen choice kernel
-            params.trigEvent10 = NaN(length(stats_new.ql),1);
-            params.trigEvent10(stats.c(:,1)==-1) = stats_new.ckl(stats.c(:,1)==-1);
-            params.trigEvent10(stats.c(:,1) == 1) = stats_new.ckr(stats.c(:,1) == 1);
-            
+          
+            % sum Q
+            params.trigEvent8 = stats_new.ql+stats_new.qr;
+%             % delta choice kernel
+%             params.trigEvent9 = stats_new.ckl - stats_new.ckr;
+%             
+%             % chosen choice kernel
+%             params.trigEvent10 = NaN(length(stats_new.ql),1);
+%             params.trigEvent10(stats.c(:,1)==-1) = stats_new.ckl(stats.c(:,1)==-1);
+%             params.trigEvent10(stats.c(:,1) == 1) = stats_new.ckr(stats.c(:,1) == 1);
+%             
             % average reward rate on 20 trials window
-            params.trigEvent11 = NaN(size(trials.go));
+            params.trigEvent9 = NaN(size(trials.go));
             for kk = 1:length(trials.left)
                 if kk <= 20
-                    params.trigEvent11(kk) = sum(trials.reward(1:kk))/kk;
+                    params.trigEvent9(kk) = sum(trials.reward(1:kk))/kk;
                 else
-                    params.trigEvent11(kk) = sum(trials.reward(kk-19:kk))/20;
+                    params.trigEvent9(kk) = sum(trials.reward(kk-19:kk))/20;
                 end
             end
             
             % cumulative reward
-            params.trigEvent12=NaN(size(trials.left));
+            params.trigEvent10=NaN(size(trials.left));
             for kk = 1:length(trials.left)
-                params.trigEvent12(kk) = sum(trials.reward(1:kk));
+                params.trigEvent10(kk) = sum(trials.reward(1:kk));
             end
-            params.trigEvent12 = params.trigEvent12/sum(trials.reward);
+            params.trigEvent10 = params.trigEvent10/sum(trials.reward);
             
             
             % make matrix
@@ -109,7 +107,7 @@ for ii = 1:nFiles
             %only perform analysis on this subset of trials
             fieldname={'go'};
             trialMask = getMask(trials,fieldname);
-            tlabel={'c(n)','r(n)','c(n)xr(n)','c(n-1)','r(n-1)', 'c(n-1)xr(n-1)','dQ', 'ChosenQ','sumQ', 'dK', 'ChosenK','Reward Rate', 'Cumulavtive reward'};
+            tlabel={'c(n)','r(n)','c(n)xr(n)','c(n-1)','r(n-1)', 'c(n-1)xr(n-1)','dQ', 'sumQ','Reward Rate', 'Cumulavtive reward'};
             
             %reg_cr=linear_regr( pupil.dia, pupil.t, RL_event, params.trigTime, trialMask, params );
             %         reg_cr_ctrl = linear_regr_ctrl( pupil.dia, pupil.t, RL_event, params.trigTime, trialMask, params, tlabel);
@@ -126,8 +124,8 @@ for ii = 1:nFiles
                 end
             end
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-choiceselection');    %png format
-            saveas(gcf, 'MLR-choiceselection', 'fig');
+            print(gcf,'-dpng','MLR-sumQ');    %png format
+            saveas(gcf, 'MLR-sumQ', 'fig');
             
             %% running control multilinear regression
             % shuffle every factor one by one, keeping other factors intact

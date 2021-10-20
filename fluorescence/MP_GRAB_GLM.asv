@@ -2,9 +2,12 @@ function MP_GRAB_GLM(dataIndex,lambda)
 
 %% build a random forest regressor to estimate the variable importance
 
-% how to determine whether the coefficient is signficant?
-
-% ridge regression
+% 1. OOB-predictor importance -- how to compare them. mean/std. make sense
+% to compare them
+% 2. add/delete predictors: based on the pred importance.
+% 3. multiple random forest to see how the predictor importance varied: done.
+% The estimation is stable
+% 4. add more variable (c(n+1), r(n+1),cumulative reward)
 nFiles = size(dataIndex,1);
 
 
