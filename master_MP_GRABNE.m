@@ -5,10 +5,10 @@ close all;
 setup_figprop;
 
 
-%root_path = 'Y:\HongliWang\GRAB_analysis';
+root_path = 'Y:\HongliWang\GRAB_analysis';
 
 %root_path = 'C:\Hongli\data\GRAB_analysis';
-root_path = 'V:\HongliWang\GRAB_analysis';
+%root_path = 'V:\HongliWang\GRAB_analysis';
 
 %% matching pennies behavior 
 
@@ -74,6 +74,7 @@ save_path_fluo = fullfile(root_path,'summary','figs_summary_fluo');
 
 % choice/reward selevitivty
 MP_GRAB_selectivity(dataIndex);
+MP_GRAB_prev_selectivity(dataIndex);
 %% Linear regression with choice and reward
 % running regression (choice and reward) on individual sessions
 MP_GRAB_MLR(dataIndex);
@@ -94,7 +95,7 @@ MP_GRAB_RF(dataIndex);
 MP_GRAB_RF_acrossSessions(dataIndex, save_path_fluo)
 
 MP_GRAB_RF_RL(dataIndex);
-MP_GRAB_RF_acrossSessions(dataIndex, save_path_fluo)
+MP_GRAB_RF_RL_acrossSessions(dataIndex, save_path_fluo)
 
 %% GLM
 MP_GRAB_GLM(dataIndex);
@@ -102,3 +103,6 @@ MP_GRAB_GLM(dataIndex);
 MP_GRAB_BLM(dataIndex);
 %% PCA
 MP_GRAB_PCA(dataIndex);
+
+%% try to make the two baseline equal?
+%% find the patchness?

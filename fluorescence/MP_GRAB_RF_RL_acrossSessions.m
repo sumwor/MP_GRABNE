@@ -1,4 +1,4 @@
-function MP_GRAB_RF_acrossSessions(dataIndex, savefigpath)
+function MP_GRAB_RF_RL_acrossSessions(dataIndex, savefigpath)
 
 %% reference to Sul et al.2011
 % averaged within subject
@@ -25,7 +25,7 @@ for ii = 1:nFiles
     % load behavior files
        fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     
-     saveRegName = fullfile(savematpath,'RF_CR_100.mat');  % regression for fluo change
+     saveRegName = fullfile(savematpath,'RF_AS_100.mat');  % regression for fluo change
    
     if exist(saveRegName)
         load(saveRegName)
@@ -116,6 +116,7 @@ for ii = 1:nFiles
 %             end
 %         end
     end
+
         
 
 
@@ -285,14 +286,15 @@ rf_cr_all.pvalThresh= 0.01;
 % ylabel('Coefficients (a.u.)');
 % title('Coefficient for pupil change - choice and reward');
 xtitle='Time from cue (s)';
- tlabel = {'c(n)','c(n-1)','r(n)','r(n-1)','c(n+1)','r(n+1)','aveR','Cum.R'};
+tlabel = {'c(n)','c(n-1)','r(n)','r(n-1)','dQ','chosenQ','dK','chosenK','Reward rate','Cum. reward'};
+          
 pvalThresh=0.01;
 
 
 MP_plot_rfImp_fluo(rf_cr_all,pvalThresh,tlabel,xtitle);
-print(gcf,'-dpng','RF_CR_averageSession');    %png format
-saveas(gcf, 'RF_CR_averageSession', 'fig');
-saveas(gcf, 'RF_CR_averageSession','svg');
+print(gcf,'-dpng','RF_CR_AS_averageSession');    %png format
+saveas(gcf, 'RF_CR_AS_averageSession', 'fig');
+saveas(gcf, 'RF_CR_AS_averageSession','svg');
 
 % plot the figure as number of session that is significant
 % reg_sig.coeff = all_coeff_future;

@@ -168,7 +168,7 @@ for ii = 1:nFiles
             
             RF_t = cells.t;
             RF_dFF = cells.dFF;
-            for j=1:numel(RF_dFF)
+            parfor j=1:numel(RF_dFF)
                 %                 for mm = 1:20
                 if length(RF_t) > length(RF_dFF{1})
                     rf_cr{j}=random_forest( RF_dFF{j}, RF_t(1:length(RF_dFF{1})), X, params.trigTime, trialMask, params );
@@ -206,8 +206,8 @@ for ii = 1:nFiles
             yyaxis right; hold on; plot(meanIntensity);
             hold on; plot(varIntensity);
             legend('R2','meanInt','varInt');
-            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-r2meanvar'));
-            saveas(gcf, fullfile(savefluofigpath,'r2meanvar'), 'fig');
+            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-actionselection-r2meanvar'));
+            saveas(gcf, fullfile(savefluofigpath,'actionselection-r2meanvar'), 'fig');
             
             % get mean predictor importance from all 196 ROIs
             meanPredImp = zeros(length(rf_cr{1}.regr_time),10);
@@ -238,8 +238,8 @@ for ii = 1:nFiles
                 set(gca,'box','off');
                 ylim([minValue-0.05,maxValue+0.05]);
             end
-            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-avepredImp'));
-            saveas(gcf, fullfile(savefluofigpath,'RF-avepredImp'), 'fig');
+            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-actionselection-avepredImp'));
+            saveas(gcf, fullfile(savefluofigpath,'RF-actionselectionavepredImp'), 'fig');
             toc
             
 %             figure;
