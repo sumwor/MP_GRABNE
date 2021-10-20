@@ -72,8 +72,9 @@ for jj=1:numel(output.regr_time)
         t = templateTree('NumVariablesToSample','all',...
             'PredictorSelection','interaction-curvature','Surrogate','on');
         rng(1); % For reproducibility
+        warning('off','all')
         Mdl = fitrensemble(event,tempsig,'Method','Bag','NumLearningCycles',100, ...
-            'Learners',t);
+            'Learners',t,'NumBins',params.bin);
 
         % estimate R^2
         yHat = oobPredict(Mdl);

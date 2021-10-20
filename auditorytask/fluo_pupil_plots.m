@@ -2,7 +2,10 @@ function fluo_pupil_plots(dataIndex)
 % plot spontaneous pupil & fluorescent dynamics
 
 nFiles = size(dataIndex,1);
- cxyAll.coeff = [];
+cxyAll.coeff = [];
+
+ colors=cbrewer('div','RdBu',256);
+    colors=flipud(colors);
 for ii = 1:nFiles
     
     % load behavior files
@@ -44,7 +47,7 @@ for ii = 1:nFiles
        
         % tCue = trialData.cueTimes(1):trialData.cueTimes(2);
         
-        corrCoeff = zeros(1, length(cells.dFF));
+       
         pupili = interp1(pupil.t,pupil.dia,cells.t);
         
         % paper plot 
@@ -80,8 +83,22 @@ for ii = 1:nFiles
 %              print(gcf,'-dpng',['spon_pupil_ave' int2str(jj)]);
 %              saveas(gcf, 'spon_pupil_ave', 'fig');
 %              saveas(gcf, 'spon_pupil_ave', 'svg');
-        % plot the whole session
-%         for jj = 1:length(cells.dFF)
+        % plot the whole session 
+        edgelength = sqrt(numel(cells.dFF));
+    corrCoeff = zeros(edgelength);
+    corrP = zeros(edgelength);
+    for gg = 1:numel(cells.dFF)
+        if mod(gg,edgelength) == 0
+            Ind2 = edgelength;
+        else
+            Ind2 = mod(gg,(edgelength));
+        end
+        if mod(gg,edgelength) == 0
+            Ind1 = gg/edgelength;
+        else
+            Ind1 = floor(gg/edgelength)+1;
+        end
+        
 %            figure('Renderer', 'painters', 'Position', [10 10 2000 600]);
 %             plot(pupil.t,smooth(pupil.dia,60)); ylabel('Pupil z-score');
 %            
@@ -92,14 +109,23 @@ for ii = 1:nFiles
 %            
 %             set(gca,'box','off');
 %             print(gcf,'-dpng',['spon_pupil_grid' int2str(jj)]);
-%             % calculate correlation
-%             cor = corrcoef(pupili,cells.dFF{jj},'Rows','pairwise');
-%             corrCoeff(jj) = cor(1,2);
-%             close all;
-%         end
+            % calculate correlation
+            [cor,p] = corrcoef(pupili,cells.dFF{gg},'Rows','pairwise');
+            corrCoeff(Ind1,Ind2) = cor(1,2);
+            corrP(Ind1,Ind2) = p(1,2);
+            close all;
+        end
         
-        figure;plot(corrCoeff);
-        
+        figure;
+        colorRange = [-0.5 0.5];
+        imagesc(corrCoeff);
+         colormap(colors);
+         caxis([colorRange(1) colorRange(2)]);
+        axis square
+        colorbar;
+        print(gcf,'-dpng',['pupil correlation']);
+         saveas(gcf, ['pupil correlation'], 'fig');
+         
         % coherence analysis
         pupInt = interp1(pupil.t,pupil.dia, cells.t);
         % get rid of the NaN
@@ -125,6 +151,7 @@ for ii = 1:nFiles
         hold on;plot(fc(2:end),cxy.coeff_bootave(2:end),'k');
         
         xlim([0.01, 0.2]);
+        ylim([0 1]);
         set(gca,'box','off')
         set(gca, 'XScale', 'log')
                      print(gcf,'-dpng',['spon_pupil_coh']);

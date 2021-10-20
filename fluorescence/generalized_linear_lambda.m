@@ -1,4 +1,4 @@
-function [ output ] = generalized_linear ( signal, t, event, eventTime, trialSubset, params)
+function [ output ] = generalized_linear_lambda ( signal, t, event, eventTime, trialSubset, params,savefluopath)
 % % linear_regr %
 %% change the regression equation to Sul et al.2011
 %PURPOSE:  random forest regressor
@@ -67,57 +67,63 @@ trainTrials = drawNum(numTest+1:end);
 testTrials = testTrials(testTrials~=1 & testTrials~=numTrial);
 trainTrials = trainTrials(trainTrials~=1 & trainTrials~=numTrial);
 
-
-%identify the fit that has the smallest mean least-square error
-%[~,idx]=min(mean(sqerr,2));
-
-%using that specific lambda parameter, fit again using training +
-%validation set
+testLambda = [0.05:0.05:0.6];
+%testLambda=10.^(-(5:-0.1:0.1));
+numRepeat = 5; %testCC(ll,tt,jj)
+ testCC=zeros(numel(testLambda),numRepeat,numel(output.regr_time));
 for jj=1:numel(output.regr_time)
-    
+    %display(jj);
     idx1=sum(tbyTrial<=output.regr_time(jj)-step_dur/2);     %signal corresponding to current time step
     idx2=sum(tbyTrial<(output.regr_time(jj)+step_dur/2));
     tempsig=squeeze(nanmean(sigbyTrial(idx1:idx2,:),1));
     
-    
-    % run multiple times to get a list of coefficients,
-    % then use bootstrap to determine the CI 
-    
-    numIter = 100;
-    coeff = zeros(numIter,size(event,2));
-    for nn = 1:numIter
-        MDl=fitrlinear(event(trainTrials,:)',tempsig(trainTrials)','ObservationsIn','columns','Learner','leastsquares','Solver','sgd','Regularization','ridge','Lambda',params.lambda,'FitBias',true);
-        coeff(nn,:) = MDl.Beta;
-    end
-    
-    % bootstrap to get mean and confidence interval
-   greg.coeff = coeff;
-   greg = getBootstrp(greg, 0, 0.001);
-    % save the fitted coefficient
-%      figure;plot(greg.coeff_bootave)
-%       hold on;plot(greg.boothigh);
-%        hold on;plot(greg.bootlow);
-%        
-        for kk=1:size(event,2)
-            output.coeff(jj,kk)=greg.coeff_bootave(kk);        %coefficient
-            output.pval(jj,kk)=signtest(greg.coeff(:,kk),0);   %pvalue for coefficient
-            %output.rsquare(jj,kk) = stats.rsquare;
-            %output.adjrsquare(jj,kk) = stats.adjrsquare;
-%             if kk == 1
-%                 output.SumSq(jj,kk) = tbl.SumSq(end);  % last one is error term
-%             else
-%                 output.SumSq(jj,kk) = tbl.SumSq(kk-1);
-%             end
+    for tt = 1:numRepeat  %do 5 repeats for each lambda value
+        beta = zeros(14,numel(testLambda));
+        %among the train trials, use 80% to train and 20% to test the lambda
+        numTrainTrial = numel(trainTrials);
+        numVal = round(0.2*numTrainTrial);
+        
+        drawNum = randsample(numTrainTrial,numTrainTrial,'false'); %each time draw another set without replacement
+        
+        trainvalTrials = trainTrials(drawNum(1:numVal));
+        traintrainTrials = trainTrials(drawNum(numVal+1:end));
+        
+        %     traintrainIdx=false(1,size(signal,1));
+        %     for j=1:numel(traintrainTrials)
+        %         idx1=sum(eventTime(traintrainTrials(j),1)>=t);
+        %         idx2=sum(eventTime(traintrainTrials(j),2)>=t);
+        %         traintrainIdx(idx1:idx2)=true;
+        %     end
+        %     trainvalIdx=false(1,size(signal,1));
+        %     for j=1:numel(trainvalTrials)
+        %         idx1=sum(trigTime(trainvalTrials(j),1)>=t);
+        %         idx2=sum(trigTime(trainvalTrials(j),2)>=t);
+        %         trainvalIdx(idx1:idx2)=true;
+        %     end
+        %
+        for ll=1:numel(testLambda) %test a range of regularization parameter lambda
+            %L2-penalized linear least square regressoin (ridge regression)
+            
+            
+            MDl=fitrlinear(event(traintrainTrials,:)',tempsig(traintrainTrials)','ObservationsIn','columns','Learner','leastsquares','Solver','sgd','Regularization','ridge','Lambda',testLambda(ll),'FitBias',true);
+            yfit=predict(MDl,event(trainvalTrials,:));
+            
+            %computer corr. coefficient between predicted and measured activity
+            tempCC=corrcoef(tempsig(trainvalTrials),yfit,'rows','pairwise');
+            testCC(ll,tt,jj)=tempCC(1,2);
+            %beta(:,ll) = MDl.Beta;
+            %computer squared error between predicted and measured activity
+            %note -- in my hands, this seems to identify the same index more consistently than CC
+            %        sqerr(ll,jj) = sum((yfit - signal(trainvalIdx)).^2);
         end
-%evaluate fit using test set
-%     ytest_fit=predict(MDl,event(testIdx,:));
-% 
-%     output_fit.ytest = nan(size(tempsig));
-%     output_fit.ytest(testIdx) = signal(testIdx);  %the test signal, measured
-%     output_fit.ytest_fit = nan(size(signal));
-%     output_fit.ytest_fit(testIdx) = ytest_fit;    %the test signal, predicted
-
+        
+    end
 end
+
+
+output=squeeze(mean(testCC,2));
+
+
 warning('on','MATLAB:singularMatrix');
 warning('on','stats:pvaluedw:ExactUnavailable');
 

@@ -159,16 +159,18 @@ for ii = 1:nFiles
             params.interaction = false;
             params.ifplot = 0;
             params.trigTime = trialData.cueTimes;
+            params.bin = [];
             %only perform analysis on this subset of trials
             %
             %             tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
             %                 'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward'};
             %
             % reg_cr_future=linear_regr( fluo.dia, fluo.t, future_event, params.trigTime, trialMask, params );
-            
+            tic
             RF_t = cells.t;
             RF_dFF = cells.dFF;
-            for j=1:numel(RF_dFF)
+            warning('off','all')
+            parfor j=1:numel(RF_dFF)
                 %                 for mm = 1:20
                 if length(RF_t) > length(RF_dFF{1})
                     rf_cr{j}=random_forest( RF_dFF{j}, RF_t(1:length(RF_dFF{1})), X, params.trigTime, trialMask, params );
@@ -177,7 +179,8 @@ for ii = 1:nFiles
                 end
                 %                 end
             end
-            
+            toc
+            warning('on','all')
             % check variation, the estimation is stable
             %             rsquare = zeros(80,20);
             %             predImp = zeros(80,7,20);
@@ -238,9 +241,9 @@ for ii = 1:nFiles
                 set(gca,'box','off');
                 ylim([minValue-0.05,maxValue+0.05]);
             end
-            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-avepredImp'));
-            saveas(gcf, fullfile(savefluofigpath,'RF-avepredImp'), 'fig');
-            toc
+            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-actionselection-avepredImp'));
+            saveas(gcf, fullfile(savefluofigpath,'RF-actionselection-avepredImp'), 'fig');
+            
             
 %             figure;
 %             for mm = 1:10
