@@ -5,10 +5,10 @@ close all;
 setup_figprop;
 
 
-root_path = 'Y:\HongliWang\GRAB_analysis';
+%root_path = 'Y:\HongliWang\GRAB_analysis';
 
 %root_path = 'C:\Hongli\data\GRAB_analysis';
-%root_path = 'V:\HongliWang\GRAB_analysis';
+root_path = 'V:\HongliWang\GRAB_analysis';
 
 %% matching pennies behavior 
 
@@ -62,7 +62,9 @@ MP_GRAB_preprocess(dataIndex);
 %% simple plots
 MP_GRAB_simpleplots(dataIndex);
 
-%% model fitting
+
+%% try to make the two baseline equal?
+MP_GRAB_checkbaseline(dataIndex);
 
 %% fluorescent raw single trial plots
 MP_GRAB_rawplots(dataIndex);
@@ -114,5 +116,5 @@ MP_GRAB_BLM(dataIndex);
 %% PCA
 MP_GRAB_PCA(dataIndex);
 
-%% try to make the two baseline equal?
+
 %% find the patchness?
