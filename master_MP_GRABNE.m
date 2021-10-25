@@ -5,10 +5,10 @@ close all;
 setup_figprop;
 
 
-%root_path = 'Y:\HongliWang\GRAB_analysis';
+root_path = 'Y:\HongliWang\GRAB_analysis';
 
 %root_path = 'C:\Hongli\data\GRAB_analysis';
-root_path = 'V:\HongliWang\GRAB_analysis';
+%root_path = 'V:\HongliWang\GRAB_analysis';
 
 %% matching pennies behavior 
 
