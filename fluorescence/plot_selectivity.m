@@ -58,8 +58,8 @@ title(['(A-B)/(A+B)']);
 set(gca,'YDir','normal');
 set(gca,'XTick',[]);
 
-print(gcf,'-dpng',fullfile(savefigpath,[tlabel,' Grid selectivity']));
-            saveas(gcf, fullfile(savefigpath,[tlabel,' Grid selectivity']), 'fig');
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel,' norm']));
+            saveas(gcf, fullfile(savefigpath,[tlabel,' norm']), 'fig');
 % plot the selectivity in 2-D at differnet time point
 edgelength = sqrt(nCells);
 
@@ -107,8 +107,8 @@ caxis([colorRange(1) colorRange(2)]);
 title(['(A-B)/(A+B)']);
 set(gca,'YDir','normal');
 set(gca,'XTick',[]);
-print(gcf,'-dpng',fullfile(savefigpath,[tlabel,' Grid selectivity 0-1s']));
-            saveas(gcf, fullfile(savefigpath,[tlabel,' Grid selectivity 0-1s']), 'fig');
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel,' norm 0-1s']));
+            saveas(gcf, fullfile(savefigpath,[tlabel,' norm 0-1s']), 'fig');
 
             figure;
 subplot(1,3,1)
@@ -128,8 +128,8 @@ caxis([colorRange(1) colorRange(2)]);
 title(['(A-B)/(A+B)']);
 set(gca,'YDir','normal');
 set(gca,'XTick',[]);
-print(gcf,'-dpng',fullfile(savefigpath,[tlabel, ' Grid selectivity 1-2s']));
-saveas(gcf, fullfile(savefigpath,[tlabel, ' Grid selectivity 1-2s']), 'fig');
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel, ' norm 1-2s']));
+saveas(gcf, fullfile(savefigpath,[tlabel, ' norm 1-2s']), 'fig');
 
 figure;
 subplot(1,3,1)
@@ -149,8 +149,8 @@ caxis([colorRange(1) colorRange(2)]);
 title(['(A-B)/(A+B)']);
 set(gca,'YDir','normal');
 set(gca,'XTick',[]);
-print(gcf,'-dpng',fullfile(savefigpath,[tlabel, ' Grid selectivity 2-3s']));
-saveas(gcf, fullfile(savefigpath,[tlabel, ' Grid selectivity 2-3s']), 'fig');
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel, ' norm 2-3s']));
+saveas(gcf, fullfile(savefigpath,[tlabel, ' norm 2-3s']), 'fig');
 
 figure;
 subplot(1,3,1)
@@ -170,8 +170,8 @@ caxis([colorRange(1) colorRange(2)]);
 title(['(A-B)/(A+B)']);
 set(gca,'YDir','normal');
 set(gca,'XTick',[]);
-print(gcf,'-dpng',fullfile(savefigpath,[tlabel, ' Grid selectivity 3-4s']));
-saveas(gcf, fullfile(savefigpath,[tlabel, ' Grid selectivity 3-4s']), 'fig');
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel, ' norm 3-4s']));
+saveas(gcf, fullfile(savefigpath,[tlabel, ' norm 3-4s']), 'fig');
        
 
 end

@@ -58,8 +58,8 @@ title(['(A-B)/(A+B)']);
 set(gca,'YDir','normal');
 set(gca,'XTick',[]);
 
-print(gcf,'-dpng',fullfile(savefigpath,[tlabel,' Grid selectivity']));
-            saveas(gcf, fullfile(savefigpath,[tlabel,' Grid selectivity']), 'fig');
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel,' Choice selectivity norm']));
+            saveas(gcf, fullfile(savefigpath,[tlabel,' Choice selectivity norm']), 'fig');
 % plot the selectivity in 2-D at differnet time point
 edgelength = sqrt(nCells);
 
@@ -73,21 +73,21 @@ pref_3 = zeros(edgelength);
 pref_4 = zeros(edgelength);
 for cc = 1:nCells
     if mod(cc,edgelength) == 0
-        Ind1 = edgelength;
+        Ind2 = edgelength;
     else
-        Ind1 = mod(cc,(edgelength)); 
+        Ind2 = mod(cc,(edgelength)); 
     end
     if mod(cc,edgelength) == 0
-        Ind2 = cc/edgelength;
+        Ind1 = cc/edgelength;
     else
-        Ind2 = floor(cc/edgelength)+1;
+        Ind1 = floor(cc/edgelength)+1;
     end
     tt1 = (t>=0 & t<1);tt2 = (t>=1 & t<2);
      tt3 = (t>=2 & t<3);tt4 = (t>=3 & t<4);
     pref_1(Ind1, Ind2) = nanmean(pref(tt1,cc));
     pref_2(Ind1, Ind2) = nanmean(pref(tt2,cc));
-    pref_1(Ind1, Ind2) = nanmean(pref(tt3,cc));
-    pref_2(Ind1, Ind2) = nanmean(pref(tt4,cc));
+    pref_3(Ind1, Ind2) = nanmean(pref(tt3,cc));
+    pref_4(Ind1, Ind2) = nanmean(pref(tt4,cc));
 end
 figure;
 subplot(1,2,1)
@@ -107,12 +107,54 @@ caxis([colorRange(1) colorRange(2)]);
 title(['(A-B)/(A+B)']);
 set(gca,'YDir','normal');
 set(gca,'XTick',[]);
-print(gcf,'-dpng',fullfile(savefigpath,[tlabel,' Grid selectivity 0-1s']));
-            saveas(gcf, fullfile(savefigpath,[tlabel,' Grid selectivity 0-1s']), 'fig');
-            
-figure;
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel,' norm 0-1s']));
+            saveas(gcf, fullfile(savefigpath,[tlabel,' norm 0-1s']), 'fig');
+
+            figure;
 subplot(1,3,1)
 image(pref_2,'CDataMapping','scaled');
+axis square;
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);      %normalize dF/F heatmap to max of all conditions
+ylabel('Cells');
+%xlabel(xtitle);
+title([tlabel,'at t=1-2s']);
+
+%make a color scale bar
+subplot(3,20,60);
+image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);
+title(['(A-B)/(A+B)']);
+set(gca,'YDir','normal');
+set(gca,'XTick',[]);
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel, ' norm 1-2s']));
+saveas(gcf, fullfile(savefigpath,[tlabel, ' norm 1-2s']), 'fig');
+
+figure;
+subplot(1,3,1)
+image(pref_3,'CDataMapping','scaled');
+axis square;
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);      %normalize dF/F heatmap to max of all conditions
+ylabel('Cells');
+%xlabel(xtitle);
+title([tlabel,'at t=2-3s']);
+
+%make a color scale bar
+subplot(3,20,60);
+image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);
+title(['(A-B)/(A+B)']);
+set(gca,'YDir','normal');
+set(gca,'XTick',[]);
+print(gcf,'-dpng',fullfile(savefigpath,[tlabel, ' Grid selectivity 2-3s']));
+saveas(gcf, fullfile(savefigpath,[tlabel, ' Grid selectivity 2-3s']), 'fig');
+
+figure;
+subplot(1,3,1)
+image(pref_4,'CDataMapping','scaled');
 axis square;
 colormap(colors);
 caxis([colorRange(1) colorRange(2)]);      %normalize dF/F heatmap to max of all conditions
