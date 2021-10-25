@@ -96,15 +96,15 @@ for ii = 1:nFiles
         meanCorrSG(Ind1,Ind2) = mean(autoCorr(gg,:));
     end
     
-%     figure;imagesc(meanCorrSG);
-%     colorRange = [-0.5 0.5];
-%     colormap(colors);
-%     caxis([colorRange(1) colorRange(2)]);
-%     axis square
-%     colorbar;
-%    print(gcf,'-dpng',['Cross-correlation-average correlation coefficient']);    %png format
-%         saveas(gcf, ['Cross-correlation-average correlation coefficient'], 'fig');
-%     
+    figure;imagesc(meanCorrSG);
+    colorRange = [-0.5 0.5];
+    colormap(colors);
+    caxis([colorRange(1) colorRange(2)]);
+    axis square
+    colorbar;
+   print(gcf,'-dpng',['Cross-correlation-average correlation coefficient']);    %png format
+        saveas(gcf, ['Cross-correlation-average correlation coefficient'], 'fig');
+    
                 multidFF = zeros(length(cells.normdFF{1}),length(cells.normdFF));
         for gg = 1:length(cells.normdFF)
             multidFF(:,gg) = cells.normdFF{gg};
@@ -128,7 +128,7 @@ for ii = 1:nFiles
          figure;imagesc(corrMean);
     colormap(colors);
     axis square
-    colorRange = [-1 1];
+    colorRange = [-0.5 0.5];
     colormap(colors);
     caxis([colorRange(1) colorRange(2)]);
     colorbar;
@@ -162,16 +162,16 @@ for ii = 1:nFiles
         plot(f,pow2db(mean(pSpec,1)),'-k')
         xlabel('Frequency (Hz)');
         ylabel('Power Spectrum (dB)');
-        %xlim([0 2]);
+        xlim([0 2]);
         set(gca,'box','off');
         print(gcf,'-dpng',['Single unit average power spectrum']);    %png format
         saveas(gcf, ['Single unit average power spectrum'], 'fig');
     
         % multiunit spectrum
-%         multidFF = zeros(length(cells.normdFF{1}),length(cells.normdFF));
-%         for gg = 1:length(cells.normdFF)
-%             multidFF(:,gg) = cells.normdFF{gg};
-%         end
+        multidFF = zeros(length(cells.normdFF{1}),length(cells.normdFF));
+        for gg = 1:length(cells.normdFF)
+            multidFF(:,gg) = cells.normdFF{gg};
+        end
 %         figure
 %         pspectrum(sum(multidFF,2),frequency);
     % correlation to meandFF

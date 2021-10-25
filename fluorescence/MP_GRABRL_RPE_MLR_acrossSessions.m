@@ -26,7 +26,7 @@ for ii = 1:nFiles
     % load behavior files
        fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     
-     saveRegName = fullfile(savematpath,'regRL_RPE.mat');  % regression for fluo change
+     saveRegName = fullfile(savematpath,'regRL_RPE_norm.mat');  % regression for fluo change
    
     if exist(saveRegName)
         load(saveRegName)
@@ -276,9 +276,9 @@ xtitle='Time from cue (s)';
  tlabel={'C(n)','C(n-1)','R(n-1)','deltaQ','RPE', 'deltaK','CKE','Reward Rate', 'Cumulavtive reward'};
                         pvalThresh=0.01;
 MP_plot_regrcoef_fluo(reg_cr_all,pvalThresh,tlabel,xtitle);
-print(gcf,'-dpng','MLR-valueupdating_averageSession');    %png format
-saveas(gcf, 'MLR-valueupdating_averageSession', 'fig');
-saveas(gcf, 'MLR-valueupdating_averageSession','svg');
+print(gcf,'-dpng','MLR-norm_valueupdating_averageSession');    %png format
+saveas(gcf, 'MLR-norm_valueupdating_averageSession', 'fig');
+saveas(gcf, 'MLR-norm_valueupdating_averageSession','svg');
 
 % plot the figure as number of session that is significant
 reg_sig.coeff = all_coeff;
@@ -301,9 +301,9 @@ if exist('all_pval_future_ctrl')
 else
     MP_plot_regr_fluo(reg_sig,[], reg_sig.pvalThresh,tlabel,xtitle);
 end
-print(gcf,'-dpng','MLR-valueupdating_sigSession');    %png format
-saveas(gcf, 'MLR-valueupdating_sigSession', 'fig');
-saveas(gcf, 'MLR-valueupdating_sigSession','svg');
+print(gcf,'-dpng','MLR_norm-valueupdating_sigSession');    %png format
+saveas(gcf, 'MLR_norm-valueupdating_sigSession', 'fig');
+saveas(gcf, 'MLR-norm_valueupdating_sigSession','svg');
 
 
 

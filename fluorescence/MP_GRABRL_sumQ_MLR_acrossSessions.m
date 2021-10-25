@@ -26,7 +26,7 @@ for ii = 1:nFiles
     % load behavior files
        fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     
-     saveRegName = fullfile(savematpath,'regRL_sumQ.mat');  % regression for fluo change
+     saveRegName = fullfile(savematpath,'regRL_sumQ_norm.mat');  % regression for fluo change
    
     if exist(saveRegName)
         load(saveRegName)
@@ -276,9 +276,9 @@ xtitle='Time from cue (s)';
 tlabel={'c(n)','r(n)','c(n)xr(n)','c(n-1)','r(n-1)', 'c(n-1)xr(n-1)','dQ', 'sumQ','Reward Rate', 'Cumulavtive reward'};
 pvalThresh=0.01;
 MP_plot_regrcoef_fluo(reg_cr_all,pvalThresh,tlabel,xtitle);
-print(gcf,'-dpng','MLR-sumQ_averageSession');    %png format
-saveas(gcf, 'MLR-sumQ_averageSession', 'fig');
-saveas(gcf, 'MLR-sumQ_averageSession','svg');
+print(gcf,'-dpng','MLR-sumQ_norm_averageSession');    %png format
+saveas(gcf, 'MLR-sumQ_norm_averageSession', 'fig');
+saveas(gcf, 'MLR-sumQ_norm_averageSession','svg');
 
 % plot the figure as number of session that is significant
 reg_sig.coeff = all_coeff;
@@ -301,9 +301,9 @@ if exist('all_pval_future_ctrl')
 else
     MP_plot_regr_fluo(reg_sig,[], reg_sig.pvalThresh,tlabel,xtitle);
 end
-print(gcf,'-dpng','MLR-sumQ_sigSession');    %png format
-saveas(gcf, 'MLR-sumQ_sigSession', 'fig');
-saveas(gcf, 'MLR-sumQ_sigSession','svg');
+print(gcf,'-dpng','MLR-sumQ_norm_sigSession');    %png format
+saveas(gcf, 'MLR-sumQ_norm_sigSession', 'fig');
+saveas(gcf, 'MLR-sumQ_norm_sigSession','svg');
 
 
 

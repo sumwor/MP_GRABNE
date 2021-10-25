@@ -94,7 +94,7 @@ for ii = 1:nFiles
             % dummy code: ipsi: 0; contra: 1;
             
             choice = NaN(size(trials.left));
-            if strcmp(dataIndex.RecordingSite{ii},'left')
+            if strcmp(dataIndex.RecordingSite{ii} == 'left'
                 choice(trialData.response == 2) = 0;
                 choice(trialData.response == 3) = 1;
             else

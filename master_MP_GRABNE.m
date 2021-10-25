@@ -66,6 +66,8 @@ MP_GRAB_simpleplots(dataIndex);
 %% try to make the two baseline equal?
 MP_GRAB_checkbaseline(dataIndex);
 
+%% check correlation
+audi_GRAB_correlation(dataIndex);
 %% fluorescent raw single trial plots
 MP_GRAB_rawplots(dataIndex);
 %% regression: observable variable, choice, outcome, average reward, cumulative reward

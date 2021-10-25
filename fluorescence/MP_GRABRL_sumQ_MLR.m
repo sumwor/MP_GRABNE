@@ -35,16 +35,21 @@ for ii = 1:nFiles
             mkdir(savematpath);
         end
         %saveMLRmatpath = fullfile(savematpath,[fn_beh.name(1:end-7),'regRL_CK.mat']);
-        saveRegName = fullfile(savematpath,'regRL_sumQ.mat');  % regression for fluo changehange
+        saveRegName = fullfile(savematpath,'regRL_sumQ_norm.mat');  % regression for fluo changehange
         % saveMLRmatpath_outcome = fullfile(dataIndex.BehPath{ii},[fn_beh.name(1:end-7),'regRL_lag0_outcome_cut_fitall.mat']);
         
         %if ~exist(saveRegName)
             params=[];
             
-            choice = NaN(size(trials.left));
-            choice(trialData.response == 2) = 0;
-            choice(trialData.response == 3) = 1;
-            % dummycode left: 0, right 1
+             choice = NaN(size(trials.left));
+            if strcmp(dataIndex.RecordingSite{ii},'left')
+                choice(trialData.response == 2) = 0;
+                choice(trialData.response == 3) = 1;
+            else
+                choice(trialData.response == 2) = 1;
+                choice(trialData.response == 3) = 0;
+            end
+            % dummycode ipsi: 0, contra 1
             %C(n)
             params.trigEvent = choice;
             %R(n)
@@ -62,8 +67,13 @@ for ii = 1:nFiles
             params.trigEvent6 = params.trigEvent4 .* params.trigEvent5;
             
             % delta Q
-            params.trigEvent7=stats_new.ql-stats_new.qr;
-            
+           params.trigEvent7 = NaN(size(trials.left));
+            if strcmp(dataIndex.RecordingSite{ii},'left')
+                params.trigEvent7 =stats_new.qr-stats_new.ql;
+            else
+                params.trigEvent7 =stats_new.ql-stats_new.qr;
+            end
+          
           
             % sum Q
             params.trigEvent8 = stats_new.ql+stats_new.qr;
@@ -115,7 +125,7 @@ for ii = 1:nFiles
             
             params.xtitle = {'Time from cue (s)'};
             LR_t = cells.t;
-            LR_dFF = cells.dFF;
+            LR_dFF = cells.normdFF;
             parfor j=1:numel(LR_dFF )
                 if length(LR_t) > length(LR_dFF {1})
                     reg_cr{j}=linear_regr( LR_dFF {j}, LR_t(1:length(LR_dFF {1})), RL_event, params.trigTime, trialMask, params );
@@ -124,8 +134,8 @@ for ii = 1:nFiles
                 end
             end
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-sumQ');    %png format
-            saveas(gcf, 'MLR-sumQ', 'fig');
+            print(gcf,'-dpng','MLR-sumQ-norm');    %png format
+            saveas(gcf, 'MLR-sumQ-norm', 'fig');
             
             %% running control multilinear regression
             % shuffle every factor one by one, keeping other factors intact

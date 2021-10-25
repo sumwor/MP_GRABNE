@@ -22,6 +22,10 @@ audi_GRAB_plots(dataIndex(11,:));
 
 %% check correlation
 audi_GRAB_correlation(dataIndex);
+
+% how to find the patchness in the video?
+% autocorrealtion?
+
 %% plot pupil and fluorescence signal together
 % use subject 902
 audi_GRAB_pupil_plots(dataIndex(8,:));

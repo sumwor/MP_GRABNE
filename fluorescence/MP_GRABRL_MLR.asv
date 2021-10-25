@@ -35,7 +35,7 @@ for ii = 1:nFiles
             mkdir(savematpath);
         end
         %saveMLRmatpath = fullfile(savematpath,[fn_beh.name(1:end-7),'regRL_CK.mat']);
-        saveRegName = fullfile(savematpath,'regRL_norm.mat');  % regression for fluo changehange
+        saveRegName = fullfile(savematpath,'regRL.mat');  % regression for fluo changehange
         % saveMLRmatpath_outcome = fullfile(dataIndex.BehPath{ii},[fn_beh.name(1:end-7),'regRL_lag0_outcome_cut_fitall.mat']);
         
         %if ~exist(saveRegName)
@@ -127,7 +127,7 @@ for ii = 1:nFiles
             %only perform analysis on this subset of trials
             fieldname={'go'};
             trialMask = getMask(trials,fieldname);
-            tlabel={'c(n)','r(n)','c(n)xr(n)','c(n-1)','r(n-1)', 'c(n-1)xr(n-1)','dQ', 'ChosenQ', 'dK', 'ChosenK','Reward Rate', 'Cumulavtive reward'};
+            tlabel={'c(n)','r(n)','c(n)xr(n)','c(n-1)','r(n-1)', 'c(n-1)xr(n-1)','dQ', 'ChosenQ','sumQ', 'dK', 'ChosenK','Reward Rate', 'Cumulavtive reward'};
             
             %reg_cr=linear_regr( pupil.dia, pupil.t, RL_event, params.trigTime, trialMask, params );
             %         reg_cr_ctrl = linear_regr_ctrl( pupil.dia, pupil.t, RL_event, params.trigTime, trialMask, params, tlabel);
@@ -135,7 +135,7 @@ for ii = 1:nFiles
             
             params.xtitle = {'Time from cue (s)'};
             LR_t = cells.t;
-            LR_dFF = cells.normdFF;
+            LR_dFF = cells.dFF;
             parfor j=1:numel(LR_dFF )
                 if length(LR_t) > length(LR_dFF {1})
                     reg_cr{j}=linear_regr( LR_dFF {j}, LR_t(1:length(LR_dFF {1})), RL_event, params.trigTime, trialMask, params );
@@ -144,8 +144,8 @@ for ii = 1:nFiles
                 end
             end
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-choiceselection-norm');    %png format
-            saveas(gcf, 'MLR-choiceselection-norm', 'fig');
+            print(gcf,'-dpng','MLR-choiceselection');    %png format
+            saveas(gcf, 'MLR-choiceselection', 'fig');
             
             %% running control multilinear regression
             % shuffle every factor one by one, keeping other factors intact

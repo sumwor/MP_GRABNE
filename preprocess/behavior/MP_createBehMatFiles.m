@@ -20,14 +20,16 @@ behIndex = table(...
     cell(nFile,1),...
     cell(nFile,1),...
     NaN(nFile,1),...
-    NaN(nFile,1)...
+    NaN(nFile,1),...
+    cell(nFile,1)...
     );
 
 behIndex.Properties.VariableNames = {...
     'Animal',...
     'Experiment',... Name of the scenario file ran by NBS Presentation
     'DateNumber',... Date/Time e.g, 1806291321 = 2018 June 29 13:21
-    'BehCreated'...  Has the behavioral .mat file been created
+    'BehCreated',...  Has the behavioral .mat file been created
+    'RecordingSite'...  left/right hemisphere recorded
     };
 
 %% parse and plot the logfiles specified in dataIndex
@@ -82,11 +84,19 @@ for ii = 1:nFile
     behIndex.Animal(ii) = {dataIndex.LogFilePath{ii}(Ind(end-1)+1:Ind(end)-1)};
     behIndex.Experiment(ii) = logfileData.Experiment;
     behIndex.DateNumber(ii) = logfileData.DateNumber;
+    % record from left or right hemisphere
+    
     %%
-    clearvars -except i dataIndex behIndex
+    clearvars -except nFile i dataIndex behIndex
     
 end
-
+% 891,893,894,895,896,897. sub 894 is not sure
+subList = {'891';'893';'894';'895';'896';'897'};
+recordSite = {'left','right','right','left','right','right'};
+for ii = 1:nFile
+    Index = strcmp(subList, behIndex.Animal{ii});
+    behIndex.RecordingSite{ii} = recordSite{Index};
+end
 %% Add the logfile-extracted information into the database index
 
 newDataIndex = [dataIndex behIndex];

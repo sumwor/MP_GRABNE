@@ -26,7 +26,7 @@ for ii = 1:nFiles
     % load behavior files
        fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     
-     saveRegName = fullfile(savematpath,'regCR.mat');  % regression for fluo change
+     saveRegName = fullfile(savematpath,'regCR_norm.mat');  % regression for fluo change
    
     if exist(saveRegName)
         load(saveRegName)
@@ -277,9 +277,9 @@ xtitle='Time from cue (s)';
         'c(n+1)*r(n+1)','c(n)*r(n)','c(n-1)*r(n-1)','c(n-2)*r(n-2)','Reward Rate','Cumulative Reward'};
 pvalThresh=0.01;
 MP_plot_regrcoef_fluo(reg_cr_all,pvalThresh,tlabel,xtitle);
-print(gcf,'-dpng','MLR-change-choiceoutcome_future_averageSession');    %png format
-saveas(gcf, 'MLR-change-choiceoutcome_future_averageSession', 'fig');
-saveas(gcf, 'MLR-change-choiceoutcome_future_averageSession','svg');
+print(gcf,'-dpng','MLR-norm-choiceoutcome_future_averageSession');    %png format
+saveas(gcf, 'MLR-norm-choiceoutcome_future_averageSession', 'fig');
+saveas(gcf, 'MLR-norm-choiceoutcome_future_averageSession','svg');
 
 % plot the figure as number of session that is significant
 reg_sig.coeff = all_coeff_future;
@@ -302,9 +302,9 @@ if exist('all_pval_future_ctrl')
 else
     MP_plot_regr_fluo(reg_sig,[], reg_sig.pvalThresh,tlabel,xtitle);
 end
-print(gcf,'-dpng','MLR-change-choiceoutcome_future_sigSession');    %png format
-saveas(gcf, 'MLR-change-choiceoutcome_future_sigSession', 'fig');
-saveas(gcf, 'MLR-change-choiceoutcome_future_sigSession','svg');
+print(gcf,'-dpng','MLR-norm-choiceoutcome_future_sigSession');    %png format
+saveas(gcf, 'MLR-norm-choiceoutcome_future_sigSession', 'fig');
+saveas(gcf, 'MLR-norm-choiceoutcome_future_sigSession','svg');
 
 
 
