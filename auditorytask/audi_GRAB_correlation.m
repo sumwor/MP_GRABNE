@@ -21,11 +21,11 @@ for ii = 1:nFiles
     end
     cd(savefigpath)
    
-     autoCorr = zeros(length(cells.normdFF));
-     autoCorrP = zeros(length(cells.normdFF));
-        for uu = 1:length(cells.normdFF)
-            for vv = 1:length(cells.normdFF)
-                [autoCorr(uu,vv),autoCorrP(uu,vv)] = corr(cells.normdFF{uu}, cells.normdFF{vv});
+     autoCorr = zeros(length(cells.dFF));
+     autoCorrP = zeros(length(cells.dFF));
+        for uu = 1:length(cells.dFF)
+            for vv = 1:length(cells.dFF)
+                [autoCorr(uu,vv),autoCorrP(uu,vv)] = corr(cells.dFF{uu}, cells.dFF{vv});
             end
         end
     % plot correlation historgram
@@ -52,7 +52,7 @@ for ii = 1:nFiles
     frequency = 1/mean(diff(cells.t));
     timeWin = 200;
 %     for gg = 1:20
-%         [c,lags] = xcorr(cells.normdFF{98},cells.normdFF{gg},'normalized');
+%         [c,lags] = xcorr(cells.dFF{98},cells.dFF{gg},'normalized');
 %         lagTime = lags/frequency;
 %         figure;
 %         stem(lagTime(lagTime>-timeWin & lagTime<timeWin),c(lagTime>-timeWin & lagTime<timeWin));
@@ -68,7 +68,7 @@ for ii = 1:nFiles
 %     end
     
     % plot correlation diagram based on pvalue
-    sigCorr = zeros(length(cells.normdFF));
+    sigCorr = zeros(length(cells.dFF));
     sigCorr(autoCorr>0 & autoCorrP<0.05) = 1;
     sigCorr(autoCorr<0 & autoCorrP<0.05) = -1;
     figure;imagesc(sigCorr);
@@ -79,9 +79,9 @@ for ii = 1:nFiles
     colors=cbrewer('div','RdBu',256);
     colors=flipud(colors);
 
-    edgelength = sqrt(numel(cells.normdFF));
+    edgelength = sqrt(numel(cells.dFF));
     meanCorrSG = zeros(edgelength);
-    for gg = 1:numel(cells.normdFF)
+    for gg = 1:numel(cells.dFF)
         if mod(gg,edgelength) == 0
             Ind2 = edgelength;
         else
@@ -105,14 +105,14 @@ for ii = 1:nFiles
 %    print(gcf,'-dpng',['Cross-correlation-average correlation coefficient']);    %png format
 %         saveas(gcf, ['Cross-correlation-average correlation coefficient'], 'fig');
 %     
-                multidFF = zeros(length(cells.normdFF{1}),length(cells.normdFF));
-        for gg = 1:length(cells.normdFF)
-            multidFF(:,gg) = cells.normdFF{gg};
+                multidFF = zeros(length(cells.dFF{1}),length(cells.dFF));
+        for gg = 1:length(cells.dFF)
+            multidFF(:,gg) = cells.dFF{gg};
         end
         meandFF = mean(multidFF,2);
         % correlation with mean dFF
         corrMean = zeros(edgelength);  
-        for gg = 1:length(cells.normdFF)
+        for gg = 1:length(cells.dFF)
             if mod(gg,edgelength) == 0
                 Ind2 = edgelength;
             else
@@ -123,7 +123,7 @@ for ii = 1:nFiles
             else
                 Ind1 = floor(gg/edgelength)+1;
             end
-            corrMean(Ind1,Ind2) = corr(cells.normdFF{gg}, meandFF);
+            corrMean(Ind1,Ind2) = corr(cells.dFF{gg}, meandFF);
         end
          figure;imagesc(corrMean);
     colormap(colors);
@@ -137,8 +137,8 @@ for ii = 1:nFiles
     
 %      frequency = 1/mean(diff(cells.t));
 %     timeWin = 200;
-%     for gg = 1:numel(cells.normdFF)
-%         [c,lags] = xcorr(cells.normdFF{gg},meandFF,'normalized');
+%     for gg = 1:numel(cells.dFF)
+%         [c,lags] = xcorr(cells.dFF{gg},meandFF,'normalized');
 %         lagTime = lags/frequency;
 %         figure;
 %         stem(lagTime(lagTime>-timeWin & lagTime<timeWin),c(lagTime>-timeWin & lagTime<timeWin));
@@ -154,8 +154,8 @@ for ii = 1:nFiles
 %     end
         %% power spectrum
         pSpec = [];
-        for gg = 1:numel(cells.normdFF)
-            [p,f] = pspectrum(cells.normdFF{gg},frequency);
+        for gg = 1:numel(cells.dFF)
+            [p,f] = pspectrum(cells.dFF{gg},frequency);
             pSpec = [pSpec;p'];
         end
         figure;
@@ -168,9 +168,9 @@ for ii = 1:nFiles
         saveas(gcf, ['Single unit average power spectrum'], 'fig');
     
         % multiunit spectrum
-%         multidFF = zeros(length(cells.normdFF{1}),length(cells.normdFF));
-%         for gg = 1:length(cells.normdFF)
-%             multidFF(:,gg) = cells.normdFF{gg};
+%         multidFF = zeros(length(cells.dFF{1}),length(cells.dFF));
+%         for gg = 1:length(cells.dFF)
+%             multidFF(:,gg) = cells.dFF{gg};
 %         end
 %         figure
 %         pspectrum(sum(multidFF,2),frequency);

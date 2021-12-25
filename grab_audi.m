@@ -3,7 +3,7 @@ clearvars;
 close all;
 setup_figprop;
 
-root_path = 'E:\data\grabne_audi\grabne_audi';
+root_path = 'E:\grabne_audi\grabne_audi';
 
 logfilepath = fullfile(root_path,'data');
 analysispath = fullfile(root_path,'analysis');
@@ -15,21 +15,21 @@ dataIndex = audi_createBehMatFiles(dataIndex);
 createPupilFiles(dataIndex);
 
 % plot pupil-tone PSTH
-audi_pupil_plots(dataIndex(4:6,:));
+audi_pupil_plots(dataIndex([16,19],:));
 %% fluo
-MP_GRAB_preprocess(dataIndex);
-audi_GRAB_plots(dataIndex(11,:));
+MP_GRAB_preprocess(dataIndex([5,8,16,19],:));
+audi_GRAB_plots(dataIndex([16,19],:));
 
 %% check correlation
-audi_GRAB_correlation(dataIndex);
+audi_GRAB_correlation(dataIndex([7:9,16:18],:));
 
 % how to find the patchness in the video?
 % autocorrealtion?
 
 %% plot pupil and fluorescence signal together
 % use subject 902
-audi_GRAB_pupil_plots(dataIndex(8,:));
+audi_GRAB_pupil_plots(dataIndex([16,19],:));
 %% spontaneous recordings
-fluo_pupil_plots(dataIndex([1:3,5,6],:));
+fluo_pupil_plots(dataIndex([5,8],:));
 % coherence
 coherence_plots(dataIndex([1:3,5,6],:));

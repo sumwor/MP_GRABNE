@@ -72,8 +72,13 @@ for ii = 1:nFiles
             nPred = 10; nTrials = length(trials.left);
             event = zeros(nTrials,nPred);
             choice = NaN(size(trials.left));
-            choice(trialData.response == 2) = 0;
-            choice(trialData.response == 3) = 1;
+          if strcmp(dataIndex.RecordingSite{ii},'left')
+                choice(trialData.response == 2) = 0;
+                choice(trialData.response == 3) = 1;
+            else
+                choice(trialData.response == 2) = 1;
+                choice(trialData.response == 3) = 0;
+            end
             
             %params_future.trigEvent1 = [choice(2:end);NaN];  % C(n+1)
             %params_future.trigEvent2 = choice; %C(n)
@@ -148,6 +153,7 @@ for ii = 1:nFiles
             params.interaction = false;
             params.ifplot = 0;
             params.trigTime = trialData.cueTimes;
+            params.bin = [];
             %only perform analysis on this subset of trials
             %
             %             tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
@@ -156,7 +162,7 @@ for ii = 1:nFiles
             % reg_cr_future=linear_regr( fluo.dia, fluo.t, future_event, params.trigTime, trialMask, params );
             
             RF_t = cells.t;
-            RF_dFF = cells.dFF;
+            RF_dFF = cells.normdFF;
             parfor j=1:numel(RF_dFF)
                 %                 for mm = 1:20
                 if length(RF_t) > length(RF_dFF{1})
@@ -195,8 +201,8 @@ for ii = 1:nFiles
             yyaxis right; hold on; plot(meanIntensity);
             hold on; plot(varIntensity);
             legend('R2','meanInt','varInt');
-            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-r2meanvar'));
-            saveas(gcf, fullfile(savefluofigpath,'r2meanvar'), 'fig');
+            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-r2meanvar-norm'));
+            saveas(gcf, fullfile(savefluofigpath,'r2meanvar-norm'), 'fig');
             
             % get mean predictor importance from all 196 ROIs
             meanPredImp = zeros(length(rf_cr{1}.regr_time),10);
@@ -227,8 +233,8 @@ for ii = 1:nFiles
                 set(gca,'box','off');
                 ylim([minValue-0.05,maxValue+0.05]);
             end
-            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-avepredImp'));
-            saveas(gcf, fullfile(savefluofigpath,'RF-avepredImp'), 'fig');
+            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-avepredImp-norm'));
+            saveas(gcf, fullfile(savefluofigpath,'RF-avepredImp-norm'), 'fig');
             toc
             
 %             figure;
