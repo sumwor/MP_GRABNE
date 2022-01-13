@@ -45,36 +45,7 @@ for ii = 1:nFiles
         params.numBootstrapRepeat = 1000;   %number of repeats for bootstrap (for estimating CI)
         params.CI = 0.95;  %confidence interval
         params.minNumTrial = 50;
-%         for j=1:numel(cells.dFF)
-%             psth_output=[];
-%             for k=1:2
-%                 fieldname=[];
-%                 if k==1 %panel 1
-%                     fieldname{1}={'left','reward'};
-%                     fieldname{2}={'left','noreward'};
-%                 elseif k==2 %panel 2
-%                     fieldname{1}={'right','reward'};
-%                     fieldname{2}={'right','noreward'};
-%                 end
-%                 for kk=1:numel(fieldname)
-%                     trialMask = getMask(trials,fieldname{kk});
-%                     psth_panel(k).sig{kk} = get_psth( cells.dFF{j}, cells.t, params.trigTime(trialMask), strjoin(fieldname{kk}), params );
-%                 end
-%             end
-%             
-%             if cells.isRedCell{j}
-%                 tlabel = ['RED Cell ' int2str(j)];
-%             else
-%                 tlabel = ['Cell ' int2str(j)];
-%             end
-%             plot_psth(psth_panel,tlabel,params.xtitle);
-%             print(gcf,'-dpng',fullfile(savefigpath,['cell' int2str(j)]));
-%             close;
-%         end
-        
-        %% normalized df/f
-        if isfield(cells,'normdFF')
-            for j=1:numel(cells.dFF)
+        for j=1:numel(cells.dFF)
             psth_output=[];
             for k=1:2
                 fieldname=[];
@@ -87,7 +58,7 @@ for ii = 1:nFiles
                 end
                 for kk=1:numel(fieldname)
                     trialMask = getMask(trials,fieldname{kk});
-                    psth_panel(k).sig{kk} = get_psth( cells.normdFF{j}, cells.t, params.trigTime(trialMask), strjoin(fieldname{kk}), params );
+                    psth_panel(k).sig{kk} = get_psth( cells.dFF{j}, cells.t, params.trigTime(trialMask), strjoin(fieldname{kk}), params );
                 end
             end
             
@@ -97,10 +68,39 @@ for ii = 1:nFiles
                 tlabel = ['Cell ' int2str(j)];
             end
             plot_psth(psth_panel,tlabel,params.xtitle);
-            print(gcf,'-dpng',fullfile(savefigpath,['normcell' int2str(j)]));
+            print(gcf,'-dpng',fullfile(savefigpath,['cell' int2str(j)]));
             close;
-            end
         end
+        
+        %% normalized df/f
+%         if isfield(cells,'normdFF')
+%             for j=1:numel(cells.dFF)
+%             psth_output=[];
+%             for k=1:2
+%                 fieldname=[];
+%                 if k==1 %panel 1
+%                     fieldname{1}={'left','reward'};
+%                     fieldname{2}={'left','noreward'};
+%                 elseif k==2 %panel 2
+%                     fieldname{1}={'right','reward'};
+%                     fieldname{2}={'right','noreward'};
+%                 end
+%                 for kk=1:numel(fieldname)
+%                     trialMask = getMask(trials,fieldname{kk});
+%                     psth_panel(k).sig{kk} = get_psth( cells.normdFF{j}, cells.t, params.trigTime(trialMask), strjoin(fieldname{kk}), params );
+%                 end
+%             end
+%             
+%             if cells.isRedCell{j}
+%                 tlabel = ['RED Cell ' int2str(j)];
+%             else
+%                 tlabel = ['Cell ' int2str(j)];
+%             end
+%             plot_psth(psth_panel,tlabel,params.xtitle);
+%             print(gcf,'-dpng',fullfile(savefigpath,['normcell' int2str(j)]));
+%             close;
+%             end
+%         end
     end
     % plot fluorescent signal align to left/right lick
 %     params_left = [];

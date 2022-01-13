@@ -23,7 +23,7 @@ for ii = 1:nFiles
     
     tic
     
-    cells = MP_GRAB_normalizedFF(cells, trialData);
+    %cells = MP_GRAB_normalizedFF(cells, trialData);
     toc
     %figure;histogram(cells.dFF{1});
     
@@ -33,19 +33,23 @@ for ii = 1:nFiles
     % this
     
     % use the grand mean? 
-%     edges = 0:0.01:0.25;
-%     figure;histogram(aveBaseBC,edges)
+    %edges = 0:0.01:0.25;
+    %figure;histogram(aveBaseBC,edges)
 %     
   
     
     % two peaks
-%     aveBaseline = zeros(1, length(trialData.cue));
-%     for tt = 1:length(trialData.cue)
-%         aveBaseline(tt) = nanmean(cells.dFF{1}(cells.t>trialData.cueTimes(tt)-1 & cells.t<trialData.cueTimes(tt)));
-%     end
-%     figure; histogram(aveBaseline);
-    
-    % detect change point? too sensitive sometimes, try to align by cue
+      savefluofigpath = fullfile(fn_beh.folder,'figs_analysis');
+    aveBaseline = zeros(1, length(trialData.cue));
+    for tt = 1:length(trialData.cue)
+        aveBaseline(tt) = nanmean(cells.dFF{1}(cells.t>trialData.cueTimes(tt)-1 & cells.t<trialData.cueTimes(tt)));
+    end
+    figure; histogram(aveBaseline);
+    savefilename = 'baselinecheck';
+    print(gcf,'-dpng',fullfile(savefluofigpath,savefilename));    %png format
+    saveas(gcf,fullfile(savefluofigpath,savefilename), 'fig');
+    close;
+    % detect change point? too sensitive sometimes, try to align byhel cue
     % onset
-    
+    save(fullfile(fn_dff.folder,fn_dff.name),'cells');
 end

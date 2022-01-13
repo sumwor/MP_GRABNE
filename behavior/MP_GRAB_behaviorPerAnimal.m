@@ -16,13 +16,13 @@ if ~exist(save_path,'dir')
 end
 
 %% go through each animal
-animalFolder = unique(dataIndex.LogFilePath);
-for ii = 1:length(animalFolder)
-    Ind = strfind(animalFolder{ii},filesep);
-    startInd = Ind(end);
-    animalList{ii} = animalFolder{ii}(startInd+1:end);
-end
-
+% animalFolder = unique(dataIndex.LogFilePath);
+% for ii = 1:length(animalFolder)
+%     Ind = strfind(animalFolder{ii},filesep);
+%     startInd = Ind(end);
+%     animalList{ii} = animalFolder{ii}(startInd+1:end);
+% end
+animalList = unique(dataIndex.Animal);
 disp('-----------------------------------------------------------');
 disp(['--- Analyzing - summary of ', int2str(numel(animalList)) ' animals']);
 disp('-----------------------------------------------------------');

@@ -15,8 +15,8 @@ stats_all.r = [];
 stats_all.sessionLength = [];
 for i=1:size(dataIndex,1)
     
-    load(fullfile(dataIndex.BehPath{i},[dataIndex.LogFileName{i}(1:end-4),'_beh_cut.mat']));
-
+    %load(fullfile(dataIndex.BehPath{i},[dataIndex.LogFileName{i}(1:end-4),'_beh_cut.mat']));
+    load(fullfile(dataIndex.BehPath{i},'beh_cut.mat'));
     lick_trType_array{i}=lick_trType;
     
     lregRCUC_array{i}=lregRCUC_output;

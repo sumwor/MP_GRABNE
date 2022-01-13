@@ -9,12 +9,13 @@ close all;
 setup_figprop;  %set up default figure plotting parameters
 %set(0, 'DefaultFigureRenderer', 'painters');
 %% load data file list
-animalFolder = unique(dataIndex.LogFilePath);
-for ii = 1:length(animalFolder)
-    Ind = strfind(animalFolder{ii},filesep);
-    startInd = Ind(end);
-    animalList{ii} = animalFolder{ii}(startInd+1:end);
-end
+% animalFolder = unique(dataIndex.LogFilePath);
+% for ii = 1:length(animalFolder)
+%     Ind = strfind(animalFolder{ii},filesep);
+%     startInd = Ind(end);
+%     animalList{ii} = animalFolder{ii}(startInd+1:end);
+% end
+animalList = unique(dataIndex.Animal);
 
 %% load the data
 

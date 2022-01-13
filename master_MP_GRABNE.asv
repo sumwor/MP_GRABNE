@@ -58,10 +58,7 @@ MP_GRAB_saveLatent(dataIndex, model_path);
 
 %% fluorescent signal preprocessing
 MP_GRAB_preprocess(dataIndex(6,:));
-% in 910-MP-1213, one img trigger was missing at trial 450 (two trials 450
-% + 451) in one imaging file 
-% solve later
-
+% in 910-MP-1213, one img trigger was missing at trial 450
 %% simple plots
 MP_GRAB_simpleplots(dataIndex);
 

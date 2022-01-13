@@ -16,9 +16,9 @@ for ii = 1:numel(cells.dFF)
         end
     end
     
-%     figure;plot(cells.t,cells.dFF{ii});
-%     yplot = ones(1,numel(iptKept))*0.3;
-%     hold on;scatter(cells.t(iptKept),yplot,400,'k.');
+    figure;plot(cells.t,cells.dFF{ii});
+    yplot = ones(1,numel(iptKept))*0.3;
+    hold on;scatter(cells.t(iptKept),yplot,400,'k.');
     
     % check average baseline between changepoints
     aveBaseBC = zeros(1, length(iptKept)+1);
@@ -56,10 +56,12 @@ for ii = 1:numel(cells.dFF)
     cells.normdFF{ii}(cells.dffMask{ii}==1) = cells.normdFF{ii}(cells.dffMask{ii}==1)-(highmean-lowmean);
     
     % plot distributions of average baseline
-    figure;
-    edge = [0:0.01:0.3];
-    histogram(aveBaseBC,edge);
-    hold on; plot([lowmean lowmean
+%     figure;
+%     edge = [0:0.01:0.3];
+%     histogram(aveBaseBC,edge);
+%     hold on; plot([lowmean lowmean],[0 100]);
+%     hold on;plot([highmean highmean],[0 100]);
+%    
 end
 
     
