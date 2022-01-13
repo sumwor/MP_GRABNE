@@ -79,20 +79,73 @@ for xx = xIter
 end
 toc
 
-corrPixAll = zeros(size(desampledmat,1)-pxExclude*2,  size(desampledmat,2)-pxExclude*2);
-        for xx = 1:xIter
-            for yy = 1:yIter
-                corrMat = corrcoef(double(desampledmat(xx,yy,:)),double(desampledmat(cX,cY,:))); 
-                corrPixAll(xx,yy) = corrMat(1,2);
+% save result
+savefilepath = "F:\GRABNE\tone\tone-pupil-1\corrResult.mat";
+save(savefilepath, 'cellMask');
+% loop through cellMasks, exclude overlap ROIs (keep the larger one)
+% overlapping area larger than 70% of the smaller ROIs
+
+load(savefilepath);
+
+delList = zeros(1, size(cellMask,3));
+for tt = 1:size(cellMask,3)
+    display(tt);
+    maskInd = tt+1;
+    %ifDel = 0
+    while delList(tt) == 0 & maskInd <= size(cellMask,3)
+        area1 = sum(sum(cellMask(:,:,tt))); area2 = sum(sum(cellMask(:,:,maskInd)));
+        if sum(sum(cellMask(:,:,tt)&cellMask(:,:,maskInd))) > min(area1,area2)*0.7
+            if area1 > area2
+                delList(maskInd) = 1;
+            else
+                delList(tt) = 1;
             end
         end
-        BW = (corrPixAll>corrThresh); %Get logical mask of pixels exceeding threshold
-        BW = ~bwareaopen(~BW,10,8); 
-        
-        cellMask{xx,yy} = bwareafilt(BW,1,4);
-        
- figure;imagesc(corrPixAll);axis equal
- colorbar
- figure;imagesc(BW);axis equal
- 
- figure;histogram(corrPixAll)
+        maskInd = maskInd+1;
+    end
+end
+savedMask = cellMask(:,:,~delList);
+% plot cellMask
+figure;imagesc(meanInt);
+axis equal;
+for ii = 1:size(savedMask,3)
+    hold on;
+    [B,L]=bwboundaries(savedMask(:,:,ii),'noholes');
+    plot(B{1}(:,2),B{1}(:,1));
+end
+
+% get centor of every shape
+centerCoor = zeros(2,size(savedMask,3));
+for tt = 1:size(savedMask,3)
+  	props = regionprops(savedMask(:,:,tt), 'Centroid');
+	centerCoor(1,tt) = props.Centroid(1);
+    centerCoor(2,tt) = props.Centroid(2);
+end
+
+figure;
+for tt = 1:size(savedMask,3)
+    hold on;
+    scatter(centerCoor(1,tt),centerCoor(2,tt),'.')
+end
+% calculate nearby area correlation for the center points
+range = 100; % check -50 to + 50 pixels
+% try pixal (380,335)
+corrPix = zeros(range+1,range+1,size(savedMask,3));
+for cc = 1:size(centerCoor,2)
+    cX = round(centerCoor(1,cc)); cY = round(centerCoor(2,cc));
+    for xx = cX-range/2:cX+range/2
+        for yy = cY-range/2:cY+range/2
+            if xx<size(desampledmat,1) & yy<size(desampledmat,2) & xx>0 & yy>0
+                corrMat = corrcoef(double(desampledmat(cX,cY,:)),double(desampledmat(xx,yy,:))); 
+                corrPix(xx-cX+range/2+1,yy-cY+range/2+1,cc) = corrMat(1,2);
+            else
+                corrPix(xx-cX+range/2+1,yy-cY+range/2+1,cc) = nan;
+            end
+        end
+    end
+end
+% set the autocorrelation to nan
+corrPix(corrPix>0.99) = nan;
+figure;imagesc(nanmean(corrPix,3))
+
+% correlation as a function of distance
