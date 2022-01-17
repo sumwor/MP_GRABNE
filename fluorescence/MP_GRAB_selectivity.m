@@ -47,7 +47,12 @@ for ii = 1:nFiles
             params.CI = 0.95;  %confidence interval
             params.minNumTrial = 50;
         
-            sel_t= cells.t; sel_dFF = cells.normdFF;
+                       
+            if isfield(cells,'normdFF')
+                sel_t= cells.t; sel_dFF = cells.normdFF;
+            else
+                 sel_t= cells.t; sel_dFF = cells.dFF;
+            end
             
             fieldname1={'left'}; trialMask1 = getMask(trials,fieldname1);
             fieldname2={'right'}; trialMask2 = getMask(trials,fieldname2);
