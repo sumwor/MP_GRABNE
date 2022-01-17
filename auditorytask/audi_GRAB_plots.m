@@ -37,7 +37,6 @@ for ii = 1:nFiles
         saveas(gcf, fullfile(savefigpath,'corr-cells'), 'fig');
         
         %% Plot cue-aligned dF/F for each cell
-        % Fig. 3d in paper came from 140605 data set, cell 8 10 37 74
         params=[];
         params.trigTime = trialData.cueTimes;
         params.xtitle = 'Time from cue (s)';

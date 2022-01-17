@@ -5,7 +5,7 @@ nFiles = size(dataIndex,1);
 cxyAll.coeff = [];
 
  colors=cbrewer('div','RdBu',256);
-    colors=flipud(colors);
+colors=flipud(colors);
 for ii = 1:nFiles
     
     % load behavior files
@@ -115,7 +115,9 @@ for ii = 1:nFiles
             corrP(Ind1,Ind2) = p(1,2);
             close all;
         end
-        
+         savematname='corrPupFluo.mat';
+         save(fullfile(savematpath,savematname),'corrCoeff','corrP');
+         
         figure;
         colorRange = [-0.5 0.5];
         imagesc(corrCoeff);

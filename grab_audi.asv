@@ -38,8 +38,7 @@ audi_GRAB_summary(dataIndex([20,21,23,24,26],:));
 %% spontaneous recordings
 
 % spontaneous, GRAB_Ach, before MP. 5,8,10,12
-fluo_pupil_plots(dataIndex([1:13],:));
-fluo_pupil_GRAB_summary(dataIndex([1:3],:));
+fluo_pupil_plots(dataIndex([11],:));
 
 % coherence
 coherence_plots(dataIndex([1:3,5,6],:));
