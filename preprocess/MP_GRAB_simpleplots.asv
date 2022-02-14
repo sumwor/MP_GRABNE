@@ -8,21 +8,18 @@ nFiles = size(dataIndex,1);
 for ii = 1:nFiles
     
     % load behavior files
-   fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
+    fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
+    load(fullfile(fn_beh.folder,fn_beh.name));
+    % load dFF files
+    load(fullfile(fn_beh.folder,'dff.mat'));
+    
 
     savefigpath = fullfile(fn_beh.folder,'figs-fluo');
     if ~exist(savefigpath,'dir')
         mkdir(savefigpath);
     end
     
-    if ~exist(fullfile(savefigpath,'cell196.png')) 
-        
-         
-        load(fullfile(fn_beh.folder,fn_beh.name));
-        % load dFF files
-        load(fullfile(fn_beh.folder,'dff.mat'));
-    
-    
+    if ~exist(fullfile(savefigpath,'cell196.png'))
         %% Plot dF/F of all the cells
         MP_plot_allCells( cells, trialData ,savefigpath);
         

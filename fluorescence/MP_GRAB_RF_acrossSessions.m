@@ -25,7 +25,7 @@ for ii = 1:nFiles
     % load behavior files
        fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     
-     saveRegName = fullfile(savematpath,'RF_CR_100.mat');  % regression for fluo change
+     saveRegName = fullfile(savematpath,'RF_CR_norm.mat');  % regression for fluo change
    
     if exist(saveRegName)
         load(saveRegName)

@@ -121,7 +121,11 @@ for ii = 1:nFiles
             
             params.xtitle = {'Time from cue (s)'};
             LR_t = cells.t;
-            LR_dFF = cells.normdFF;
+             if isfield(cells,'normdFF')
+                LR_dFF = cells.normdFF;
+            else
+                LR_dFF = cells.dFF;
+             end
             parfor j=1:numel(LR_dFF )
                 if length(LR_t) > length(LR_dFF {1})
                     reg_cr{j}=linear_regr( LR_dFF {j}, LR_t(1:length(LR_dFF {1})), RL_event, params.trigTime, trialMask, params );

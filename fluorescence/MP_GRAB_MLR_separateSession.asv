@@ -1,4 +1,4 @@
-function MP_GRAB_MLR(dataIndex)
+function MP_GRAB_MLR_separateSession(dataIndex)
 
 %% reference to Sul et al.2011
 % running multilinear regression
@@ -7,47 +7,33 @@ function MP_GRAB_MLR(dataIndex)
 % C: choice, R: reward, X:interaction
 
 
-
+% separate a session into first/second half, run linear regression
+% separately
 nFiles = size(dataIndex,1);
 
 
-%% load the behavior files first to get the ITI time
-% iti_trueTime = cell(0);
+%% load the behavior files first to get the session length
+sesLength = [];
 
-% for ii = 1:nFiles
-%     fn_beh = dir(fullfile(dataIndex.BehPath{ii},[dataIndex.LogFileName{ii}(1:end-4),'_beh_cut.mat']));
-%     load(fullfile(fn_beh.folder,fn_beh.name));
-%
-%
-%     % load fluo files
-%     date = num2str(dataIndex.DateNumber(ii));
-%     pup_name = fullfile(dataIndex.BehPath{ii}, ['*',date(1:6),'*_pup.mat']);
-%     fn_pup = dir(pup_name);
-%     if length(fn_pup) == 1
-%
-%         iti_time = zeros(1, length(trialData.cueTimes)-1);
-%
-%         for tt=1:length(trialData.cueTimes)-1
-%             iti_time(tt) = trialData.cueTimes(tt+1) - trialData.outcomeTimes(tt);
-%         end
-%         iti_trueTime{end+1} = iti_time;
-%     end
-% end
-%
-%
-% % check the 33, 66 percentile point of every session
-% prc33 = cellfun(@(x) prctile(x,33),iti_trueTime);
-% prc67 = cellfun(@(x) prctile(x,67), iti_trueTime);
-%
-% % save it somewhere?
-% iti_all = [iti_trueTime{:}];
-% prc33_all = prctile(iti_all,33);
-% prc67_all = prctile(iti_all,67);
-%
-% % looks like the medians of every session is close to the percentile of all
-% % sessions taken together, taken the median
-% prc1 = median(prc33);
-% prc2 = median(prc67);
+for ii = 1:nFiles
+     fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
+    load(fullfile(fn_beh.folder,fn_beh.name));
+    % load fluo files
+    fn_fluo = dir(fullfile(dataIndex.BehPath{ii},'dff.mat'));
+    if length(fn_fluo) == 1
+        
+        if trialData.cutPoint == 0
+            sesLength = [sesLength,length(trialData.cue)];
+        else
+            sesLength = [sesLength,trialData.cutPoint];
+        end
+
+       
+    end
+end
+
+
+% check the 33, 66 percentile point of every session
 
 
 %% go through every session, running MLR separately
@@ -80,7 +66,7 @@ for ii = 1:nFiles
         
         
         %saveRegName = fullfile(savematpath,[fn_beh.name(1:end-7),'regCR.mat']);
-        saveRegName = fullfile(savematpath,'regCR_norm.mat');  % regression for fluo change
+        saveRegName = fullfile(savematpath,'regCR_sep.mat');  % regression for fluo change
         % saveRegName_ITI =  fullfile(savematpath,[fn_beh.name(1:end-7),'regCR_ITI.mat']);
         
         %% linear regression with C(n+1), observable variables
@@ -164,6 +150,11 @@ for ii = 1:nFiles
             tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
                 'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward'};
             
+            trialMask1  = trialMask;
+            trialMask1(round(length(trialMask)/2)+1:end) = 0;
+            trialMask2 = trialMask;
+            trialMask2(1:round(length(trialMask)/2) = 0;
+            
             % reg_cr_future=linear_regr( fluo.dia, fluo.t, future_event, params.trigTime, trialMask, params );
             reg_t = cells.t;
             if isfield(cells,'normdFF')
@@ -171,19 +162,19 @@ for ii = 1:nFiles
             else
                 reg_dFF = cells.dFF;
             end
-            parfor j=1:numel(reg_dFF)
+            for j=1:numel(reg_dFF)
                 if length(reg_t) > length(reg_dFF{1})
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t(1:length(cells.dFF{1})), future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
+                    reg_cr1{j}=linear_regr( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
                 else
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t, future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr(reg_dFF{j}, reg_t, future_event, params.trigTime, trialMask, params );
+                    reg_cr1{j}=linear_regr(reg_dFF{j}, reg_t, future_event, params.trigTime, trialMask, params );
                 end
             end
             
-            MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-norm-choiceoutcome');    %png format
-            saveas(gcf, 'MLR-norm-choiceoutcome', 'fig');
+            MP_plot_regr(reg_cr1,[],params.pvalThresh,tlabel,params.xtitle);
+            print(gcf,'-dpng','MLR-norm-choiceoutcome_1half');    %png format
+            saveas(gcf, 'MLR-norm-choiceoutcome_1half', 'fig');
             
             %%plot the field of view, with significance of choice/reward in every grid
             

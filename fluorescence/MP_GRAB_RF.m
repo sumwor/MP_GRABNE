@@ -48,18 +48,18 @@ for ii = 1:nFiles
         %
         
         if ~exist(saveRFName)
-            fn_ROI = dir(fullfile(dataIndex.LogFilePath{ii},'cell*.mat'));
-            meanProjPath = dir(fullfile(dataIndex.BehPath{ii},'*Mean*.tif'));
-            meanProj = loadtiffseq([],fullfile(meanProjPath.folder,meanProjPath.name));
-            
-            %get the mean intensity in ROI
-            meanIntensity = zeros(1, size(fn_ROI,1));
-            varIntensity = zeros(1,size(fn_ROI,1));
-            for uu = 1:size(fn_ROI,1)
-                roi = load(fullfile(fn_ROI(uu).folder,fn_ROI(uu).name));
-                meanIntensity(uu) = mean(meanProj(roi.bw==1));
-                varIntensity(uu) = nanstd(cells.cellf{uu});
-            end
+%             fn_ROI = dir(fullfile(dataIndex.LogFilePath{ii},'cell*.mat'));
+%             meanProjPath = dir(fullfile(dataIndex.BehPath{ii},'*Mean*.tif'));
+%             meanProj = loadtiffseq([],fullfile(meanProjPath.folder,meanProjPath.name));
+%             
+%             %get the mean intensity in ROI
+%             meanIntensity = zeros(1, size(fn_ROI,1));
+%             varIntensity = zeros(1,size(fn_ROI,1));
+%             for uu = 1:size(fn_ROI,1)
+%                 roi = load(fullfile(fn_ROI(uu).folder,fn_ROI(uu).name));
+%                 meanIntensity(uu) = mean(meanProj(roi.bw==1));
+%                 varIntensity(uu) = nanstd(cells.cellf{uu});
+%             end
             
             %% random forest
             % use c(n), c(n-1),r(n),r(n-1),x(n),x(n-1), average r for now
@@ -162,7 +162,11 @@ for ii = 1:nFiles
             % reg_cr_future=linear_regr( fluo.dia, fluo.t, future_event, params.trigTime, trialMask, params );
             
             RF_t = cells.t;
-            RF_dFF = cells.normdFF;
+             if isfield(cells,'normdFF')
+                RF_dFF = cells.normdFF;
+            else
+                RF_dFF = cells.dFF;
+             end
             parfor j=1:numel(RF_dFF)
                 %                 for mm = 1:20
                 if length(RF_t) > length(RF_dFF{1})
@@ -196,14 +200,14 @@ for ii = 1:nFiles
                 meanrSquare(nn) = nanmean(rf_cr{nn}.rsquare);
             end
             
-            figure;plot(meanrSquare); % negative correlation with meanIntensity
-            
-            yyaxis right; hold on; plot(meanIntensity);
-            hold on; plot(varIntensity);
-            legend('R2','meanInt','varInt');
-            print(gcf,'-dpng',fullfile(savefluofigpath,'RF-r2meanvar-norm'));
-            saveas(gcf, fullfile(savefluofigpath,'r2meanvar-norm'), 'fig');
-            
+%             figure;plot(meanrSquare); % negative correlation with meanIntensity
+%             
+%             yyaxis right; hold on; plot(meanIntensity);
+%             hold on; plot(varIntensity);
+%             legend('R2','meanInt','varInt');
+%             print(gcf,'-dpng',fullfile(savefluofigpath,'RF-r2meanvar-norm'));
+%             saveas(gcf, fullfile(savefluofigpath,'r2meanvar-norm'), 'fig');
+%             
             % get mean predictor importance from all 196 ROIs
             meanPredImp = zeros(length(rf_cr{1}.regr_time),10);
             
