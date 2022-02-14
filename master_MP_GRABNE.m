@@ -6,9 +6,9 @@ setup_figprop;
 
 
 %root_path = 'Y:\HongliWang\GRAB_analysis';
-root_path = 'Y:\HongliWang\Ach_analysis';
+%root_path = 'Y:\HongliWang\Ach_analysis';
 %root_path = 'C:\Hongli\data\GRAB_analysis';
-%root_path = 'V:\HongliWang\GRAB_analysis';
+root_path = 'V:\HongliWang\Ach_analysis';
 
 %% matching pennies behavior 
 
@@ -82,6 +82,10 @@ save_path_fluo = fullfile(root_path,'summary','figs_summary_fluo');
 % choice/reward selevitivty
 MP_GRAB_selectivity(dataIndex);
 MP_GRAB_prev_selectivity(dataIndex);
+
+% make videos of choice/outcome selectivity
+MP_GRAB_selectivityVideo(dataIndex);
+
 %% Linear regression with choice and reward
 % running regression (choice and reward) on individual sessions
 MP_GRAB_MLR(dataIndex);
