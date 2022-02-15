@@ -96,6 +96,7 @@ MP_GRAB_MLR_acrossSessions(dataIndex, save_path_fluo)
 
 %% 
 MP_GRAB_MLR_separateSession(dataIndex);
+MP_GRAB_MLR_separateSummary(dataIndex, save_path_fluo);
 
 % latent variable
 MP_GRABRL_MLR(dataIndex)
