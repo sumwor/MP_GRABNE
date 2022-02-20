@@ -33,7 +33,7 @@ for aa = 1:numel(animalList)
         % load behavior files
         fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
         
-        saveRegName = fullfile(savematpath,'regCR.mat');  % regression for fluo change
+        saveRegName = fullfile(savematpath,'regCR_norm.mat');  % regression for fluo change
         
         if exist(saveRegName)
             load(saveRegName)

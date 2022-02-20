@@ -46,7 +46,7 @@ for ii = 1:nFiles
             dt = mean(diff(cells.t));
             maxTime = 20; % only consider 5s lags
         for tt=1:length(cells.dFF) 
-            [c{tt},lags] = xcorr(pupilInt(~isnan(pupilInt)),cells.dFF{tt}(~isnan(pupilInt))-mean(cells.dFF{tt}(~isnan(pupilInt))),'normalized');
+            [c{tt},lags] = xcorr(pupilInt(~isnan(pupilInt)),cells.dFF{tt}(~isnan(pupilInt)),'normalized');
             newlag = lags*dt;
             % calculate autocorrelation as well
             [autoCorrFluo{tt},lags] = xcorr(cells.dFF{tt}-mean(cells.dFF{tt}),'normalized');
@@ -57,8 +57,8 @@ for ii = 1:nFiles
         end
         [autoCorrPup,lags] = xcorr(pupilZ,'normalized');
         dtPup = mean(diff(pupil.t));
-        newlagPup = lags*dtPup;
+        newlagPup = lags*d
         savefilename = fullfile(savematpath,'xcorr-pupil-fluo.mat');
-        save(savefilename,'c','newlag','autoCorrFluo','newlagFluo','autoCorrPup','newlagPup');
+        save(savefilename,'c','newlag');
     end
 end

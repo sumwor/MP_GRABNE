@@ -43,6 +43,7 @@ fluo_pupil_GRAB_summary(dataIndex([1:3],:));
 
 % cross-correlation of pupil and GRAB signals
 fluo_pupil_GRAB_correlation(dataIndex([1:17],:));
+% Ach
 fluo_pupil_corrSummary(dataIndex([1:17],:));
 
 % coherence
