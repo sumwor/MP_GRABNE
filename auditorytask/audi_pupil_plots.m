@@ -59,7 +59,8 @@ for ii = 1:nFiles
         
       
         %% plot pupil change against cue (psth plot)
-       
+        savepsthname = fullfile(fn_pup.folder,'psthPup.mat');
+        
         params=[];
         params.trigTime = trialData.cueTimes;
         params.xtitle = 'Time from cue (s)';
@@ -117,6 +118,7 @@ for ii = 1:nFiles
         % plot a figure to show the extremties influence the error bar
         % (bootstrap)
         % MP_plot_extreme(psth_panel, tlabel, params.xtitle);
+        save(
         close all;
     end
 

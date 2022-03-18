@@ -177,7 +177,7 @@ for ii = 1:nFiles
                     reg_cr{j}=linear_regr( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
                 else
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t, future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr(reg_dFF{j}, reg_t, future_event, params.trigTime, trialMask, params );
+                    reg_cr{j}=linear_regr(reg_dFF{j}(1:length(reg_t)), reg_t, future_event, params.trigTime, trialMask, params );
                 end
             end
             

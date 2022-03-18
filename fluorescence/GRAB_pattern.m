@@ -80,6 +80,7 @@ for ii = 1:nFiles
     imagesc(aveSpec(240:280,240:280))
     figure;surf(aveSpec)
     
+    %% 
     %% cross correlation
      corrDist = 50;
      crrMat = zeros(2*corrDist+1, 2*corrDist+1,size(desampledmat,3)-1);

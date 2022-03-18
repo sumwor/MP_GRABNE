@@ -23,7 +23,7 @@ for ii = 1:nFiles
     
     tic
     
-    %cells = MP_GRAB_normalizedFF(cells, trialData);
+    cells = MP_GRAB_normalizedFF(cells, trialData);
     toc
     %figure;histogram(cells.dFF{1});
     

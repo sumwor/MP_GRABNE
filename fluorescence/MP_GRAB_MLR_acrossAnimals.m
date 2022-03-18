@@ -29,9 +29,10 @@ for aa = 1:numel(animalList)
     % all_pval_iti_3 = [];
     
     for ii = 1:numel(sessionInclude)
-        savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');
+        ind = sessionInclude(ii);
+        savematpath = fullfile(dataIndex.BehPath{ind},'analysis-fluo');
         % load behavior files
-        fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
+        fn_beh = dir(fullfile(dataIndex.BehPath{ind},'beh_cut.mat'));
         
         saveRegName = fullfile(savematpath,'regCR_norm.mat');  % regression for fluo change
         

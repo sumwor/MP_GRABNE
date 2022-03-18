@@ -130,7 +130,7 @@ for ii = 1:nFiles
                 if length(LR_t) > length(LR_dFF {1})
                     reg_cr{j}=linear_regr( LR_dFF {j}, LR_t(1:length(LR_dFF {1})), RL_event, params.trigTime, trialMask, params );
                 else
-                    reg_cr{j}=linear_regr( LR_dFF {j}, LR_t, RL_event, params.trigTime, trialMask, params );
+                    reg_cr{j}=linear_regr( LR_dFF {j}(1:length(LR_t)), LR_t, RL_event, params.trigTime, trialMask, params );
                 end
             end
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);

@@ -29,6 +29,7 @@ for ii = 1:nFiles
         %% get cue-aligned dF/F for each cell
         % Fig. 3d in paper came from 140605 data set, cell 8 10 37 74
         savepsthname = fullfile(fn_pup.folder,'psthMat.mat');
+        savepupname = fullfile(fn_pup.folder,'psthPup.mat');
         params=[];
             params.trigTime = trialData.cueTimes;
             params.xtitle = 'Time from cue (s)';
@@ -55,9 +56,13 @@ for ii = 1:nFiles
             load(savepsthname);
         end
         % save psth results
-        params.window = [-1:0.1:3];
-        psthpupil_panel(1).sig{1} = get_psth(pupil.dia, pupil.t, params.trigTime(2:end-1), 'Pupil change', params );
-          
+        %if ~exist(savepupname)
+            params.window = [-1:0.05:3];
+            psthpupil_panel(1).sig{1} = get_psth(pupil.dia, pupil.t, params.trigTime(2:end-1), 'Pupil change', params );
+            save(savepupname,'psthpupil_panel');
+%         else
+%             display('PSTH_pup already computed');
+%         end
         gray=[0.7 0.7 0.7];
         avePsth = zeros(size(psth_panel(1).sig{1}.signal,1),1);
         figure;
@@ -101,4 +106,6 @@ for ii = 1:nFiles
                 print(gcf,'-dpng',['tone-fluo_ave' ]);
              saveas(gcf, 'tone-fluo_ave', 'fig');
              saveas(gcf, 'tone-fluo_ave', 'svg');
+             
+             close;
 end

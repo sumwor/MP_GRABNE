@@ -135,10 +135,15 @@ for ii = 1:nFiles
         % sample rate
         fs = 1/mean(diff(cells.t));
         [cxy,fc] = mscohere(pupI, cells.dFF{1}(~isnan(pupInt)),[],[],[],fs);
+        [Pxy,F] = cpsd(pupI, cells.dFF{1}(~isnan(pupInt)),[],[],[],fs);
+
         cxyList = zeros(length(cells.dFF),length(cxy));
+        pxyList = zeros(length(cells.dFF),length(Pxy));
         for tt = 1:length(cells.dFF)
         %[cxy,fc] = mscohere(pupI, cells.dFF{1}(~isnan(pupInt)));
             [cxyList(tt,:),fc] = mscohere(pupI, cells.dFF{tt}(~isnan(pupInt)),[],[],[],fs);
+            [pxyList(tt,:),F] = cpsd(pupI, cells.dFF{tt}(~isnan(pupInt)),[],[],[],fs);
+
         end
         cxyBoot.coeff = cxyList;
         cxy = getBootstrp(cxyBoot, 0, 0.05);
@@ -159,31 +164,54 @@ for ii = 1:nFiles
                      print(gcf,'-dpng',['spon_pupil_coh']);
              saveas(gcf, 'spon_pupil_coh', 'fig');
              saveas(gcf, 'spon_pupil_coh', 'svg');
+        
+        % cross spectrum
+         pxyBoot.coeff = angle(pxyList)/pi;
+        pxy = getBootstrp(pxyBoot, 0, 0.05);
+        avePxy = mean(pxyList);
+        figure;
+        plot(F,pxy.coeff_bootave,'k');
+        hold on;
+        gray = [0.7, 0.7, 0.7];
+        %patch([fc fliplr(fc)], [cxy.boothigh  fliplr(cxy.bootlow)], [0.7 0.7 0.7])
+        hold on;
+        errorshade(F,pxy.bootlow,pxy.boothigh,gray);
+        hold on;plot(F,pxy.coeff_bootave,'k');
+        
+        xlim([0.01, 0.2]);
+        %ylim([0 1]);
+        set(gca,'box','off')
+        set(gca, 'XScale', 'log')
+                     print(gcf,'-dpng',['spon_pupil_xspec']);
+             saveas(gcf, 'spon_pupil_xspec', 'fig');
+             saveas(gcf, 'spon_pupil_xspec', 'svg');
+        
+
 
         savematname='coherence.mat';
-        save(fullfile(savematpath,savematname),'cxy','fc');
+        save(fullfile(savematpath,savematname),'cxy','fc','pxy','F');
         
-        cxyAll.coeff = [cxyAll.coeff; cxy.coeff];
+        %.coeff = [cxyAll.coeff; cxy.coeff];
     end
         
 end
 
 % plot total of 588 grids
-cxyAll = getBootstrp(cxyAll, 0, 0.05);
-        
-        figure;
-        plot(fc(2:end),cxyAll.coeff_bootave(2:end),'k');
-        hold on;
-        gray = [0.7, 0.7, 0.7];
-        %patch([fc fliplr(fc)], [cxy.boothigh  fliplr(cxy.bootlow)], [0.7 0.7 0.7])
-        hold on;
-        errorshade(fc(2:end),cxyAll.bootlow(2:end),cxyAll.boothigh(2:end),gray);
-        hold on;plot(fc(2:end),cxyAll.coeff_bootave(2:end),'k');
-        
-        xlim([0.01, 0.2]);
-        set(gca,'box','off')
-        set(gca, 'XScale', 'log')
-                     print(gcf,'-dpng',['spon_pupil_All']);
-             saveas(gcf, 'spon_pupil_All', 'fig');
-             saveas(gcf, 'spon_pupil_All', 'svg');
+% cxyAll = getBootstrp(cxyAll, 0, 0.05);
+%         
+%         figure;
+%         plot(fc(2:end),cxyAll.coeff_bootave(2:end),'k');
+%         hold on;
+%         gray = [0.7, 0.7, 0.7];
+%         %patch([fc fliplr(fc)], [cxy.boothigh  fliplr(cxy.bootlow)], [0.7 0.7 0.7])
+%         hold on;
+%         errorshade(fc(2:end),cxyAll.bootlow(2:end),cxyAll.boothigh(2:end),gray);
+%         hold on;plot(fc(2:end),cxyAll.coeff_bootave(2:end),'k');
+%         
+%         xlim([0.01, 0.2]);
+%         set(gca,'box','off')
+%         set(gca, 'XScale', 'log')
+%                      print(gcf,'-dpng',['spon_pupil_All']);
+%              saveas(gcf, 'spon_pupil_All', 'fig');
+%              saveas(gcf, 'spon_pupil_All', 'svg');
 end

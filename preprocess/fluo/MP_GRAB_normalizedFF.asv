@@ -4,22 +4,28 @@ function cells = MP_GRAB_normalizedFF(cells, trialData)
 % ouput: same cells structure with normalized df/f and timemask
 % normalize df/f based on average 
 
+% find consistant change point in the end
 
 for ii = 1:numel(cells.dFF)
     [ipt,~] = findchangepts(cells.dFF{ii},'Statistic','mean','MaxNumChanges',200);
     % if the change point is close to cue onset, keep it . otherwise
     % discard.
     iptKept = [];
+    trialInd = [];
     for cc = 1:numel(ipt)
         if min(abs(trialData.cueTimes-cells.t(ipt(cc))))< 0.3
             iptKept = [iptKept,ipt(cc)];
+            [~,I] = min(abs(trialData.cueTimes-cells.t(ipt(cc))));
+            trialInd = [trialInd,
         end
     end
     
     figure;plot(cells.t,cells.dFF{ii});
     yplot = ones(1,numel(iptKept))*0.3;
     hold on;scatter(cells.t(iptKept),yplot,400,'k.');
-    
+%      figure;plot(cells.t,cells.dFF{ii});
+%     yplot = ones(1,numel(ipt))*0.3;
+%     hold on;scatter(cells.t(ipt),yplot,400,'k.');
     % check average baseline between changepoints
     aveBaseBC = zeros(1, length(iptKept)+1);
     for aa = 1:length(aveBaseBC)
@@ -56,11 +62,11 @@ for ii = 1:numel(cells.dFF)
     cells.normdFF{ii}(cells.dffMask{ii}==1) = cells.normdFF{ii}(cells.dffMask{ii}==1)-(highmean-lowmean);
     
     % plot distributions of average baseline
-%     figure;
-%     edge = [0:0.01:0.3];
-%     histogram(aveBaseBC,edge);
-%     hold on; plot([lowmean lowmean],[0 100]);
-%     hold on;plot([highmean highmean],[0 100]);
+    figure;
+    edge = [0:0.01:0.3];
+    histogram(aveBaseBC,edge);
+    hold on; plot([lowmean lowmean],[0 100]);
+    hold on;plot([highmean highmean],[0 100]);
 %    
 end
 
