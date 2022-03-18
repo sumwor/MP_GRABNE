@@ -3,7 +3,7 @@ clearvars;
 close all;
 setup_figprop;
 
-root_path = 'V:\HongliWang\grabne_audi\grabne_audi';
+root_path = 'Y:\HongliWang\grabne_audi\grabne_audi';
 
 logfilepath = fullfile(root_path,'data');
 analysispath = fullfile(root_path,'analysis');
@@ -16,12 +16,10 @@ createPupilFiles(dataIndex);
 
 % plot pupil-tone PSTH
 
-audi_pupil_plots(dataIndex([14],:));
+%audi_pupil_plots(dataIndex([14],:));
 %% fluo
-MP_GRAB_preprocess(dataIndex([14],:));
-
-%% plot PSTH for single session
-audi_GRAB_plots(dataIndex([14],:));
+MP_GRAB_preprocess(dataIndex([15,20,22,27],:));
+audi_GRAB_plots(dataIndex([22,27],:));
 
 %% check correlation
 audi_GRAB_correlation(dataIndex([14],:));
@@ -58,4 +56,3 @@ fluo_pupil_GRAB_correlation(dataIndex([1:18],:));
 % Ach
 savefigpath = fullfile(root_path,'summary');
 fluo_pupil_corrSummary(dataIndex([1:18],:),savefigpath);
-

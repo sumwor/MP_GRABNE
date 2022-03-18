@@ -1,4 +1,4 @@
-% analysis the GRAB_NE signal 
+% analysis the GRAB_NE signal
 
 clearvars;
 close all;
@@ -10,7 +10,7 @@ setup_figprop;
 %root_path = 'C:\Hongli\data\GRAB_analysis';
 root_path = 'V:\HongliWang\NE_analysis';
 
-%% matching pennies behavior 
+%% matching pennies behavior
 
 disp('-----------------------------------------------------------');
 disp('--- HERE WE GO ');
@@ -59,7 +59,7 @@ MP_GRAB_saveLatent(dataIndex, model_path);
 %% fluorescent signal preprocessing
 MP_GRAB_preprocess(dataIndex);
 % in 910-MP-1213, one img trigger was missing at trial 450 (two trials 450
-% + 451) in one imaging file 
+% + 451) in one imaging file
 % solve later
 
 %% simple plots
@@ -87,7 +87,7 @@ MP_GRAB_prev_selectivity(dataIndex);
 MP_GRAB_selectivity_px(dataIndex);
 % make videos of choice/outcome selectivity
 MP_GRAB_selectivityVideo(dataIndex);
-% spatial pattern 
+% spatial pattern
 MP_GRAB_selectivitySpatial(dataIndex);
 
 %% Linear regression with choice and reward
@@ -98,7 +98,7 @@ MP_GRAB_MLR_analysis(dataIndex);
 MP_GRAB_MLR_acrossAnimals(dataIndex,save_path_fluo);
 MP_GRAB_MLR_acrossSessions(dataIndex, save_path_fluo)
 
-%% 
+%%
 MP_GRAB_MLR_separateSession(dataIndex);
 MP_GRAB_MLR_separateSummary(dataIndex, save_path_fluo);
 
