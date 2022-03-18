@@ -38,7 +38,7 @@ for ii = 1:nFiles
         
         savematpath = fn_beh.folder;
         save(fullfile(savematpath,'dff.mat'),...
-            'cells');
+            'cells', '-v7.3');
         
         
         

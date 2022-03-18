@@ -93,7 +93,8 @@ for ii = 1:nFiles
         
         save(saveSelName,...
         'choicesel','outcomesel');
-    
+%     save(saveSelName,...
+%         'choicesel');
     close all;
     end
 end

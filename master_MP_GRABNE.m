@@ -8,8 +8,8 @@ setup_figprop;
 %root_path = 'Y:\HongliWang\GRAB_analysis';
 %root_path = 'Y:\HongliWang\Ach_analysis';
 %root_path = 'C:\Hongli\data\GRAB_analysis';
-root_path = 'V:\HongliWang\Ach_analysis';
-
+%root_path = 'V:\HongliWang\Ach_analysis';
+root_path='Y:\HongliWang\Ach_784'
 %% matching pennies behavior 
 
 disp('-----------------------------------------------------------');
