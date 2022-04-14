@@ -77,6 +77,7 @@ for ii = 1:numel(cells.dFF)
     hold on; plot([lowmean lowmean],[0 100]);
     hold on;plot([highmean highmean],[0 100]);
 %    
+    close all
 end
 
     

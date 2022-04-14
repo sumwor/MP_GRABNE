@@ -58,7 +58,7 @@ for ii = 1:nFiles
                 
                 % change left-right to contra-ipsi
               
-                    if dataIndex.RecordingSite{ii} == 'left'
+                    if strcmp(dataIndex.RecordingSite{ii},'left')
                          choiceselMat(Ind1, Ind2,:) = -choicesel{cc}.signal;
                     else
                         choiceselMat(Ind1, Ind2,:) = choicesel{cc}.signal;
@@ -67,64 +67,89 @@ for ii = 1:nFiles
             
             
             %% calculate the area with bwareaopen()
-%             posMask = zeros(edgelength,edgelength,size(choiceselMat,3));
-%             negMask = zeros(edgelength,edgelength,size(choiceselMat,3));
-%             for tt = 1:size(choiceselMat,3)
-%                 posBW = (choiceselMat(:,:,tt)>0); %Get logical mask of pixels exceeding threshold
-%                 posBW = ~bwareaopen(~posBW,50,8); %Remove small holes from pixel mask
-%                 posMask(:,:,tt) = bwareafilt(posBW,6,4);
-%                 negBW = (choiceselMat(:,:,tt)<0); %Get logical mask of pixels exceeding threshold
-%                 negBW = ~bwareaopen(~negBW,50,8); %Remove small holes from pixel mask
-%                 negMask(:,:,tt) = bwareafilt(negBW,6,4);
-%             end
-%             figure;
-%             subplot(1,2,1)
-%             image(mean(posMask,3),'CDataMapping','scaled');
-%             axis square;
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]); 
-%             title('Average positive choice selecvitity mask');
-%             subplot(3,20,60);
-%             image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%             print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-pos mask'));
-%             saveas(gcf, fullfile(savefluofigpath,'c selecvitity-pos mask'), 'fig');
-% 
-%             figure;
-%             subplot(1,2,1)
-%             image(mean(negMask,3),'CDataMapping','scaled');
-%             axis square;
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%              title('Average negative choice selecvitity mask');
-%             subplot(3,20,60);
-%             image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%             print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-neg mask'));
-%             saveas(gcf, fullfile(savefluofigpath,'c selecvitity-neg mask'), 'fig');
+            posMask = zeros(edgelength,edgelength,size(choiceselMat,3));
+            negMask = zeros(edgelength,edgelength,size(choiceselMat,3));
+            mergeMask = zeros(edgelength,edgelength,size(choiceselMat,3));
+            for tt = 1:size(choiceselMat,3)
+                posBW = (choiceselMat(:,:,tt)>0); %Get logical mask of pixels exceeding threshold
+                posBW = ~bwareaopen(~posBW,50,8); %Remove small holes from pixel mask
+                posMask(:,:,tt) = bwareafilt(posBW,6,4);
+                negBW = (choiceselMat(:,:,tt)<0); %Get logical mask of pixels exceeding threshold
+                negBW = ~bwareaopen(~negBW,50,8); %Remove small holes from pixel mask
+                negMask(:,:,tt) = -bwareafilt(negBW,6,4);
+
+                % merge the pos/neg Mask (pos px = 1; neg px = -1);
+                tempmerge = zeros(edgelength,edgelength);
+                temppos = posMask(:,:,tt); tempneg = negMask(:,:,tt);
+                tempmerge(temppos==1) =1;
+                tempmerge(tempneg==-1) = -1;
+                tempmerge(temppos==1 & tempneg==-1) = 0;
+                mergeMask(:,:,tt) = tempmerge;   
+            end
+
+            figure;
+            subplot(1,2,1)
+            image(mean(posMask,3),'CDataMapping','scaled');
+            axis square;
+            colormap(colors);
+            caxis([colorRange(1) colorRange(2)]); 
+            title('Average positive choice selecvitity mask');
+            subplot(3,20,60);
+            image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+            colormap(colors);
+            caxis([colorRange(1) colorRange(2)]);
+            print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-pos mask'));
+            saveas(gcf, fullfile(savefluofigpath,'c selecvitity-pos mask'), 'fig');
+
+            figure;
+            subplot(1,2,1)
+            image(mean(negMask,3),'CDataMapping','scaled');
+            axis square;
+            colormap(colors);
+            caxis([colorRange(1) colorRange(2)]);
+             title('Average negative choice selecvitity mask');
+            subplot(3,20,60);
+            image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+            colormap(colors);
+            caxis([colorRange(1) colorRange(2)]);
+            print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-neg mask'));
+            saveas(gcf, fullfile(savefluofigpath,'c selecvitity-neg mask'), 'fig');
+            
+             figure;
+            subplot(1,2,1)
+            image(mean(mergeMask,3),'CDataMapping','scaled');
+            axis square;
+            colormap(colors);
+            caxis([colorRange(1) colorRange(2)]); 
+            title('Average merged choice selecvitity mask');
+            subplot(3,20,60);
+            image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+            colormap(colors);
+            caxis([colorRange(1) colorRange(2)]);
+            print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-merge mask'));
+            saveas(gcf, fullfile(savefluofigpath,'c selecvitity-merge mask'), 'fig');
+
 
 %% directly averaging the sign of every grid
 % pos = 1; neg = -1
-signMask = zeros(edgelength,edgelength,size(choiceselMat,3));
-signMask(choiceselMat>0) = 1;
-signMask(choiceselMat<0) = -1;
-signMask(choiceselMat == 0) = 0;
-
-figure;
-subplot(1,2,1)
-image(mean(signMask,3),'CDataMapping','scaled');
-axis square;
-colormap(colors);
-caxis([colorRange(1) colorRange(2)]);
-title('Average positive choice selecvitity mask');
-subplot(3,20,60);
-image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-colormap(colors);
-caxis([colorRange(1) colorRange(2)]);
-print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-sign mask'));
-saveas(gcf, fullfile(savefluofigpath,'c selecvitity-sign mask'), 'fig');
+% signMask = zeros(edgelength,edgelength,size(choiceselMat,3));
+% signMask(choiceselMat>0) = 1;
+% signMask(choiceselMat<0) = -1;
+% signMask(choiceselMat == 0) = 0;
+% 
+% figure;
+% subplot(1,2,1)
+% image(mean(signMask,3),'CDataMapping','scaled');
+% axis square;
+% colormap(colors);
+% caxis([colorRange(1) colorRange(2)]);
+% title('Average positive choice selecvitity mask');
+% subplot(3,20,60);
+% image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+% colormap(colors);
+% caxis([colorRange(1) colorRange(2)]);
+% print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-sign mask'));
+% saveas(gcf, fullfile(savefluofigpath,'c selecvitity-sign mask'), 'fig');
 
 %% determine the area with watershed
 
@@ -166,29 +191,29 @@ saveas(gcf, fullfile(savefluofigpath,'c selecvitity-sign mask'), 'fig');
             %% get the areas, plot x/y arerage as a function of time
             % how to split the area? using bwareaopen&bwareafilt? manually?
             % threshold : 0-0.3; 0.3-0.7; 0.7-1.0
-                area =  mean(signMask,3);
-                BW1 = (area<0); %Get logical mask of pixels exceeding threshold
-                BW1 = ~bwareaopen(~BW1,10,8); %Remove small holes from pixel mask
+                area =  mean(mergeMask,3);
+                BW1 = (area<-0.2); %Get logical mask of pixels exceeding threshold
+                BW1 = ~bwareaopen(~BW1,10,4); %Remove small holes from pixel mask
                 AMask1 = bwareafilt(BW1,6,4);
                 L1 = bwlabel(AMask1);
                 %function to get separate masks of objects in L
                 Mask1 = getSepMask(L1,10);
                 
-                BW2 = (area>0); %Get logical mask of pixels exceeding threshold
-                BW2 = ~bwareaopen(~BW2,10,8); %Remove small holes from pixel mask
+                BW2 = (area>0.2); %Get logical mask of pixels exceeding threshold
+                BW2 = ~bwareaopen(~BW2,10,4); %Remove small holes from pixel mask
                 AMask2 = bwareafilt(BW2,6,4);
                 %CC = bwconncomp(AMask2);
                 L2 = bwlabel(AMask2);
                 Mask2 = getSepMask(L2,10);
                 
-%                 BW3 = (area>0.25); %Get logical mask of pixels exceeding threshold
+%                 BW3 = (area<0.65 & area>0); %Get logical mask of pixels exceeding threshold
 %                 BW3 = ~bwareaopen(~BW3,10,8); %Remove small holes from pixel mask
 %                 AMask3 = bwareafilt(BW3,6,4);
 %                 %CC = bwconncomp(AMask2);
 %                 L3 = bwlabel(AMask3);
 %                 Mask3 = getSepMask(L3,10);
-%                 
-%                 BW4 = (area>0.5); %Get logical mask of pixels exceeding threshold
+% %                 
+%                 BW4 = (area>0.65); %Get logical mask of pixels exceeding threshold
 %                 BW4 = ~bwareaopen(~BW4,10,8); %Remove small holes from pixel mask
 %                 AMask4 = bwareafilt(BW4,6,4);
 %                 %CC = bwconncomp(AMask2);
@@ -199,21 +224,24 @@ saveas(gcf, fullfile(savefluofigpath,'c selecvitity-sign mask'), 'fig');
                 %% go through the different areas, plot the average choice selevitity over time
                 figure;
                 subplot(1,2,1)
-                image(mean(signMask,3),'CDataMapping','scaled');
+                image(mean(mergeMask,3),'CDataMapping','scaled');
                 axis square;
                 colormap(colors);
                 caxis([colorRange(1) colorRange(2)]);
-                title('Average positive choice selecvitity mask');
+                title('Average choice selecvitity mask');
                 hold on;
                 %get a function to plot different Masks
-                plotbound(Mask1);plotbound(Mask2);%plotbound(Mask3);%plotbound(Mask4);
+                plotbound(Mask1);plotbound(Mask2);%plotbound(Mask3);plotbound(Mask4);
                 subplot(3,20,60);
                 image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
                 colormap(colors);
                 caxis([colorRange(1) colorRange(2)]);
-                print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-pos mask-division'));
-                saveas(gcf, fullfile(savefluofigpath,'c selecvitity-pos mask-division'), 'fig');
+                print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-sign mask-division'));
+                saveas(gcf, fullfile(savefluofigpath,'c selecvitity-sign mask-division'), 'fig');
                 
+                %% save the mask information
+                savemaskpath = fullfile(savematpath,'choiceselMask.mat');
+                save(savemaskpath,'Mask1','Mask2')
 %                 %
 %                 aveChoiceSel1 = getAveSel(choiceselMat,Mask1);
 %                 aveChoiceSel2 = getAveSel(choiceselMat,Mask2);
@@ -231,8 +259,16 @@ saveas(gcf, fullfile(savefluofigpath,'c selecvitity-sign mask'), 'fig');
 %                  print(gcf,'-dpng',fullfile(savefluofigpath,'ave choice sel by area'));
 %                 saveas(gcf, fullfile(savefluofigpath,'ave choice sel by area'), 'fig');
 %                 
-
-%% monte carlo simulation of 
+                    close all;
+%% monte carlo simulation of
+                % find the center of neg/pos areas
+                % model the area by average density distribution, with
+                % error
+                % calculate the distribution of center distance
+                % generate infinite plane by center distance and
+                % distribution
+               % poisson point process: number of points follows poisson
+               % distribution
         end
     end
 end

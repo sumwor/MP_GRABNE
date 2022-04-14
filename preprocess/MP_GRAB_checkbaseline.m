@@ -22,8 +22,11 @@ for ii = 1:nFiles
     load(fullfile(fn_dff.folder,fn_dff.name));
     
     tic
-    
-    cells = MP_GRAB_normalizedFF(cells, trialData);
+    if isfield(cells,'normdFF')
+        display('Movement corrected')
+    else
+        cells = MP_GRAB_normalizedFF(cells, trialData);
+    end
     toc
     %figure;histogram(cells.dFF{1});
     
@@ -51,5 +54,5 @@ for ii = 1:nFiles
     close;
     % detect change point? too sensitive sometimes, try to align byhel cue
     % onset
-    save(fullfile(fn_dff.folder,fn_dff.name),'cells');
+    save(fullfile(fn_dff.folder,fn_dff.name),'cells','-v7.3');
 end

@@ -93,10 +93,10 @@ end
 % 891,893,894,895,896,897. sub 894 is not sure
 %subList = {'891';'893';'894';'895';'896';'897'};
 %recordSite = {'left','right','right','left','right','right'};
-%subList = {'910';'912';'913';'914';'915'};
-%recordSite = {'left','left','right','left','right'};
-subList = {'922';'923'};
-recordSite = {'right','left'};
+subList = {'910';'912';'913';'914';'915'};
+recordSite = {'left','left','right','left','right'};
+%subList = {'922';'923'};
+%recordSite = {'right','left'};
 for ii = 1:nFile
     Index = strcmp(subList, behIndex.Animal{ii});
     behIndex.RecordingSite{ii} = recordSite{Index};
