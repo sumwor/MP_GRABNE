@@ -20,7 +20,7 @@ for ii = 1:nFiles
     
     if length(fn_fluo) == 1
         
-        savefluofigpath = fullfile(dataIndex.BehPath{ii},'figs-fluo');
+        savefluofigpath = fullfile(dataIndex.BehPath{ii},'figs-fluo/LinearRegr');
         if ~exist(savefluofigpath,'dir')
             mkdir(savefluofigpath);
         end
@@ -38,7 +38,7 @@ for ii = 1:nFiles
         saveRegName = fullfile(savematpath,'regRL_norm.mat');  % regression for fluo changehange
         % saveMLRmatpath_outcome = fullfile(dataIndex.BehPath{ii},[fn_beh.name(1:end-7),'regRL_lag0_outcome_cut_fitall.mat']);
         
-        %if ~exist(saveRegName)
+        if ~exist(saveRegName)
             params=[];
             
             choice = NaN(size(trials.left));
@@ -150,52 +150,19 @@ for ii = 1:nFiles
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
             print(gcf,'-dpng','MLR-choiceselection-norm');    %png format
             saveas(gcf, 'MLR-choiceselection-norm', 'fig');
-            
-            %% running control multilinear regression
-            % shuffle every factor one by one, keeping other factors intact
-            
-            % check
-            
-            %             % construct every regression factor
-            %             params_ctrl = params;
-            %
-            %             % concatenate it into a matrix
-            %             params_ctrlMat = [];
-            %             fields = fieldnames(params_ctrl);
-            %             for jj = 1:length(fields)
-            %                 if contains(fields{jj},'trigEvent')
-            %                     params_ctrlMat = [params_ctrlMat params_ctrl.(fields{jj})];
-            %                 end
-            %             end
-            %
-            %             % shul
-            %             fieldname={'go'};
-            %             trialMask = getMask(trials,fieldname);
-            %
-            %
-            %             params.xtitle = 'Time from cue (s)';
-            %             params.window = [-3:0.1:5];
-            %             params.nback = 0;       %how many trials back to regress against
-            %             params.pvalThresh = 0.01;   %p-value for coefficient be considered significant
-            %             params.interaction = false;
-            %             %params.trigTime = trialData.cueTimes;
-            %             params.ifplot = 0;
-            %             %only perform analysis on this subset of trials
-            %
-            %             % iterate through all 9 factors, shuffle name one by one to get
-            %             % the control regression for every factor
-            %             tlabel={'C(n)','R(n)','C(n)xR(n)','C(n-1)','R(n-1)', 'C(n-1)xR(n-1)','QL-QR', 'ChosenQ', 'Reward Rate', 'Cumulavtive reward'};
-            %
-            %
-            %             reg_cr_ctrl = linear_regr_ctrl(pupil.dia, pupil.t, params_ctrlMat, params.trigTime, trialMask, params, tlabel);
-            %             reg_cr_change_ctrl = linear_regr_ctrl(pupil.resp, pupil.respT, params_ctrlMat,  params.trigTime, trialMask, params, tlabel );
-            %
-            %             save(saveMLRmatpath, 'reg_cr','reg_cr_ctrl');
+           
             save(saveRegName, 'reg_cr');
             close all;
-        %else
-        %    display('Regression already done');
-        %end
+        else
+           display('Regression already done');
+           load(saveRegName);
+           params.xtitle = {'Time from cue (s)'};
+           tlabel={'c(n)','r(n)','c(n)xr(n)','c(n-1)','r(n-1)', 'c(n-1)xr(n-1)','dQ', 'ChosenQ', 'dK', 'ChosenK','Reward Rate', 'Cumulavtive reward'};
+           params.pvalThresh = 0.01;
+           MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
+            print(gcf,'-dpng','MLR-choiceselection-norm');    %png format
+            saveas(gcf, 'MLR-choiceselection-norm', 'fig');
+        end
         
     end
 end

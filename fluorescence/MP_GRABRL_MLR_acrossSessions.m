@@ -306,7 +306,11 @@ saveas(gcf, 'MLR-norm_choiceselection_sigSession', 'fig');
 saveas(gcf, 'MLR-norm_choiceselection_sigSession','svg');
 
 
-
+savematpath = fullfile(savefigpath,'Result');
+if ~exist(savematpath)
+    mkdir(savematpath);
+end
+save(fullfile(savematpath,'regression2Sum'),'reg_cr_all','reg_sig');
 %%
 close all
 

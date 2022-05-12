@@ -69,6 +69,7 @@ for l=1:nPredictor
              [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         elseif nPredictor == 6  % for RPE/updatedQ
             subplot(2,3,currPredictor-1); hold on;
+             [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         elseif nPredictor == 12  % for RL with choice autocorrelation
             subplot(4,3,currPredictor-1); hold on;
              [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
