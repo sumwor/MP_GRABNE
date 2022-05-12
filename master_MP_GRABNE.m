@@ -8,8 +8,13 @@ setup_figprop;
 %root_path = 'Y:\HongliWang\GRAB_analysis';
 %root_path = 'Y:\HongliWang\Ach_analysis';
 %root_path = 'C:\Hongli\data\GRAB_analysis';
+<<<<<<< Updated upstream
 %root_path = 'V:\HongliWang\NE_analysis';
 root_path = 'Y:\HongliWang\Ach_784';
+=======
+root_path = 'K:\Ach_784';
+
+>>>>>>> Stashed changes
 %% matching pennies behavior
 
 disp('-----------------------------------------------------------');
@@ -80,7 +85,11 @@ model_path = fullfile(root_path,'mat_models');
 save_path_fluo = fullfile(root_path,'summary','figs_summary_fluo');
 
 % choice/reward selevitivty
+<<<<<<< Updated upstream
 MP_GRAB_selectivity(dataIndex(43:47,:));
+=======
+MP_GRAB_selectivity(dataIndex(11,:));
+>>>>>>> Stashed changes
 MP_GRAB_prev_selectivity(dataIndex);
 
 % calculate px selectivity
@@ -92,6 +101,7 @@ MP_GRAB_selectivitySpatial(dataIndex);
 MP_GRAB_selectivitySpatial_summary(dataIndex, save_path_fluo);
 
 %% Linear regression with choice and reward
+%% for linear regression - load averagve grid intensity, and its corresponding linear regression R2
 % running regression (choice and reward) on individual sessions
 MP_GRAB_MLR(dataIndex);
 % regression results seems unstable, try amount of variance explained?
@@ -100,6 +110,7 @@ MP_GRAB_MLR_acrossAnimals(dataIndex,save_path_fluo);
 MP_GRAB_MLR_acrossSessions(dataIndex, save_path_fluo)
 
 %%
+%
 MP_GRAB_MLR_separateSession(dataIndex);
 MP_GRAB_MLR_separateSummary(dataIndex, save_path_fluo);
 
@@ -112,6 +123,10 @@ MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex, save_path_fluo)
 
 MP_GRABRL_RPE_MLR(dataIndex);
 MP_GRABRL_RPE_MLR_acrossSessions(dataIndex, save_path_fluo)
+
+MP_GRAB_selectivitySpatial(dataIndex);
+MP_GRAB_selectivityCorr(dataIndex);
+MP_GRAB_selectivitySummary(dataIndex, save_path_fluo);
 
 %% random forest is better in estimating weak signals
 MP_GRAB_RF(dataIndex);
@@ -134,5 +149,7 @@ MP_GRAB_BLM(dataIndex);
 %% PCA
 MP_GRAB_PCA(dataIndex);
 
+%% clustering
+MP_GRAB_clustering(dataIndex);
 
 %% find the patchness?

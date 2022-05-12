@@ -306,8 +306,12 @@ print(gcf,'-dpng','MLR-norm-choiceoutcome_future_sigSession');    %png format
 saveas(gcf, 'MLR-norm-choiceoutcome_future_sigSession', 'fig');
 saveas(gcf, 'MLR-norm-choiceoutcome_future_sigSession','svg');
 
-
-
+% save the analysis
+savematpath = fullfile(savefigpath,'Result');
+if ~exist(savematpath)
+    mkdir(savematpath);
+end
+save(fullfile(savematpath,'regression1Sum'),'reg_cr_all','reg_sig');
 %%
 close all
 

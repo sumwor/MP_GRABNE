@@ -163,13 +163,13 @@ saveas(gcf, 'MLR-norm_valueupdating_sigSession','svg');
 %% plot pos/neg RPE
 
 %% plot Positive RPE
-reg_sig_pos.coeff = all_coeff_pos;
-reg_sig_pos.pval = all_pval_pos;
-reg_sig_pos.regr_time = reg_all.regr_time;
-reg_sig_pos.numPredictor = 5;
-reg_sig_pos.nback = reg_all.nback;
-reg_sig_pos.interaction = reg_all.interaction;
-reg_sig_pos.pvalThresh= 0.01;
+reg_sig.coeff = all_coeff_pos;
+reg_sig.pval = all_pval_pos;
+reg_sig.regr_time = reg_all.regr_time;
+reg_sig.numPredictor = 5;
+reg_sig.nback = reg_all.nback;
+reg_sig.interaction = reg_all.interaction;
+reg_sig.pvalThresh= 0.01;
 
 % preprocessing the control coefficient and pval: bootstrap the pval to
 % determine a baseline percentage of significant session
@@ -179,22 +179,22 @@ if exist('all_pval_future_ctrl')
     reg_pval_future_ctrl = getBootstrp(all_pval_future_ctrl, 0.01, 0.05);
 
 % MP_plot_regr(reg_sig,reg_sig.pvalThresh,tlabel,xtitle,[all_pval_sC; all_pval_sR]);
-    MP_plot_regr_fluo(reg_sig_pos,reg_pval_future_ctrl, reg_sig_pos.pvalThresh,tlabel,xtitle);
+    MP_plot_regr_fluo(reg_sig,reg_pval_future_ctrl, reg_sig.pvalThresh,tlabel,xtitle);
 else
-    MP_plot_regr_fluo(reg_sig_pos,[], reg_sig_pos.pvalThresh,tlabel,xtitle);
+    MP_plot_regr_fluo(reg_sig,[], reg_sig.pvalThresh,tlabel,xtitle);
 end
 print(gcf,'-dpng','MLR_norm-valueupdating_posRPEsigSession');    %png format
 saveas(gcf, 'MLR_norm-valueupdating_posRPEsigSession', 'fig');
 saveas(gcf, 'MLR-norm_valueupdating_posRPEsigSession','svg');
 
 %% plot negative RPE
-reg_sig_neg.coeff = all_coeff_neg;
-reg_sig_neg.pval = all_pval_neg;
-reg_sig_neg.regr_time = reg_all.regr_time;
-reg_sig_neg.numPredictor = 5;
-reg_sig_neg.nback = reg_all.nback;
-reg_sig_neg.interaction = reg_all.interaction;
-reg_sig_neg.pvalThresh= 0.01;
+reg_sig.coeff = all_coeff_neg;
+reg_sig.pval = all_pval_neg;
+reg_sig.regr_time = reg_all.regr_time;
+reg_sig.numPredictor = 5;
+reg_sig.nback = reg_all.nback;
+reg_sig.interaction = reg_all.interaction;
+reg_sig.pvalThresh= 0.01;
 
 % preprocessing the control coefficient and pval: bootstrap the pval to
 % determine a baseline percentage of significant session
@@ -204,9 +204,9 @@ if exist('all_pval_future_ctrl')
     reg_pval_future_ctrl = getBootstrp(all_pval_future_ctrl, 0.01, 0.05);
 
 % MP_plot_regr(reg_sig,reg_sig.pvalThresh,tlabel,xtitle,[all_pval_sC; all_pval_sR]);
-    MP_plot_regr_fluo(reg_sig_neg,reg_pval_future_ctrl, reg_sig_neg.pvalThresh,tlabel,xtitle);
+    MP_plot_regr_fluo(reg_sig,reg_pval_future_ctrl, reg_sig.pvalThresh,tlabel,xtitle);
 else
-    MP_plot_regr_fluo(reg_sig_neg,[], reg_sig_neg.pvalThresh,tlabel,xtitle);
+    MP_plot_regr_fluo(reg_sig,[], reg_sig.pvalThresh,tlabel,xtitle);
 end
 print(gcf,'-dpng','MLR_norm-valueupdating_negRPEsigSession');    %png format
 saveas(gcf, 'MLR_norm-valueupdating_negRPEsigSession', 'fig');
@@ -240,7 +240,7 @@ savematpath = fullfile(savefigpath,'Result');
 if ~exist(savematpath)
     mkdir(savematpath);
 end
-save(fullfile(savematpath,'regression3Sum'),'reg_cr_all','reg_sig','reg_sig_pos','reg_sig_neg','reg_all_sign');
+save(fullfile(savematpath,'regression3Sum'),'reg_cr_all','reg_sig','reg_cr_pos','reg_cr_neg');
 %%
 close all
 

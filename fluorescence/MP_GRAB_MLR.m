@@ -62,7 +62,7 @@ for ii = 1:nFiles
     fn_fluo = dir(fullfile(dataIndex.BehPath{ii},'dff.mat'));
     if length(fn_fluo) == 1
         
-        savefluofigpath = fullfile(dataIndex.BehPath{ii},'figs-fluo');
+        savefluofigpath = fullfile(dataIndex.BehPath{ii},'figs-fluo/LinearRegr');
         if ~exist(savefluofigpath,'dir')
             mkdir(savefluofigpath);
         end
@@ -88,7 +88,7 @@ for ii = 1:nFiles
         %  C(n-2) - C(n+1)
         %  R(n-2) - R(n+1)
         %   interaction term
-        %if ~exist(saveRegName)
+        if ~exist(saveRegName)
             
             % convert left/right choices into ipsi/contra choices
             % dummy code: ipsi: 0; contra: 1;
@@ -171,6 +171,7 @@ for ii = 1:nFiles
             else
                 reg_dFF = cells.dFF;
             end
+            tic
             parfor j=1:numel(reg_dFF)
                 if length(reg_t) > length(reg_dFF{1})
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t(1:length(cells.dFF{1})), future_event, params.trigTime, trialMask, params );
@@ -180,7 +181,7 @@ for ii = 1:nFiles
                     reg_cr{j}=linear_regr(reg_dFF{j}(1:length(reg_t)), reg_t, future_event, params.trigTime, trialMask, params );
                 end
             end
-            
+            toc
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
             print(gcf,'-dpng','MLR-norm-choiceoutcome');    %png format
             saveas(gcf, 'MLR-norm-choiceoutcome', 'fig');
@@ -296,9 +297,18 @@ for ii = 1:nFiles
             save(saveRegName,'reg_cr');
             %save(saveRegName_ITI,'reg_cr1_change_1','reg_cr2_change_1','reg_cr3_change_1');
             close all;
-%         else
-%             display('Regression already done');
-%         end
+        else
+            %
+            display('Regression already done');
+            load(saveRegName);
+             params.xtitle = {'Time from cue (s)'};
+           tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
+                'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward'};
+                params.pvalThresh = 0.01;
+           MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
+            print(gcf,'-dpng','MLR-norm-choiceoutcome');    %png format
+            saveas(gcf, 'MLR-norm-choiceoutcome', 'fig');
+        end
     end
 end
 end

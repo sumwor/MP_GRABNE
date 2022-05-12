@@ -84,7 +84,7 @@ elseif output.numPredictor==2
 %     error('This function does not handle more than 3 predictor events plus their interactions.');
 % end
 elseif output.numPredictor > 2 % this is the linear regression for RL latent variables
-    disp('Linear regression model');
+    %disp('Linear regression model');
     terms = [zeros(1, output.numPredictor);eye(output.numPredictor,output.numPredictor)];
 end
 
