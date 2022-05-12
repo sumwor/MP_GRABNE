@@ -62,7 +62,7 @@ for ii = 1:nFiles
     fn_fluo = dir(fullfile(dataIndex.BehPath{ii},'dff.mat'));
     if length(fn_fluo) == 1
         
-        savefluofigpath = fullfile(dataIndex.BehPath{ii},'figs-fluo');
+        savefluofigpath = fullfile(dataIndex.BehPath{ii},'figs-fluo-normed');
         if ~exist(savefluofigpath,'dir')
             mkdir(savefluofigpath);
         end

@@ -12,9 +12,10 @@ for ii = 1:nFiles
     
     % check if dff is already computed
     fn_dff = dir(fullfile(fn_beh.folder, 'dff.mat'));
-    if isempty(fn_dff)
+    if isempty(fn_dff) 
         % load the fluorescence data extracted using cellROI, calculate dF/F
         stackPath = fullfile(dataIndex.LogFilePath{ii},'stack_info.mat');
+        if exist(stackPath)
         stackInfo = load(stackPath);
         
         % get trigger delay times
@@ -45,6 +46,7 @@ for ii = 1:nFiles
         close all;
     else
         display('dFF already computed');
+        end
     end
     end
 

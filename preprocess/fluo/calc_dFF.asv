@@ -81,13 +81,13 @@ elseif numel(imageTrigTimes) < numel(stackInfo.trigDelay) %behavior aborted befo
     end
 else            %imaging aborted before behavior finishes
     % usually because of the deletion of the last trial
-   % if numel(imageTrigTimes)-1 == numel(stackInfo.trigDelay)
+    if numel(imageTrigTimes)-1 == numel(stackInfo.trigDelay)
         disp(['CAUTION: Behavioral start times (' int2str(numel(imageTrigTimes)) ') < imaging triggers (' int2str(numel(stackInfo.trigDelay)) '); inconsistent number of trials/files. CHECK!']);
         temp = stackInfo.trigDelay(1);
         startTimes = imageTrigTimes(1) - temp;
         
         %crop the fluorescence data
-        cropIdx=sum(stackInfo.nFrames(1:numel(stackInfo.trigDelay))); %save only frames up to end of last behavioral trial
+        cropIdx=sum(stackInfo.nFrames(1:numel(imageTrigTimes)-1)); %save only frames up to end of last behavioral trial
         for i=1:numel(rois)
             cells.cellf{i} = cells.cellf{i}(1:cropIdx);
             cells.baseline{i} = cells.baseline{i}(1:cropIdx);
@@ -95,7 +95,7 @@ else            %imaging aborted before behavior finishes
             
             
         end
-    %end
+    end
 end
 
 % once we figure out the alignment of image trigger time, then line up the
@@ -112,10 +112,10 @@ elseif numel(imageTrigTimes) < numel(stackInfo.trigDelay)
     t_temp = [frameTimes{:}]'; %Column vector
     cells.t = t_temp(1:cropIdx);
 else
-  %  if numel(imageTrigTimes)-1 == numel(stackInfo.trigDelay) 
+    if numel(imageTrigTimes)-1 == numel(stackInfo.trigDelay) 
         t_temp = [frameTimes{:}]'; %Column vector
         cells.t = t_temp(1:cropIdx);
-   % end
+    end
 end
 
 

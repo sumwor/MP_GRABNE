@@ -9,7 +9,7 @@ setup_figprop;
 %root_path = 'Y:\HongliWang\Ach_analysis';
 %root_path = 'C:\Hongli\data\GRAB_analysis';
 %root_path = 'V:\HongliWang\NE_analysis';
-root_path = 'Y:\HongliWang\Ach_784';
+root_path = 'Y:\HongliWang\NE_analysis_784';
 %% matching pennies behavior
 
 disp('-----------------------------------------------------------');
@@ -80,7 +80,7 @@ model_path = fullfile(root_path,'mat_models');
 save_path_fluo = fullfile(root_path,'summary','figs_summary_fluo');
 
 % choice/reward selevitivty
-MP_GRAB_selectivity(dataIndex(43:47,:));
+MP_GRAB_selectivity(dataIndex(1,:));
 MP_GRAB_prev_selectivity(dataIndex);
 
 % calculate px selectivity

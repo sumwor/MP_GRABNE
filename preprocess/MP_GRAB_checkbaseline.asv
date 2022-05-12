@@ -20,7 +20,7 @@ for ii = 1:nFiles
     end
     
     if ~isempty(fn_dff)
-     load(fullfile(fn_dff.folder,fn_dff.name));
+    load(fullfile(fn_dff.folder,fn_dff.name));
     
     tic
     if isfield(cells,'normdFF')
@@ -56,7 +56,4 @@ for ii = 1:nFiles
     % detect change point? too sensitive sometimes, try to align byhel cue
     % onset
     save(fullfile(fn_dff.folder,fn_dff.name),'cells','-v7.3');
-    else
-        display('Fluorescent file not found');
-    end
 end

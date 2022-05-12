@@ -36,7 +36,7 @@ for ii = 1:nFiles
         if ~exist(savematpath,'dir')
             mkdir(savematpath);
         end
-        saveSelName = fullfile(savematpath,'select_norm.mat');  % random forest
+        saveSelName = fullfile(savematpath,'select_nonorm.mat');  % random forest
         
         if ~exist(saveSelName)
             params=[];
@@ -48,11 +48,11 @@ for ii = 1:nFiles
             params.minNumTrial = 50;
         
                        
-            if isfield(cells,'normdFF')
-                sel_t= cells.t; sel_dFF = cells.normdFF;
-            else
+%             if isfield(cells,'normdFF')
+%                 sel_t= cells.t; sel_dFF = cells.normdFF;
+%             else
                  sel_t= cells.t; sel_dFF = cells.dFF;
-            end
+%             end
             
             fieldname1={'left'}; trialMask1 = getMask(trials,fieldname1);
             fieldname2={'right'}; trialMask2 = getMask(trials,fieldname2);
