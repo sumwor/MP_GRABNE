@@ -49,6 +49,13 @@ centerCoor = [size(Mat1.sig,1), size(Mat1.sig,2)];
 for ii = 1:size(Mat1.sig,3)
     mat1 = Mat1.sig(:,:,ii); mat2 = Mat2.sig(:,:,ii);
     
+    % check if there is NaN in the data
+    if sum(sum(isnan(mat1)))>0 | sum(sum(isnan(mat2)))>0
+        display(['Warning! NaN in regression',savefluofigpath])
+        mat1(isnan(mat1))=0;
+        mat2(isnan(mat2))=0;
+    end
+
     if all(mat1(:)==0) | all(mat2(:)==0)
         sigCorr(:,:,ii) = NaN;
         sigMaxInd(:,ii)=[NaN,NaN];
@@ -73,7 +80,18 @@ coeffMaxValue = zeros(1, size(Mat1.coeff,3)-1);
 
 for ii = 1:size(Mat1.coeff,3)
     mat1 = Mat1.sigCoeff(:,:,ii); mat2 = Mat2.sigCoeff(:,:,ii);
-    
+     if sum(sum(isnan(mat1)))>0 | sum(sum(isnan(mat2)))>0
+        display(['Warning! NaN in regression',savefluofigpath])
+        mat1(isnan(mat1))=0;
+        mat2(isnan(mat2))=0;
+     end
+
+      if sum(sum(isinf(mat1)))>0 | sum(sum(isinf(mat2)))>0
+        display(['Warning! inf in regression',savefluofigpath])
+        mat1(isinf(mat1))=0;
+        mat2(isinf(mat2))=0;
+      end
+
     if all(mat1(:)==0) | all(mat2(:)==0)
         coeffCorr(:,:,ii) = NaN;
          coeffMaxInd(:,ii)=[NaN,NaN];

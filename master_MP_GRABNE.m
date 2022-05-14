@@ -107,7 +107,7 @@ MP_GRAB_MLR(dataIndex);
 % regression results seems unstable, try amount of variance explained?
 MP_GRAB_MLR_analysis(dataIndex);
 MP_GRAB_MLR_acrossAnimals(dataIndex,save_path_fluo);
-MP_GRAB_MLR_acrossSessions(dataIndex, save_path_fluo)
+MP_GRAB_MLR_acrossSessions(dataIndex([1:10,20:end],:), save_path_fluo)
 
 %%
 %
@@ -116,17 +116,17 @@ MP_GRAB_MLR_separateSummary(dataIndex, save_path_fluo);
 
 % latent variable
 MP_GRABRL_MLR(dataIndex)
-MP_GRABRL_MLR_acrossSessions(dataIndex, save_path_fluo)
+MP_GRABRL_MLR_acrossSessions(dataIndex([1:10,20:end],:), save_path_fluo)
 
 MP_GRABRL_sumQ_MLR(dataIndex)
 MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex, save_path_fluo)
 
 MP_GRABRL_RPE_MLR(dataIndex);
-MP_GRABRL_RPE_MLR_acrossSessions(dataIndex, save_path_fluo)
+MP_GRABRL_RPE_MLR_acrossSessions(dataIndex([1:10,20:end],:), save_path_fluo)
 
 MP_GRAB_selectivitySpatial(dataIndex);
 MP_GRAB_selectivityCorr(dataIndex);
-MP_GRAB_selectivitySummary(dataIndex, save_path_fluo);
+MP_GRAB_selectivitySummary(dataIndex([1:10,20:end],:), save_path_fluo);
 
 %% random forest is better in estimating weak signals
 MP_GRAB_RF(dataIndex);
