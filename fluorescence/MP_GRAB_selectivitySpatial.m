@@ -380,8 +380,8 @@ for ii = 1:nFiles
          % c(n+1) regression mask
         if ~exist('cn_1RegData','var') % if choice regression mask not computed
             label = 'upcoming choice';
-            outcomeInd = 2;
-            outcomeRegData = getRegSelData(reg1.reg_cr,label,outcomeInd,Thresh, sigThresh,savefluofigpath);
+            cn_1Ind = 2;
+            cn_1RegData = getRegSelData(reg1.reg_cr,label,cn_1Ind,Thresh, sigThresh,savefluofigpath);
         end
         
         % r(n+1) regression mask
