@@ -38,7 +38,7 @@ for ii = 1:nFiles
         saveRegName = fullfile(savematpath,'regRL_norm.mat');  % regression for fluo changehange
         % saveMLRmatpath_outcome = fullfile(dataIndex.BehPath{ii},[fn_beh.name(1:end-7),'regRL_lag0_outcome_cut_fitall.mat']);
 
-        if ~exist(saveRegName)
+       % if ~exist(saveRegName)
             params=[];
 
             choice = NaN(size(trials.left));
@@ -175,40 +175,40 @@ for ii = 1:nFiles
 
             save(saveRegName, 'reg_cr');
             close all;
-        else
-            display('Regression already done');
-            load(saveRegName);
-            params.xtitle = {'Time from cue (s)'};
-            tlabel={'c(n)','r(n)','c(n)xr(n)','c(n-1)','r(n-1)', 'c(n-1)xr(n-1)','dQ', 'ChosenQ', 'dK', 'ChosenK','Reward Rate', 'Cumulavtive reward'};
-            params.pvalThresh = 0.01;
-
-            % get bootstrap
-            all_coeff = [];
-            for rr = 1:length(reg_cr)
-                all_coeff = cat(3,all_coeff, reg_cr{rr}.coeff);
-            end
-            reg_cr_all.coeff= all_coeff;
-
-            % use bootstrp to get coefficient
-            reg_cr_all = getBootstrp(reg_cr_all, 0, 0.05);
-
-            reg_cr_all.regr_time = reg_cr{1}.regr_time;
-            reg_cr_all.numPredictor = reg_cr{1}.numPredictor;
-            reg_cr_all.nback = reg_cr{1}.nback;
-            reg_cr_all.interaction = reg_cr{1}.interaction;
-            reg_cr_all.pvalThresh= 0.01;
-
-            MP_plot_regrcoef_fluo(reg_cr_all,params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-norm_choiceselection');    %png format
-            saveas(gcf, 'MLR-norm_choiceselection', 'fig');
-            saveas(gcf, 'MLR-norm_choiceselection','svg');
-
-            MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-choiceselection-norm');    %png format
-            saveas(gcf, 'MLR-choiceselection-norm', 'fig');
-
-            close all;
-        end
+%         else
+%             display('Regression already done');
+%             load(saveRegName);
+%             params.xtitle = {'Time from cue (s)'};
+%             tlabel={'c(n)','r(n)','c(n)xr(n)','c(n-1)','r(n-1)', 'c(n-1)xr(n-1)','dQ', 'ChosenQ', 'dK', 'ChosenK','Reward Rate', 'Cumulavtive reward'};
+%             params.pvalThresh = 0.01;
+% 
+%             % get bootstrap
+%             all_coeff = [];
+%             for rr = 1:length(reg_cr)
+%                 all_coeff = cat(3,all_coeff, reg_cr{rr}.coeff);
+%             end
+%             reg_cr_all.coeff= all_coeff;
+% 
+%             % use bootstrp to get coefficient
+%             reg_cr_all = getBootstrp(reg_cr_all, 0, 0.05);
+% 
+%             reg_cr_all.regr_time = reg_cr{1}.regr_time;
+%             reg_cr_all.numPredictor = reg_cr{1}.numPredictor;
+%             reg_cr_all.nback = reg_cr{1}.nback;
+%             reg_cr_all.interaction = reg_cr{1}.interaction;
+%             reg_cr_all.pvalThresh= 0.01;
+% 
+%             MP_plot_regrcoef_fluo(reg_cr_all,params.pvalThresh,tlabel,params.xtitle);
+%             print(gcf,'-dpng','MLR-norm_choiceselection');    %png format
+%             saveas(gcf, 'MLR-norm_choiceselection', 'fig');
+%             saveas(gcf, 'MLR-norm_choiceselection','svg');
+% 
+%             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
+%             print(gcf,'-dpng','MLR-choiceselection-norm');    %png format
+%             saveas(gcf, 'MLR-choiceselection-norm', 'fig');
+% 
+%             close all;
+%         end
 
     end
 end

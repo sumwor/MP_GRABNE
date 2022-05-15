@@ -2,6 +2,7 @@ function xcorrData = getRegSelCorr(reg_cr,label,Ind, thresh, savefluofigpath)
 
 % get the corresponding regression results
 regCoeff = [];regPval = [];
+reg_cr=reg_cr.reg_cr;
 for ii = 1:length(reg_cr)
     regCoeff = [regCoeff;reg_cr{ii}.coeff(:,Ind)'];
     regPval = [regPval;reg_cr{ii}.pval(:,Ind)'];

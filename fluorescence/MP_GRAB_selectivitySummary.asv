@@ -322,44 +322,47 @@ colors=cbrewer('div','RdBu',256);
      mkdir(savefluofigpath);
  end
  
-% for pp = 1:size(xCorrMat,3)
-%      h=figure;
-%     
-%      subplot(1,2,1)
-%      image(xCorrBootAve(:,:,pp),'CDataMapping','scaled');
-%      axis square;
-%     colormap(colors);
-%     caxis([colorRange(1) colorRange(2)]);
-%     xticks(1:15)
-%     xticklabels(varName);  
-%     xtickangle(45)
-%     yticks(1:15)
-%     yticklabels(varName)
-%     titleText = ['Cross-correlation at t= ',num2str(t(pp)),' s'];
-%     title(titleText);
-%     % add star for significance
-%     ifSig = xCorrBootPval(:,:,pp)<0.05;
-%      [r c]=find(ifSig==1);
-%     hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
-%     ax = gca(h); 
-%     ax.FontSize = 20; 
-%     %s.Marker = '*';
-%     subplot(3,30,90);
-%     image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-%     colormap(colors);
-%     caxis([colorRange(1) colorRange(2)]);
-%     
-%     print(gcf,'-dpng',fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]));
-%     saveas(gcf, fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]), 'fig');
-%     saveas(gcf, fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]), 'svg');
-%     close;
-% end
+ varName = {'cn+1','cn','cn-1','rn','rn-1','xn','xn-1','ave_r','Cum_r','dQ','chosenQ','dK','chosenK','RPE','CKE'};
+ 
+ 
+for pp = 1:size(xCorrMat,3)
+     h=figure;
+    
+     subplot(1,2,1)
+     image(xCorrBootAve(:,:,pp),'CDataMapping','scaled');
+     axis square;
+    colormap(colors);
+    caxis([colorRange(1) colorRange(2)]);
+    xticks(1:15)
+    xticklabels(varName);  
+    xtickangle(45)
+    yticks(1:15)
+    yticklabels(varName)
+    titleText = ['Cross-correlation at t= ',num2str(t(pp)),' s'];
+    title(titleText);
+    % add star for significance
+    ifSig = xCorrBootPval(:,:,pp)<0.05;
+     [r c]=find(ifSig==1);
+    hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
+    ax = gca(h); 
+    ax.FontSize = 20; 
+    %s.Marker = '*';
+    subplot(3,30,90);
+    image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+    colormap(colors);
+    caxis([colorRange(1) colorRange(2)]);
+    
+    print(gcf,'-dpng',fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]));
+    saveas(gcf, fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]), 'fig');
+    saveas(gcf, fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]), 'svg');
+    close;
+end
  
 
 
 % plot time curve as well
 
-% get the average correlation first
+% get the average correlation first (from 0-3s)
 xCorrBoot_time = cell(size(xCorrMat,1),size(xCorrMat,1));
 xCorrBootAve_time =  zeros(size(xCorrMat,1),size(xCorrMat,1));
 xCorrBootPval_time = ones(size(xCorrMat,1),size(xCorrMat,1));
