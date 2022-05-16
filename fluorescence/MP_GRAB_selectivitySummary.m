@@ -78,6 +78,7 @@ end
 
 choice_sig_dis = [];choice_center_coeff = [];choice_regPval = [];%choice_sigmax_ind = [];choice_sigmax_val=[];
 outcome_sig_dis = [];outcome_center_coeff = [];outcome_regPval = [];%outcome_sigmax_ind = [];outcome_sigmax_val=[];
+rn_1_sig_dis  = [];rn_1_center_coeff=[];rn_1_regPval = [];
 ave_r_sig_dis = [];ave_r_center_coeff = [];ave_r_regPval = [];
 cum_r_sig_dis = [];cum_r_center_coeff = [];cum_r_regPval = [];
 dQ_sig_dis = [];dQ_center_coeff = [];dQ_regPval = [];
@@ -88,6 +89,7 @@ RPE_sig_dis = [];RPE_center_coeff = [];RPE_regPval = [];%RPE_sigmax_ind = [];RPE
 
 %% crosscorrelation
 xCorrMat = zeros(15,15,80,nFiles);
+xSigMat = zeros(15,15,80,nFiles);
 regCoeffMat = zeros(15,80,nFiles); % save the regression coefficient
 
 % regression results
@@ -126,6 +128,13 @@ for ii = 1:nFiles
         %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
         outcome_regPval = cat(3,outcome_regPval,outcomeRegData.regPval);
         
+         % rn+1
+        rn_1_center_coeff=[rn_1_center_coeff;squeeze(rn_1RegData.sigCorr(28,28,:))'];
+        rn_1_sig_dis = [rn_1_sig_dis;rn_1RegData.sigMaxDis];
+        %choice_sigmax_ind =  cat(3,choice_sigmax_ind,choiceRegData.sigMaxInd);
+        %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
+        rn_1_regPval = cat(3,rn_1_regPval,rn_1RegData.regPval);
+
         % average reward
         ave_r_center_coeff=[ave_r_center_coeff;squeeze(ave_rRegData.sigCorr(28,28,:))'];
         ave_r_sig_dis = [ave_r_sig_dis;ave_rRegData.sigMaxDis];
@@ -183,6 +192,7 @@ for ii = 1:nFiles
          for uu = 1:size(xCorrCell,1)
              for vv = uu:size(xCorrCell,2)
                  xCorrMat(uu,vv,:,ii) = xCorrCell{uu,vv}.coeffCorr(28,28,:);
+                 xSigMat(uu,vv,:,ii) = xCorrCell{uu,vv}.sigCorr(28,28,:);
              end
          end
     end
@@ -206,6 +216,15 @@ maxValue.coeff= outcome_center_coeff;
 offset.coeff = outcome_sig_dis;
 maxValue.t = -2.95:0.1:4.85; offset.t = -2.95:0.1:4.85;
 pValue.coeff = outcome_regPval;pValue.t = -2.95:0.1:4.95;
+thresh = 0.01;
+plot_xcorrCoeff(pValue,maxValue,offset,thresh,save_path_fluo,label);
+
+%% ---------------upcoming reward
+label = 'rn+1 significance';
+maxValue.coeff= rn_1_center_coeff;
+offset.coeff = rn_1_sig_dis;
+maxValue.t = -2.95:0.1:4.85; offset.t = -2.95:0.1:4.85;
+pValue.coeff = rn_1_regPval;pValue.t = -2.95:0.1:4.95;
 thresh = 0.01;
 plot_xcorrCoeff(pValue,maxValue,offset,thresh,save_path_fluo,label);
 

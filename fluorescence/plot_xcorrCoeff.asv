@@ -58,18 +58,32 @@ matHist = [tHist3';vHist3']';
 edges = {0:1:maxValue input3.t};
 figure;hist3([vHist3';tHist3']','Edges',edges,'CDataMode','auto','FaceColor','interp')
 ylabel('Time from cue(s)');
-xlabel('Number of sessions')
+xlabel('Offsets')
 title(['Distribions of offsets - ',label]);
 colorbar;
 
-figure;plot(mean(offsetHist,2))
-for hh = 1:numBin
-    startV = 0+binStep*(hh-1);
-    endV = binStep*hh;
-    offsetHist(hh,tt) = sum(input3.coeff(:,tt)>=startV & input3.coeff(:,tt)<endV);
+
+print(gcf,'-dpng',fullfile(save_path_fluo,[label,' xcorrCoeff-distribution']));
+saveas(gcf, fullfile(save_path_fluo,[label,' xcorrCoeff-distribution']), 'fig');
+
+% individual animals
+tHist3 = [];
+vHist3 = [];
+for tt = 1:size(input3.coeff,2)
+    tHist3 = [tHist3;ones(10,1)*input3.t(tt)];
+    vHist3 = [vHist3;input3.coeff(21:30,tt)];
 end
-end
-figure;surf(offsetHist);
+matHist = [tHist3';vHist3']';
+edges = {0:1:maxValue input3.t};
+figure;hist3([vHist3';tHist3']','Edges',edges,'CDataMode','auto','FaceColor','interp')
+% figure;plot(mean(offsetHist,2))
+% for hh = 1:numBin
+%     startV = 0+binStep*(hh-1);
+%     endV = binStep*hh;
+%     offsetHist(hh,tt) = sum(input3.coeff(:,tt)>=startV & input3.coeff(:,tt)<endV);
+% end
+% end
+% figure;surf(offsetHist);
 
 % figure;
 % for ii=1:size(input.coeff,1)
