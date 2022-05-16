@@ -16,7 +16,6 @@ elseif isSig == 0
 else   
     colors=cbrewer('div','RdBu',256);
     colors=flipud(colors);
-    colors = [ colors ]
     bound = max(abs(max(max(nanmean(mergeMask,3)))),abs(min(min(nanmean(mergeMask,3)))));
     
     colorRange = [-0.05, 0.05];
@@ -43,6 +42,6 @@ colormap(colors);
 caxis([colorRange(1) colorRange(2)]);
 print(gcf,'-dpng',fullfile(savefluofigpath,titleText));
 saveas(gcf, fullfile(savefluofigpath,titleText), 'fig');
-saveas(gcf, fullfile(savefluofigpath,titleText), 'svg');
+saveas(gcf, fullfile(savefluofigpath,titleText), 'epsc');
 
 close;

@@ -62,7 +62,11 @@ for zz = 1:size(Mat.coeff,3)
 end
 coeffBound.min = floor(min(min(min(sigCoeff)))*10)/10;
 coeffBound.max = ceil(max(max(max(sigCoeff)))*10)/10;
-plotMaskBoundary(sigCoeff,[],[],label,savefluofigpath,isSig);
+savepath = fullfile(savefluofigpath,'sigCoeff');
+if ~exist(savepath)
+    mkdir(savepath)
+end
+plotMaskBoundary(sigCoeff,[],[],label,savepath,isSig);
 
 
 % significance mask

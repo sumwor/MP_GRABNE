@@ -41,6 +41,7 @@ image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRa
 colormap(colors);
 caxis([colorRange(1) colorRange(2)]);
 print(gcf,'-dpng',fullfile(savefluofigpath,titleText));
+%saveas(gcf,fullfile(savefluofigpath,titleText),'png');
 saveas(gcf, fullfile(savefluofigpath,titleText), 'fig');
 saveas(gcf, fullfile(savefluofigpath,titleText), 'svg');
 
