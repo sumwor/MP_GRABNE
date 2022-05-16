@@ -192,21 +192,22 @@ for ii = 1:nFiles
 
 
         % calculate crosscorrelation
-        %if ~exist(saveregVarcorrpath)
+        if ~exist(saveregVarcorrpath)
             xCorrCell = cell(length(varInd),length(varInd));
         for ii = 1:length(varName)
             for jj=ii:length(varName)
 
                 xCorrCell{ii,jj}=getRegSelxCorr(reg_cr{varReg(ii)},reg_cr{varReg(jj)},varName{ii},varName{jj},varInd(ii),varInd(jj), sigThresh, savefluofigpath);
             end
-        %end
+        end
+          save(saveregVarcorrpath,'xCorrCell');
         end
         %% save the results
         save(saveregXcorrpath,'outcomeRegData','choiceRegData','cn_1RegData','cn__1RegData',...
                              'rn__1RegData','rn_1RegData', 'xnRegData', 'ave_rRegData', 'cum_rRegData',...
                              'dQRegData', 'chosenQRegData','dKRegData','chosenKRegData',...
                              'RPERegData', 'CKERegData')
-            save(saveregVarcorrpath,'xCorrCell');
+          
     end
 
         close all

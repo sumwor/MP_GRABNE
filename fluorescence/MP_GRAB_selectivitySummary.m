@@ -385,6 +385,12 @@ end
 xCorrBoot_time = cell(size(xCorrMat,1),size(xCorrMat,1));
 xCorrBootAve_time =  zeros(size(xCorrMat,1),size(xCorrMat,1));
 xCorrBootPval_time = ones(size(xCorrMat,1),size(xCorrMat,1));
+
+
+xSigBoot_time = cell(size(xCorrMat,1),size(xCorrMat,1));
+xSigBootAve_time =  zeros(size(xCorrMat,1),size(xCorrMat,1));
+xSigBootPval_time = ones(size(xCorrMat,1),size(xCorrMat,1));
+
 for tt = 1:size(xCorrMat,1)
     for rr = tt:size(xCorrMat,2)
         if tt~= rr
@@ -394,11 +400,21 @@ for tt = 1:size(xCorrMat,1)
             % calculate two-tail p value
             
             
+              bootSigData.coeff = squeeze(nanmean(xSigMat(tt,rr,:,:),3));
+            xSigBoot_time{tt,rr} = getBootstrp(bootSigData,0,0.05);
+            xSigBootAve_time(tt,rr) = xSigBoot_time{tt,rr}.coeff_bootave;
+            
             if xCorrBoot_time{tt,rr}.coeff_bootave > 0
                 xCorrBootPval_time(tt,rr) = sum(xCorrBoot_time{tt,rr}.bootSig(1,1,:)<0)*2/size(xCorrBoot_time{tt,rr}.bootSig,3);
             else
                 xCorrBootPval_time(tt,rr) = sum(xCorrBoot_time{tt,rr}.bootSig(1,1,:)>0)*2/size(xCorrBoot_time{tt,rr}.bootSig,3);
             end
+            
+             if xSigBoot_time{tt,rr}.coeff_bootave > 0
+                xSigBootPval_time(tt,rr) = sum(xSigBoot_time{tt,rr}.bootSig(1,1,:)<0)*2/size(xSigBoot_time{tt,rr}.bootSig,3);
+            else
+                xSigBootPval_time(tt,rr) = sum(xSigBoot_time{tt,rr}.bootSig(1,1,:)>0)*2/size(xSigBoot_time{tt,rr}.bootSig,3);
+             end
         end
         
     end
@@ -440,6 +456,36 @@ ifSig = xCorrBootPval_time<0.05;
    print(gcf,'-dpng',fullfile(save_path_fluo,'Average cross-correlation'));
     saveas(gcf, fullfile(save_path_fluo,'Average cross-correlation'), 'fig');
     saveas(gcf, fullfile(save_path_fluo,'Average cross-correlation'), 'svg');
+    
+         % significancy xcorr
+   h= figure;
+    subplot(1,2,1)
+   image(xSigBootAve_time,'CDataMapping','scaled');
+axis square;
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);
+xticks(1:15)
+xticklabels(varName)
+xtickangle(45)
+yticks(1:15)
+yticklabels(varName)
+ifSig = xSigBootPval_time<0.05;
+     [r c]=find(ifSig==1);
+    hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
+  ax = gca(h); 
+    ax.FontSize = 20; 
+    title('Average sig cross-correlation');
+    %s.Marker = '*';
+    subplot(3,30,90);
+    image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+    colormap(colors);
+    caxis([colorRange(1) colorRange(2)]);
+    
+
+   print(gcf,'-dpng',fullfile(save_path_fluo,'Average sig cross-correlation'));
+    saveas(gcf, fullfile(save_path_fluo,'Average sig cross-correlation'), 'fig');
+    saveas(gcf, fullfile(save_path_fluo,'Average sig cross-correlation'), 'svg');
+
 %% negative crosscorrelation:
 % possibility 1: different region, same modulation direction;
 % possibility 2: same region, different direction; % check overlapping area
