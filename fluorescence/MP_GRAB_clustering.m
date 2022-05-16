@@ -9,7 +9,7 @@ for ii = 1:nFiles
     
     % load behavior files
     fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
-    load(fullfile(fn_beh.folder,fn_beh.name));
+    %load(fullfile(fn_beh.folder,fn_beh.name));
     
     
     % load fluorescent files
@@ -24,7 +24,7 @@ for ii = 1:nFiles
         cd(savefluofigpath);
         
         
-        load(fullfile(fn_fluo.folder,fn_fluo.name));
+        %load(fullfile(fn_fluo.folder,fn_fluo.name));
         
         % make folders to save analysis and plots
         savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');
@@ -184,7 +184,7 @@ for ii = 1:nFiles
         
         rng('default');  % For reproducibility
 X = rand(20000,3);
- T = clusterdata(X,'Linkage','ward','SaveMemory','on','Maxclust',4);
+ T = clusterdata(X,'Linkage','ward','SaveMemory','on','Maxclust',4,'distance','correlation');
         
         %% save the results
         save(saveregmaskpath,'outcomeRegData','choiceRegData','cn_1RegData','cn__1RegData',...
