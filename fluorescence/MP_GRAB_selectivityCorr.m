@@ -8,7 +8,7 @@ for ii = 1:nFiles
     
     % load behavior files
     fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
-    load(fullfile(fn_beh.folder,fn_beh.name));
+    %load(fullfile(fn_beh.folder,fn_beh.name));
     
     
     % load fluorescent files
@@ -23,7 +23,7 @@ for ii = 1:nFiles
         cd(savefluofigpath);
         
         
-        load(fullfile(fn_fluo.folder,fn_fluo.name));
+       % load(fullfile(fn_fluo.folder,fn_fluo.name));
         
         % make folders to save analysis and plots
         savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');
@@ -190,13 +190,14 @@ for ii = 1:nFiles
         varInd = [2,3,4,7,8,11,12,14,15,8,9,10,11,6,8];
         varReg = [1,1,1,1,1,1,1,1,1,2,2,2,2,3,3];
         
-        xCorrCell = cell(length(varInd),length(varInd));
+        
         % calculate crosscorrelation
         %if ~exist(saveregVarcorrpath)
+            xCorrCell = cell(length(varInd),length(varInd));
         for ii = 1:length(varName)
             for jj=ii:length(varName)
                 
-                xCorrCell{ii,jj}=getRegSelxCorr(reg_cr{varR22eg(ii)},reg_cr{varReg(jj)},varName{ii},varName{jj},varInd(ii),varInd(jj), sigThresh, savefluofigpath);
+                xCorrCell{ii,jj}=getRegSelxCorr(reg_cr{varReg(ii)},reg_cr{varReg(jj)},varName{ii},varName{jj},varInd(ii),varInd(jj), sigThresh, savefluofigpath);
             end
         %end
         end
