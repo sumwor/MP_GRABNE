@@ -310,12 +310,22 @@ plot_xcorrCoeff(pValue,maxValue,offset,thresh,save_path_fluo,label);
 xCorrBoot = cell(size(xCorrMat,1),size(xCorrMat,1));
 xCorrBootAve =  zeros(size(xCorrMat,1),size(xCorrMat,1),size(xCorrMat,3));
 xCorrBootPval = ones(size(xCorrMat,1),size(xCorrMat,1),size(xCorrMat,3));
+
+
+xSigBoot = cell(size(xCorrMat,1),size(xCorrMat,1));
+xSigBootAve =  zeros(size(xCorrMat,1),size(xCorrMat,1),size(xCorrMat,3));
+xSigBootPval = ones(size(xCorrMat,1),size(xCorrMat,1),size(xCorrMat,3));
+
 for tt = 1:size(xCorrMat,1)
     for rr = tt:size(xCorrMat,2)
         if tt~= rr
             bootData.coeff = squeeze(xCorrMat(tt,rr,:,:))';
             xCorrBoot{tt,rr} = getBootstrp(bootData,0,0.05);
             xCorrBootAve(tt,rr,:) = xCorrBoot{tt,rr}.coeff_bootave;
+
+            bootSigData.coeff = squeeze(xSigMat(tt,rr,:,:))';
+            xSigBoot{tt,rr} = getBootstrp(bootSigData,0,0.05);
+            xSigBootAve(tt,rr,:) = xSigBoot{tt,rr}.coeff_bootave;
             % calculate two-tail p value
             for mm = 1:size(xCorrMat,3)
                 
@@ -324,6 +334,13 @@ for tt = 1:size(xCorrMat,1)
                 else
                     xCorrBootPval(tt,rr,mm) = sum(xCorrBoot{tt,rr}.bootSig(1,mm,:)>0)*2/size(xCorrBoot{tt,rr}.bootSig,3);
                 end
+
+                 if xSigBoot{tt,rr}.coeff_bootave(mm) > 0
+                    xSigBootPval(tt,rr,mm) = sum(xSigBoot{tt,rr}.bootSig(1,mm,:)<0)*2/size(xSigBoot{tt,rr}.bootSig,3);
+                else
+                    xSigBootPval(tt,rr,mm) = sum(xSigBoot{tt,rr}.bootSig(1,mm,:)>0)*2/size(xSigBoot{tt,rr}.bootSig,3);
+                 end
+
             end
             
         end
@@ -385,12 +402,21 @@ end
 xCorrBoot_time = cell(size(xCorrMat,1),size(xCorrMat,1));
 xCorrBootAve_time =  zeros(size(xCorrMat,1),size(xCorrMat,1));
 xCorrBootPval_time = ones(size(xCorrMat,1),size(xCorrMat,1));
+
+xSigBoot_time = cell(size(xCorrMat,1),size(xCorrMat,1));
+xSigBootAve_time =  zeros(size(xCorrMat,1),size(xCorrMat,1));
+xSigBootPval_time = ones(size(xCorrMat,1),size(xCorrMat,1));
+
 for tt = 1:size(xCorrMat,1)
     for rr = tt:size(xCorrMat,2)
         if tt~= rr
             bootData.coeff = squeeze(nanmean(xCorrMat(tt,rr,:,:),3));
             xCorrBoot_time{tt,rr} = getBootstrp(bootData,0,0.05);
             xCorrBootAve_time(tt,rr) = xCorrBoot_time{tt,rr}.coeff_bootave;
+
+              bootSigData.coeff = squeeze(nanmean(xSigMat(tt,rr,:,:),3));
+            xSigBoot_time{tt,rr} = getBootstrp(bootSigData,0,0.05);
+            xSigBootAve_time(tt,rr) = xSigBoot_time{tt,rr}.coeff_bootave;
             % calculate two-tail p value
             
             
@@ -399,6 +425,13 @@ for tt = 1:size(xCorrMat,1)
             else
                 xCorrBootPval_time(tt,rr) = sum(xCorrBoot_time{tt,rr}.bootSig(1,1,:)>0)*2/size(xCorrBoot_time{tt,rr}.bootSig,3);
             end
+
+             if xSigBoot_time{tt,rr}.coeff_bootave > 0
+                xSigBootPval_time(tt,rr) = sum(xSigBoot_time{tt,rr}.bootSig(1,1,:)<0)*2/size(xSigBoot_time{tt,rr}.bootSig,3);
+            else
+                xSigBootPval_time(tt,rr) = sum(xSigBoot_time{tt,rr}.bootSig(1,1,:)>0)*2/size(xSigBoot_time{tt,rr}.bootSig,3);
+             end
+
         end
         
     end
@@ -413,6 +446,8 @@ varName = {'cn+1','cn','cn-1','rn','rn-1','xn','xn-1','ave_r','Cum_r','dQ','chos
 colors=cbrewer('div','RdBu',256);
     colors=flipud(colors);
     colorRange = [-0.1 0.1];
+
+    % coefficient xcorr
    h= figure;
     subplot(1,2,1)
    image(xCorrBootAve_time,'CDataMapping','scaled');
@@ -429,7 +464,7 @@ ifSig = xCorrBootPval_time<0.05;
     hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
   ax = gca(h); 
     ax.FontSize = 20; 
-    title('Average cross-correlation');
+    title('Average coeff cross-correlation');
     %s.Marker = '*';
     subplot(3,30,90);
     image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
@@ -437,9 +472,38 @@ ifSig = xCorrBootPval_time<0.05;
     caxis([colorRange(1) colorRange(2)]);
     
 
-   print(gcf,'-dpng',fullfile(save_path_fluo,'Average cross-correlation'));
-    saveas(gcf, fullfile(save_path_fluo,'Average cross-correlation'), 'fig');
-    saveas(gcf, fullfile(save_path_fluo,'Average cross-correlation'), 'svg');
+   print(gcf,'-dpng',fullfile(save_path_fluo,'Average coeff cross-correlation'));
+    saveas(gcf, fullfile(save_path_fluo,'Average coeff cross-correlation'), 'fig');
+    saveas(gcf, fullfile(save_path_fluo,'Average coeff cross-correlation'), 'svg');
+
+     % significancy xcorr
+   h= figure;
+    subplot(1,2,1)
+   image(xSigBootAve_time,'CDataMapping','scaled');
+axis square;
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);
+xticks(1:15)
+xticklabels(varName)
+xtickangle(45)
+yticks(1:15)
+yticklabels(varName)
+ifSig = xSigBootPval_time<0.05;
+     [r c]=find(ifSig==1);
+    hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
+  ax = gca(h); 
+    ax.FontSize = 20; 
+    title('Average sig cross-correlation');
+    %s.Marker = '*';
+    subplot(3,30,90);
+    image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+    colormap(colors);
+    caxis([colorRange(1) colorRange(2)]);
+    
+
+   print(gcf,'-dpng',fullfile(save_path_fluo,'Average sig cross-correlation'));
+    saveas(gcf, fullfile(save_path_fluo,'Average sig cross-correlation'), 'fig');
+    saveas(gcf, fullfile(save_path_fluo,'Average sig cross-correlation'), 'svg');
 %% negative crosscorrelation:
 % possibility 1: different region, same modulation direction;
 % possibility 2: same region, different direction; % check overlapping area

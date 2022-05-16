@@ -94,13 +94,16 @@ for ii = 1:nFiles
         %end
         end
         
+        % save the data
+        save(saveregmaskpath,'tempCorrMat','corrCoeff0','corrMax','corrLag');
+
         % correlation clustering
         
         colors=cbrewer('div','RdBu',256);
         colors=flipud(colors);
         colorRange = [-0.1 0.1];
 
-        figure;image(nanmean(corrCoeff0,3),'CDataMapping','scaled')
+        figure;image(nanmean(corrMax,3),'CDataMapping','scaled')
          axis square;
     colormap(colors);
     caxis([colorRange(1) colorRange(2)]);
