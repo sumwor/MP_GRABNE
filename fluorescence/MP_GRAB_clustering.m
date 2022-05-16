@@ -24,7 +24,7 @@ for ii = 1:nFiles
         cd(savefluofigpath);
         
         
-        %load(fullfile(fn_fluo.folder,fn_fluo.name));
+        load(fullfile(fn_fluo.folder,fn_fluo.name));
         
         % make folders to save analysis and plots
         savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');

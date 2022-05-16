@@ -17,15 +17,17 @@ for ii = 1:length(reg_cr1.reg_cr)
     coeff2 = reg_cr2.reg_cr{ii}.coeff(:,Ind2);
     pval2 = reg_cr2.reg_cr{ii}.pval(:,Ind2); 
     sigCoeff2 = coeff2; sigCoeff2(pval2>=thresh.alpha) = 0;
+
    
     if sum(isnan(sigCoeff1))>0
+
         sigCoeff1 = fillmissing(sigCoeff1,'linear');
     end
       if sum(isnan(sigCoeff2))>0
         sigCoeff2 = fillmissing(sigCoeff2,'linear');
     end
     [crossCorr(:,1,ii),crossCorr(:,2,ii)] = xcorr(sigCoeff1,sigCoeff2,'normalized');
-    
+
 end
 
 
