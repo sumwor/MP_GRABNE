@@ -16,6 +16,7 @@ elseif isSig == 0
 else   
     colors=cbrewer('div','RdBu',256);
     colors=flipud(colors);
+    colors = [ colors ]
     bound = max(abs(max(max(nanmean(mergeMask,3)))),abs(min(min(nanmean(mergeMask,3)))));
     
     colorRange = [-0.05, 0.05];

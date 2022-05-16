@@ -77,6 +77,9 @@ for l=1:nPredictor
         elseif nPredictor == 9  % for RL with choice autocorrelation
             subplot(3,3,currPredictor-1); hold on;
             [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+                    elseif nPredictor == 15  % for RL with choice autocorrelation
+            subplot(4,4,currPredictor-1); hold on;
+            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         else
             subplot(panelv,1+nback,currPredictor-1); hold on;
             [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback)
@@ -224,7 +227,7 @@ for l=1:nPredictor
         pos(4) = 0.13;
         pos(3) = 0.23;
         set(gca, 'Position', pos)
-    elseif nPredictor == 14
+    elseif nPredictor == 14 || nPredictor == 15
     % for 4*4
         pos = get(gca, 'Position');
         pos(4) = 0.13;

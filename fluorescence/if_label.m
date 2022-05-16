@@ -71,6 +71,17 @@ elseif nPred == 14 % for future choice and reward
     else
         if_xlabel = 0;
     end
+ elseif nPred == 15 % for future choice and reward
+    if mod(currPred-2,4) == 0
+        if_ylabel = 1;
+    else
+        if_ylabel = 0;
+    end
+    if currPred - 1 >= 11
+        if_xlabel = 1;
+    else
+        if_xlabel = 0;
+    end
     
 elseif nPred == 5  % for reward
     if mod(currPred-2,3) == 0

@@ -42,14 +42,13 @@ isSig = 2;
 % get significant coefficient only
 sigCoeff = Mat.coeff;
 % determine the significant grids (threshold: at least 3 consecutive significant point
-% or 10% of the time points are significant
 sigMat = zeros(size(Mat.coeff,1),size(Mat.coeff,2));
 for ss = 1:size(Mat.coeff,1)
     for uu = 1:size(Mat.coeff,2)
         sigVec = squeeze(Mat.pval(ss,uu,:)<sigThresh.alpha);
         start1 = strfind([0,sigVec'==1],[0 1]);
         end1 = strfind([sigVec'==1,0],[1 0]);
-        if sum((end1-start1+1)>=3) | sum(sigVec) >= 8
+        if sum((end1-start1+1)>=3)
             sigMat(ss,uu) = 1;
         end
     end

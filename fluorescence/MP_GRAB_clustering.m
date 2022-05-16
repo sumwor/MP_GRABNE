@@ -34,27 +34,59 @@ for ii = 1:nFiles
         
         warning('off','all')
         
-           %% set threshold
-        Thresh.pos = 0.2; Thresh.neg = -0.2; % threshold to find area with pos/neg modulation
-        sigThresh.value = 0.05; sigThresh.alpha = 0.01;  % threshold to find area with significant modulation
-        
-        tic
-        
-        %% check other variables using regression results (should focus on significance rather than coefficient)
-        
-        % variable list:
-        % regression 1: cn,rn,cn+1,cn-1,rn-1,cn*rn,average_r,cumulative_r
-        % regression 2: dQ,dK,chosenQ,chosenK
-        % regression 3: RPE, CKE,
-        saveregclusterpath = fullfile(savematpath,'cluster.mat');  % file path to save the results
-        
-        if exist(saveregclusterpath)
-            load(saveregclusterpath);
+        clusterMat = zeros(length(cells.normdFF),length(cells.normdFF{1}));
+        for cc = 1:length(cells.normdFF)
+            clusterMat(cc,:) = cells.normdFF{cc};
         end
         
-        % need to get the boundaries of possible coefficient value of all
-        % regressions
-        saveCRName = fullfile(savematpath,'regCR_norm.mat');
+        maxclust = 5;
+        T = clusterdata(clusterMat,'Linkage','ward','SaveMemory','on','Maxclust',maxclust,'distance','correlation');
+        
+        % calculate correlation matrix
+        corrMat = zeros(length(cells.normdFF));
+         %regroup the cells with cluster results
+         cellInd = 1:length(cells.normdFF);
+         clustInd = [];
+         clusterNum = zeros(1,maxclust);
+         for gg=1:maxclust
+             clustInd = [clustInd,cellInd(T==gg)];
+             clusterNum(gg) = sum(T==gg);
+         end
+         
+        for gg=1:length(clustInd)
+            for yy = gg:length(clustInd)
+                coeff = corrcoef(cells.normdFF{clustInd(gg)},cells.normdFF{clustInd(yy)});
+                corrMat(gg,yy) = coeff(1,2);
+            end
+        end
+        
+        for yy=1:length(clustInd)
+            for gg = yy+1:length(clustInd)
+                
+                corrMat(gg,yy) = corrMat(yy,gg);
+            end
+        end
+        
+         colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-0.2 0.2];
+        
+        z  =linkage(T,'ward');
+        figure;image(corrMat,'CDataMapping','scaled')
+        %hold on;dendrogram(z)
+         axis square;
+    colormap(colors);
+    caxis([colorRange(1) colorRange(2)]);
+    % plot the cluster
+    hold on;
+    for cc = 1:length(clusterNum)
+        startInd = 1+sum(clusterNum(1:cc-1));
+        endInd = sum(clusterNum(1:cc));
+        plot([startInd endInd endInd startInd startInd],[startInd startInd endInd endInd startInd],'k:');
+    end
+     
+% load regression
+ saveCRName = fullfile(savematpath,'regCR_norm.mat');
          if exist(saveCRName)
             reg1 = load(saveCRName);
          end
@@ -66,21 +98,37 @@ for ii = 1:nFiles
           if exist(saveRPEName)
             reg3 = load(saveRPEName);
           end
-         
-          % data should be save in 28*28*n*80
-          % or 748*n*80?
-        clusterData = zeros(28,28,9,80); 
-        % using choice,reward,interaction,aveR,cumR,dQ,dK,RPE,CKE for now
-        %% regression 1 -------------------------------------------------------------------------
-             % get the choice from linear regression
-        %if ~exist('choiceRegData','var') % if choice regression mask not computed
-            label = 'choice';
-            choiceInd = 3;
-            choice = selectRg2D(reg1.reg_cr,choiceInd,[]);
-            sigChoice=choice.coeff;
-            sigChoice(choice.pval>=sigThresh.alpha)= 0;
-            clusterData(:,:,1,:) = sigChoice;
-         
+ 
+          for TT = 1:maxclust
+              cluInd = cellInd(T==TT);
+              for rr = 1:length(cluInd)
+                 
+                reg_cr{rr}.numPredictor = 15;
+              reg_cr{rr}.nback = reg1.reg_cr{1}.nback;
+               reg_cr{rr}.interaction = reg1.reg_cr{1}.interaction;
+                reg_cr{rr}.regr_time = reg1.reg_cr{1}.regr_time;
+                reg_cr{rr}.coeff = zeros(length(reg1.reg_cr{1}.regr_time),1);reg_cr{rr}.pval = zeros(length(reg1.reg_cr{1}.regr_time),1);
+                % regression1
+                % cn+1,cn,cn-1,rn,rn-1,xn,xn-1,ave_r,cum_r
+                reg_cr{rr}.coeff = cat(2,reg_cr{rr}.coeff,reg1.reg_cr{cluInd(rr)}.coeff(:,[2,3,4,7,8,11,12,14,15]));
+                reg_cr{rr}.pval = cat(2,reg_cr{rr}.pval,reg1.reg_cr{cluInd(rr)}.pval(:,[2,3,4,7,8,11,12,14,15]));
+             % regression 2
+             % dQ,chosenQ,dK,chosenK
+              reg_cr{rr}.coeff = cat(2,reg_cr{rr}.coeff,reg2.reg_cr{cluInd(rr)}.coeff(:,8:11));
+                reg_cr{rr}.pval = cat(2,reg_cr{rr}.pval,reg2.reg_cr{cluInd(rr)}.pval(:,8:11));
+                % regression 3
+                %RPE CKE
+                 reg_cr{rr}.coeff = cat(2,reg_cr{rr}.coeff,reg3.reg_cr{cluInd(rr)}.coeff(:,[6,8]));
+                reg_cr{rr}.pval = cat(2,reg_cr{rr}.pval,reg3.reg_cr{cluInd(rr)}.pval(:,[6,8]));
+              end
+              pvalThresh = 0.01;xtitle = 'Time from cue(s)';
+                tlabel={'C(n+1)','C(n)','C(n-1)','R(n)', 'R(n-1)',...
+                'C(n)*R(n)','C(n-1)*R(n-1)','Reward Rate','Cumulative Reward',...
+                'dQ','chosenQ','dK','chosenK',...
+                'RPE','CKE'};
+            
+              MP_plot_regr(reg_cr,[],pvalThresh,tlabel,xtitle);
+          end
         %end
         
         % outcome regression mask
@@ -121,7 +169,7 @@ for ii = 1:nFiles
             sigcum_r(cum_r.pval>=sigThresh.alpha)= 0;
             clusterData(:,:,5,:) = sigcum_r;
         %end
-        
+     MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);   
         %% regression 2-----------------------------------------------------------------------
         
         %if ~exist('dQRegData','var') % if choice regression mask not computed
@@ -164,6 +212,36 @@ for ii = 1:nFiles
             clusterData(:,:,9,:) = sigCKE;
         %end
         
+           %% set threshold
+        Thresh.pos = 0.2; Thresh.neg = -0.2; % threshold to find area with pos/neg modulation
+        sigThresh.value = 0.05; sigThresh.alpha = 0.01;  % threshold to find area with significant modulation
+        
+        tic
+        
+        %% check other variables using regression results (should focus on significance rather than coefficient)
+        
+        % variable list:
+        % regression 1: cn,rn,cn+1,cn-1,rn-1,cn*rn,average_r,cumulative_r
+        % regression 2: dQ,dK,chosenQ,chosenK
+        % regression 3: RPE, CKE,
+        saveregclusterpath = fullfile(savematpath,'cluster.mat');  % file path to save the results
+        
+        if exist(saveregclusterpath)
+            load(saveregclusterpath);
+        end
+        
+        % need to get the boundaries of possible coefficient value of all
+        % regressions
+       
+         
+          % data should be save in 28*28*n*80
+          % or 748*n*80?
+        clusterData = zeros(28,28,9,80); 
+        % using choice,reward,interaction,aveR,cumR,dQ,dK,RPE,CKE for now
+        %% regression 1 -------------------------------------------------------------------------
+             % get the choice from linear regression
+        %if ~exist('choiceRegData','var') % if choice regression mask not computed
+           
         HCluster = reshape(clusterData,784,720);
         T = clusterdata(HCluster,'Linkage','ward','SaveMemory','on','Maxclust',20);
         
