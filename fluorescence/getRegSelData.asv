@@ -42,13 +42,14 @@ isSig = 2;
 % get significant coefficient only
 sigCoeff = Mat.coeff;
 % determine the significant grids (threshold: at least 3 consecutive significant point
+% or 10% of the time points are significant
 sigMat = zeros(size(Mat.coeff,1),size(Mat.coeff,2));
 for ss = 1:size(Mat.coeff,1)
     for uu = 1:size(Mat.coeff,2)
         sigVec = squeeze(Mat.pval(ss,uu,:)<sigThresh.alpha);
         start1 = strfind([0,sigVec'==1],[0 1]);
         end1 = strfind([sigVec'==1,0],[1 0]);
-        if sum((end1-start1+1)>=3)
+        if sum((end1-start1+1)>=3) | sum(sigVec) >= 8
             sigMat(ss,uu) = 1;
         end
     end
@@ -61,7 +62,11 @@ for zz = 1:size(Mat.coeff,3)
 end
 coeffBound.min = floor(min(min(min(sigCoeff)))*10)/10;
 coeffBound.max = ceil(max(max(max(sigCoeff)))*10)/10;
-plotMaskBoundary(sigCoeff,[],[],label,savefluofigpath,isSig);
+savepath = fullfile(savefluofigpath,'sigCoeff');
+if ~exist(savepath)
+    mkdir(savepath)
+end
+plotMaskBoundary(sigCoeff,[],[],label,savepath,isSig);
 
 
 % significance mask
@@ -78,3 +83,7 @@ RegData.sigMask = getSigSelMask(Mat.pval, sigThresh.alpha, label,savefluofigpath
 [RegData.notSigMask] = getSigMask(RegData.sigMask,sigThresh.value);
 isSig=1;
 plotMaskBoundary(RegData.sigMask,RegData.notSigMask,[],label,savefluofigpath,isSig);
+
+% make a video
+colorRange = [-0.05,0.05];
+video_coeff(sigCoeff,label,colorRange,savepath);

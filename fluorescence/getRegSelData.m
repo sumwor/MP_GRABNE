@@ -83,3 +83,7 @@ RegData.sigMask = getSigSelMask(Mat.pval, sigThresh.alpha, label,savefluofigpath
 [RegData.notSigMask] = getSigMask(RegData.sigMask,sigThresh.value);
 isSig=1;
 plotMaskBoundary(RegData.sigMask,RegData.notSigMask,[],label,savefluofigpath,isSig);
+
+% make a video
+colorRange = [-0.05,0.05];
+video_coeff(sigCoeff,label,colorRange,savepath);
