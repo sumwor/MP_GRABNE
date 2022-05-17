@@ -2,10 +2,7 @@ function xcorrData = getRegSelCorr(reg_cr,label,Ind, thresh, savefluofigpath)
 
 % set path
 savefluofigpath = fullfile(savefluofigpath,'frameAutoCorr');
-if ~exist(savefluofigpath)
-    mkdir(savefluofigpath);
-end
-    
+if 
 % get the corresponding regression results
 regCoeff = [];regPval = [];
 reg_cr=reg_cr.reg_cr;
@@ -237,6 +234,8 @@ xcorrData.sigCorr_ref = sigCorr_ref;
 xcorrData.sigMaxDis_ref = sigMaxDis_ref;
 xcorrData.sigMaxInd_ref = sigMaxInd_ref;
 xcorrData.sigMaxValue_ref = sigMaxValue_ref;
+xcorrData.regPval_ref = regPval_ref;
+xcorrData.regCoeff_ref = regCoeff_ref;
 xcorrData.coeffCorr_ref = coeffCorr_ref;
 xcorrData.coeffMaxDis_ref = coeffMaxDis_ref;
 xcorrData.coeffMaxInd_ref = coeffMaxInd_ref;
