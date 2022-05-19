@@ -11,7 +11,7 @@ colors=flipud(colors);
 
 % make videos
 videoPath = fullfile(savefigpath,[tlabel,'regrCoeff.avi']);
-if ~exist(videoPath)
+%if ~exist(videoPath)
     writerObj = VideoWriter(videoPath);
     writerObj.FrameRate = 10;
     % set the seconds per image
@@ -22,7 +22,9 @@ if ~exist(videoPath)
         % convert the image to a frame
         figure;
         subplot(1,2,1)
-        image(input(:,:,u),'CDataMapping','scaled');
+        b=image(input(:,:,u),'CDataMapping','scaled');
+        set(b,'AlphaData',~isnan(input(:,:,u)))
+        set(gca, 'Color', [0.7, 0.7, 0.7])
         title([tlabel,' sig coeff t=',num2str(u/10-3)]);
         axis square;
         colormap(colors);
@@ -41,6 +43,6 @@ if ~exist(videoPath)
     end
     % close the writer object
     close(writerObj);
-else
-    display('Video already generated');
-end
+% else
+%     display('Video already generated');
+%Wend
