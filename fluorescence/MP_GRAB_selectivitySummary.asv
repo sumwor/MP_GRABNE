@@ -169,8 +169,15 @@ close all;
 % bar plot
 
 % check the interactionn with choice/outcome
-data = [cn_xn_sig;ncn_xn_sig;rn_xn_sig;nrn_xn_sig;cnrn_xn_sig;ncnrn_xn_sig];
+% figure;
+% get the sig Index
+RInd = 1:length(cnSigList);
+cnInd = RInd(cnSigList==1);
+rnInd = RInd(rnSigList==1);
+xnInd = RInd(xnSigList==1);
 figure;
+h = vennEulerDiagram({cnInd;rnInd;xnInd}, 'drawProportional', false, 'SetLabels', ["choice"; "reward"; "interaction"]);
+figure
 violinplot(data',{'c&x','nc&x','r&x','nr&x','cr&x','ncr&x'});
 ylim([0 1]);
 title('Ratio of significant grids');

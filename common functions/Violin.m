@@ -138,14 +138,23 @@ classdef Violin < handle
                 jitterstrength = density*width;
             end
             jitter = 2*(rand(size(data))-0.5);
+            if ~isempty(args.ViolinColor)
             obj.ScatterPlot = ...
                 scatter(pos + jitter.*jitterstrength, data, 'filled','MarkerFaceColor',args.ViolinColor(pos,:),'MarkerEdgeColor',args.ViolinColor(pos,:));
-
+            else
+                 obj.ScatterPlot = ...
+                scatter(pos + jitter.*jitterstrength, data, 'filled');
+            end
             % plot the violin
+            if ~isempty(args.ViolinColor)
             obj.ViolinPlot =  ... % plot color will be overwritten later
                 fill([pos+density*width pos-density(end:-1:1)*width], ...
                      [value value(end:-1:1)], [1 1 1],'FaceColor',args.ViolinColor(pos,:),'EdgeColor',args.ViolinColor(pos,:));
-
+            else
+                 obj.ViolinPlot =  ... % plot color will be overwritten later
+                fill([pos+density*width pos-density(end:-1:1)*width], ...
+                     [value value(end:-1:1)], [1 1 1]);
+            end
             % plot the mini-boxplot within the violin
             quartiles = quantile(data, [0.25, 0.5, 0.75]);         
             obj.BoxPlot = ... % plot color will be overwritten later
