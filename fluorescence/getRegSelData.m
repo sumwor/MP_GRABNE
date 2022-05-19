@@ -54,7 +54,7 @@ for ss = 1:size(Mat.coeff,1)
         end
     end
 end
-
+RegData.sigGrid = sigMat;
 for zz = 1:size(Mat.coeff,3)
     temp = squeeze(Mat.coeff(:,:,zz));
     temp(~sigMat) = NaN;
