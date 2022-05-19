@@ -8,6 +8,9 @@ nFiles = size(dataIndex,1);
 RPE_R_sig = zeros(1, nFiles);RPE_sig = zeros(1, nFiles);R_sig = zeros(1,nFiles);
 sigVar = zeros(28,28,80,nFiles,15);  % load significant grids for 15 variables
 
+% cn/xn
+cn_xn_sig = zeros(1,nFiles); ncn_xn_sig = zeros(1.nFiles);
+
 % get the pos/neg coefficient percentage data
 choicePN = [];outcomePN = [];RPEPN=[];xnPN=[];cn__1PN=[];rn__1PN=[];xn__1PN = [];
 dQPN = [];chosenQPN = []; dKPN = [];chosenKPN = [];CKEPN = [];
