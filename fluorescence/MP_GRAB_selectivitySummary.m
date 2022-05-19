@@ -10,7 +10,8 @@ sigVar = zeros(28,28,80,nFiles,15);  % load significant grids for 15 variables
 
 % cn/xn
 cn_xn_sig = zeros(1,nFiles); ncn_xn_sig = zeros(1,nFiles);
-
+rn_xn_sig = zeros(1,nFiles); nrn_xn_sig = zeros(1,nFiles);
+cnrn_xn_sig = zeros(1,nFiles); ncnrn_xn_sig = zeros(1,nFiles);
 % get the pos/neg coefficient percentage data
 choicePN = [];outcomePN = [];RPEPN=[];xnPN=[];cn__1PN=[];rn__1PN=[];xn__1PN = [];
 dQPN = [];chosenQPN = []; dKPN = [];chosenKPN = [];CKEPN = [];
@@ -63,7 +64,15 @@ for ii = 1:nFiles
 %         RPE_R_sig(ii) = sum(sum((~RPEnotSig) & (~RnotSig)));
 %         RPE_sig(ii) = sum(sum((~RPEnotSig)&(RnotSig)));
 %         R_sig(ii) = sum(sum((RPEnotSig)&(~RnotSig)));
-        
+        % get significant numbers of interaction and choice
+        % cn/rn/xn
+        sumGrid = sum(choiceRegData.sigGrid(:)|xnRegData.sigGrid(:)|outcomeRegData.sigGrid(:));
+        cn_xn_sig(ii) = sum(choiceRegData.sigGrid(:)&xnRegData.sigGrid(:))/sumGrid; 
+        ncn_xn_sig(ii) = sum(~choiceRegData.sigGrid(:)&xnRegData.sigGrid(:))/sumGrid;
+        rn_xn_sig(ii) = sum(xnRegData.sigGrid(:)&outcomeRegData.sigGrid(:))/sumGrid;
+        nrn_xn_sig(ii) = sum(xnRegData.sigGrid(:)&~outcomeRegData.sigGrid(:))/sumGrid;
+        cnrn_xn_sig(ii) = sum(choiceRegData.sigGrid(:)&xnRegData.sigGrid(:)&outcomeRegData.sigGrid(:))/sumGrid;
+        ncnrn_xn_sig(ii) = sum(~choiceRegData.sigGrid(:)&xnRegData.sigGrid(:)&~outcomeRegData.sigGrid(:))/sumGrid;
         % get pos/neg coefficient
         choicePN = cat(4,choicePN,choiceRegData.coeffSignSig);
          outcomePN = cat(4,outcomePN,outcomeRegData.coeffSignSig);
@@ -147,11 +156,19 @@ saveas(gcf, fullfile(save_path_fluo,['Fraction of positive time -latent', animal
 end
 
 close all;
+
 % figure;violinplot(negVar1',{'choice','outcome','interaction','RPE'});
 % figure;violinplot(posVar1'./negVar1',{'choice','outcome','interaction','RPE'});
 % bar plot
 
-
+% check the interactionn with choice/outcome
+data = [cn_xn_sig;ncn_xn_sig;rn_xn_sig;nrn_xn_sig;cnrn_xn_sig;ncnrn_xn_sig];
+figure;
+violinplot(data',{'c&x','nc&x','r&x','nr&x','cr&x','ncr&x'});
+ 
+title('Ratio of significant grids');
+print(gcf,'-dpng',fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)'));
+saveas(gcf, fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)'), 'fig');
 
 
 % cats={'RPE & R','RPE only','R only'};
