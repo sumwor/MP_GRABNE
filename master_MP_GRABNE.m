@@ -121,12 +121,12 @@ MP_GRABRL_MLR_acrossSessions(dataIndex([1:9,19:end],:), save_path_fluo)
 MP_GRABRL_sumQ_MLR(dataIndex[10:17],:))
 MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex, save_path_fluo)
 
-MP_GRABRL_RPE_MLR(dataIndex([10:17],:));
+MP_GRABRL_RPE_MLR(dataIndex);
 MP_GRABRL_RPE_MLR_acrossSessions(dataIndex([1:9,19:end],:), save_path_fluo)
 
 MP_GRAB_selectivitySpatial(dataIndex);
 MP_GRAB_selectivityCorr(dataIndex);
-MP_GRAB_selectivitySummary(dataIndex([1:9,18:end],:), save_path_fluo);
+MP_GRAB_selectivitySummary(dataIndex, save_path_fluo);
 
 MP_GRAB_temporalCorr(dataIndex);
 

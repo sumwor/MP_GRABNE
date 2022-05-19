@@ -11,7 +11,8 @@ colors=flipud(colors);
 
 % make videos
 videoPath = fullfile(savefigpath,[tlabel,'regrCoeff.avi']);
-%if ~exist(videoPath)
+
+if ~exist(videoPath)
     writerObj = VideoWriter(videoPath);
     writerObj.FrameRate = 10;
     % set the seconds per image
@@ -43,6 +44,7 @@ videoPath = fullfile(savefigpath,[tlabel,'regrCoeff.avi']);
     end
     % close the writer object
     close(writerObj);
-% else
-%     display('Video already generated');
-%Wend
+
+else
+     display('Video already generated');
+ end
