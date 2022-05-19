@@ -22,7 +22,9 @@ if ~exist(videoPath)
         % convert the image to a frame
         figure;
         subplot(1,2,1)
-        image(input(:,:,u),'CDataMapping','scaled');
+        b=image(input(:,:,u),'CDataMapping','scaled');
+        set(b,'AlphaData',~isnan(input(:,:,u)))
+        set(gca, 'Color', [0.7, 0.7, 0.7])
         title([tlabel,' sig coeff t=',num2str(u/10-3)]);
         axis square;
         colormap(colors);
@@ -42,5 +44,5 @@ if ~exist(videoPath)
     % close the writer object
     close(writerObj);
 else
-    display('Video already generated');
-end
+     display('Video already generated');
+ end

@@ -8,6 +8,11 @@ nFiles = size(dataIndex,1);
 RPE_R_sig = zeros(1, nFiles);RPE_sig = zeros(1, nFiles);R_sig = zeros(1,nFiles);
 sigVar = zeros(28,28,80,nFiles,15);  % load significant grids for 15 variables
 
+% get the pos/neg coefficient percentage data
+choicePN = [];outcomePN = [];RPEPN=[];xnPN=[];cn__1PN=[];rn__1PN=[];xn__1PN = [];
+dQPN = [];chosenQPN = []; dKPN = [];chosenKPN = [];CKEPN = [];
+
+
 for ii = 1:nFiles
     tic
     % load behavior files
@@ -56,11 +61,64 @@ for ii = 1:nFiles
 %         RPE_sig(ii) = sum(sum((~RPEnotSig)&(RnotSig)));
 %         R_sig(ii) = sum(sum((RPEnotSig)&(~RnotSig)));
         
+        % get pos/neg coefficient
+        choicePN = cat(4,choicePN,choiceRegData.coeffSignSig);
+         outcomePN = cat(4,outcomePN,outcomeRegData.coeffSignSig);
+         RPEPN = cat(4,RPEPN,RPERegData.coeffSignSig);
+         xnPN=cat(4,xnPN,xnRegData.coeffSignSig);
+         cn__1PN=cat(4,cn__1PN,cn__1RegData.coeffSignSig);
+         rn__1PN=cat(4,rn__1PN,rn__1RegData.coeffSignSig);
+         xn__1PN = cat(4,xn__1PN,xn__1RegData.coeffSignSig);
+         dQPN = cat(4,dQPN,dQRegData.coeffSignSig);
+         chosenQPN = cat(4,chosenQPN,chosenQRegData.coeffSignSig);
+         dKPN = cat(4,dKPN,dKRegData.coeffSignSig);
+         chosenKPN = cat(4,chosenKPN,chosenKRegData.coeffSignSig);
+         CKEPN = cat(4,CKEPN,CKERegData.coeffSignSig);
+
     end
     toc
 end
 
-% check the percentage?
+% reshape
+s1 = size(choicePN,1)*size(choicePN,2);s2 = size(choicePN,3);s3 = size(choicePN,4);
+choicePN = reshape(choicePN,s1,s2,s3);
+outcomePN = reshape(outcomePN,s1,s2,s3);
+RPEPN=reshape(RPEPN,s1,s2,s3);
+xnPN=reshape(xnPN,s1,s2,s3);
+cn__1PN=reshape(cn__1PN,s1,s2,s3);
+rn__1PN=reshape(rn__1PN,s1,s2,s3);
+xn__1PN = reshape(xn__1PN,s1,s2,s3);
+dQPN = reshape(dQPN,s1,s2,s3);
+chosenQPN =reshape(chosenQPN,s1,s2,s3); 
+dKPN = reshape(dKPN,s1,s2,s3);
+chosenKPN = reshape(chosenKPN,s1,s2,s3);
+CKEPN = reshape(CKEPN,s1,s2,s3);
+
+% plot overall average coefficient
+% choice/outcome/interaction/RPE
+s1 = size(choicePN,1)*size(choicePN,3);
+posVar1 = [reshape(choicePN(:,1,:),1,s1);reshape(outcomePN(:,1,:),1,s1);reshape(xnPN(:,1,:),1,s1);reshape(RPEPN(:,1,:),1,s1)];
+negVar1 = [reshape(choicePN(:,2,:),1,s1);reshape(outcomePN(:,2,:),1,s1);reshape(xnPN(:,2,:),1,s1);reshape(RPEPN(:,2,:),1,s1)];
+% violin plot
+%figure
+%v=violinplot(posVar1',animalIndex,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0],'ShowData',false);
+figure;violinplot(posVar1',{'choice','outcome','interaction','RPE'},'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
+ylabel('Fraction of positive time');
+print(gcf,'-dpng',fullfile(save_path_fluo,'Fraction of positive time -choice'));
+saveas(gcf, fullfile(save_path_fluo,'Fraction of positive time -choice'), 'fig');
+
+% figure;violinplot(negVar1',{'choice','outcome','interaction','RPE'});
+% figure;violinplot(posVar1'./negVar1',{'choice','outcome','interaction','RPE'});
+% bar plot
+posVar2 = [reshape(dQPN(:,1,:),1,s1);reshape(chosenQPN(:,1,:),1,s1);reshape(dKPN(:,1,:),1,s1);reshape(chosenKPN(:,1,:),1,s1)];
+negVar2 = [reshape(dQPN(:,2,:),1,s1);reshape(chosenQPN(:,2,:),1,s1);reshape(dKPN(:,2,:),1,s1);reshape(chosenKPN(:,2,:),1,s1)];
+figure;violinplot(posVar2',{'dQ','chosenQ','dK','chosenK'},'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
+ylabel('Fraction of positive time');
+print(gcf,'-dpng',fullfile(save_path_fluo,'Fraction of positive time -latent'));
+saveas(gcf, fullfile(save_path_fluo,'Fraction of positive time -latent'), 'fig');
+
+
+
 % cats={'RPE & R','RPE only','R only'};
 % figure;
 % violinplot([RPE_R_sig;RPE_sig;R_sig]',cats);
@@ -86,6 +144,7 @@ dK_sig_dis = [];dK_center_coeff = [];dK_regPval = []; dK_sigCorr = [];
 chosenQ_sig_dis = [];chosenQ_center_coeff = [];chosenQ_regPval = [];
 chosenK_sig_dis = [];chosenK_center_coeff = [];chosenK_regPval = [];
 RPE_sig_dis = [];RPE_center_coeff = [];RPE_regPval = [];%RPE_sigmax_ind = [];RPE_sigmax_val=[];
+
 
 %% crosscorrelation
 xCorrMat = zeros(15,15,80,nFiles);
@@ -185,7 +244,7 @@ for ii = 1:nFiles
 %         RPE_sigmax_val = [RPE_sigmax_val;RPERegData.sigMaxValue];
         RPE_regPval = cat(3,RPE_regPval,RPERegData.regPval);
         
-
+        % pos/neg coefficient ratio
         %% cross correlation results
          saveregVarcorrpath = fullfile(savematpath,'regressionVarcorr.mat');
          load(saveregVarcorrpath);

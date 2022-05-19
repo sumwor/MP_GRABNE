@@ -3,6 +3,10 @@ function MP_GRAB_temporalCorr(dataIndex)
 % calculate temporal correlation of different varible coefficients within
 % grids
 
+% check if coefficient sign changes over time
+% for eachgrid, calculate the number of + time point and - time point
+% then average
+
 nFiles = size(dataIndex,1);
 
 for ii = 1:nFiles
