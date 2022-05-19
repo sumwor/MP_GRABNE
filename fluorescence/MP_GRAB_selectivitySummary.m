@@ -107,15 +107,47 @@ ylabel('Fraction of positive time');
 print(gcf,'-dpng',fullfile(save_path_fluo,'Fraction of positive time -choice'));
 saveas(gcf, fullfile(save_path_fluo,'Fraction of positive time -choice'), 'fig');
 
-% figure;violinplot(negVar1',{'choice','outcome','interaction','RPE'});
-% figure;violinplot(posVar1'./negVar1',{'choice','outcome','interaction','RPE'});
-% bar plot
 posVar2 = [reshape(dQPN(:,1,:),1,s1);reshape(chosenQPN(:,1,:),1,s1);reshape(dKPN(:,1,:),1,s1);reshape(chosenKPN(:,1,:),1,s1)];
 negVar2 = [reshape(dQPN(:,2,:),1,s1);reshape(chosenQPN(:,2,:),1,s1);reshape(dKPN(:,2,:),1,s1);reshape(chosenKPN(:,2,:),1,s1)];
 figure;violinplot(posVar2',{'dQ','chosenQ','dK','chosenK'},'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
 ylabel('Fraction of positive time');
 print(gcf,'-dpng',fullfile(save_path_fluo,'Fraction of positive time -latent'));
 saveas(gcf, fullfile(save_path_fluo,'Fraction of positive time -latent'), 'fig');
+
+% individual animals
+animalList = unique(dataIndex.Animal);
+for aa = 1:numel(animalList)
+    sessionInclude = [];
+    for tt = 1:size(dataIndex,1)
+        if dataIndex.Animal{tt}==animalList{aa}
+            sessionInclude = [sessionInclude, tt];
+        end
+    end
+    s1 = size(choicePN,1)*length(sessionInclude);
+    posVar1 = [reshape(choicePN(:,1,sessionInclude),1,s1);reshape(outcomePN(:,1,sessionInclude),1,s1);reshape(xnPN(:,1,sessionInclude),1,s1);reshape(RPEPN(:,1,sessionInclude),1,s1)];
+    negVar1 = [reshape(choicePN(:,2,sessionInclude),1,s1);reshape(outcomePN(:,2,sessionInclude),1,s1);reshape(xnPN(:,2,sessionInclude),1,s1);reshape(RPEPN(:,2,sessionInclude),1,s1)];
+
+    figure;violinplot(posVar1',{'choice','outcome','interaction','RPE'},'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
+ylabel('Fraction of positive time');
+title(animalList{aa});
+print(gcf,'-dpng',fullfile(save_path_fluo,['Fraction of positive time -choice ', animalList{aa}]));
+saveas(gcf, fullfile(save_path_fluo,['Fraction of positive time -choice ', animalList{aa}]), 'fig');
+
+posVar2 = [reshape(dQPN(:,1,sessionInclude),1,s1);reshape(chosenQPN(:,1,sessionInclude),1,s1);reshape(dKPN(:,1,sessionInclude),1,s1);reshape(chosenKPN(:,1,sessionInclude),1,s1)];
+negVar2 = [reshape(dQPN(:,2,sessionInclude),1,s1);reshape(chosenQPN(:,2,sessionInclude),1,s1);reshape(dKPN(:,2,sessionInclude),1,s1);reshape(chosenKPN(:,2,sessionInclude),1,s1)];
+figure;violinplot(posVar2',{'dQ','chosenQ','dK','chosenK'},'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
+ylabel('Fraction of positive time');
+title(animalList{aa});
+print(gcf,'-dpng',fullfile(save_path_fluo,['Fraction of positive time -latent', animalList{aa}]));
+saveas(gcf, fullfile(save_path_fluo,['Fraction of positive time -latent', animalList{aa}]), 'fig');
+
+end
+
+close all;
+% figure;violinplot(negVar1',{'choice','outcome','interaction','RPE'});
+% figure;violinplot(posVar1'./negVar1',{'choice','outcome','interaction','RPE'});
+% bar plot
+
 
 
 
