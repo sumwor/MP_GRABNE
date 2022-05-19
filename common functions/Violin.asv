@@ -189,7 +189,7 @@ classdef Violin < handle
             obj.BoxWidth = args.BoxWidth;
             obj.MedianColor = args.MedianColor;
             if not(isempty(args.ViolinColor))
-                obj.ViolinColor = args.ViolinColor(pos,:);
+                obj.ViolinColor = args.ViolinColor(pos.:);
             else
                 obj.ViolinColor = obj.ScatterPlot.CData;
             end

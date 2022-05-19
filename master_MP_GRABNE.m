@@ -11,11 +11,11 @@ setup_figprop;
 
 %root_path = 'V:\HongliWang\NE_analysis';
 
-%root_path = 'Y:\HongliWang\NE_analysis_784';
+root_path = 'Y:\HongliWang\NE_analysis_784';
 
 %root_path = 'Y:\HongliWang\Ach_784';
 
-root_path = 'K:\Ach_784';
+%root_path = 'K:\Ach_784';
 
 
 %% matching pennies behavior
@@ -126,7 +126,7 @@ MP_GRABRL_RPE_MLR_acrossSessions(dataIndex([1:9,19:end],:), save_path_fluo)
 
 MP_GRAB_selectivitySpatial(dataIndex);
 MP_GRAB_selectivityCorr(dataIndex);
-MP_GRAB_selectivitySummary(dataIndex, save_path_fluo);
+MP_GRAB_selectivitySummary(dataIndex([1:9,18:end],:), save_path_fluo);
 
 MP_GRAB_temporalCorr(dataIndex);
 
