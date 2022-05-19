@@ -176,7 +176,11 @@ cnInd = RInd(cnSigList==1);
 rnInd = RInd(rnSigList==1);
 xnInd = RInd(xnSigList==1);
 figure;
-h = vennEulerDiagram({cnInd;rnInd;xnInd}, 'drawProportional', false, 'SetLabels', ["choice"; "reward"; "interaction"]);
+h = vennEulerDiagram({cnInd;rnInd;xnInd}, 'drawProportional', true, 'SetLabels', ["choice"; "reward"; "interaction"]);
+title('Ach c/r/x significant ROIs');
+print(gcf,'-dpng',fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)-venn'));
+saveas(gcf, fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)-venn'), 'fig');
+
 figure
 violinplot(data',{'c&x','nc&x','r&x','nr&x','cr&x','ncr&x'});
 ylim([0 1]);
