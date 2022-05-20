@@ -169,20 +169,20 @@ close all;
 % bar plot
 
 % check the interactionn with choice/outcome
+
 RInd = 1:length(cnSigList);
 cnInd = RInd(cnSigList==1);
 rnInd = RInd(rnSigList==1);
 xnInd = RInd(xnSigList==1);
+
 figure;
 h = vennEulerDiagram({cnInd;rnInd;xnInd}, 'drawProportional', true, 'SetLabels', ["choice"; "reward"; "interaction"]);
 title('Ach c/r/x significant ROIs');
 print(gcf,'-dpng',fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)-venn'));
 saveas(gcf, fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)-venn'), 'fig');
 
-
-
 data = [cn_xn_sig;ncn_xn_sig;rn_xn_sig;nrn_xn_sig;cnrn_xn_sig;ncnrn_xn_sig];
-figure;
+figure
 violinplot(data',{'c&x','nc&x','r&x','nr&x','cr&x','ncr&x'});
 ylim([0 1]);
 title('Ratio of significant grids');
