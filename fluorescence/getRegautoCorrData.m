@@ -2,7 +2,8 @@ function tempData = getRegautoCorrData(reg_cr,label,Ind, sigThresh, savefluofigp
 
 Mat = selectRg2D(reg_cr,Ind,[]);
 
-
+tempData.coeff=reshape(Mat.coeff,size(Mat.coeff,1)*size(Mat.coeff,2),size(Mat.coeff,3));
+tempData.pval=reshape(Mat.pval,size(Mat.coeff,1)*size(Mat.coeff,2),size(Mat.coeff,3));
 
 % plot absolut coefficient with significant grids only
 isSig = 2;

@@ -107,7 +107,7 @@ MP_GRAB_MLR(dataIndex);
 % regression results seems unstable, try amount of variance explained?
 MP_GRAB_MLR_analysis(dataIndex);
 MP_GRAB_MLR_acrossAnimals(dataIndex,save_path_fluo);
-MP_GRAB_MLR_acrossSessions(dataIndex([1:9,19:end],:), save_path_fluo)
+MP_GRAB_MLR_acrossSessions(dataIndex, save_path_fluo)
 
 %%
 %

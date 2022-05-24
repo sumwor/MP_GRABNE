@@ -111,6 +111,12 @@ for ii = 1:nFiles
             choiceInd = 3;
 
             choicetempData = getRegautoCorrData(reg_cr{1}.reg_cr,label,choiceInd,sigThresh,savefluofigpath);
+            tlabel1='Choice coefficient';
+            xtitle='Time from cue(s)';colorRange = [-0.05 0.05];
+            choiceSel.t = reg_cr{1}.reg_cr{1}.regr_time;
+            choiceSel.coeff= choicetempData.coeff;
+            choiceSel.lag = choicetempData.tempCorrLag(:);
+        plot_coeff_sort(choiceSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath)
         %end
 
         % outcome regression mask
