@@ -113,7 +113,7 @@ for l=1:nPredictor
         plot([0 0],[0 100],'k','LineWidth',1);
         xlim([floor(t(1)) ceil(t(end))]);
         xticks([floor(t(1)):1:ceil(t(end))]);
-        ylim([0 104]);
+        ylim([0 54]);
         title(tlabel{currPredictor-1});
         if if_xlabel ~= 1
             set(gca,'xticklabel',[])
@@ -140,7 +140,7 @@ for l=1:nPredictor
             sig(sig>=0.05) = 1;
             logSig = log(sig)/log(1e-20);
             for ll=1:numel(sig)
-                plot(t(ll)+dt*[-0.5 0.5], [104 104],'-','Color',[1 1-logSig(ll) 1-logSig(ll)],'LineWidth',5);
+                plot(t(ll)+dt*[-0.5 0.5], [50 50],'-','Color',[1 1-logSig(ll) 1-logSig(ll)],'LineWidth',5);
                 %plot(t(ll)+dt*[-0.5 0.5], [95 95],'-','Color',[1 sig(ll) sig(ll)],'LineWidth',5);
             end
 
@@ -161,7 +161,7 @@ for l=1:nPredictor
             %sig(sig>=0.05) = 1;
             logSig = log(sig)/log(1e-3);
             for ll=1:numel(sig)
-                plot(t(ll)+dt*[-0.5 0.5], [95 95],'-','Color',[1 1-logSig(ll) 1-logSig(ll)],'LineWidth',5);
+                plot(t(ll)+dt*[-0.5 0.5], [50 50],'-','Color',[1 1-logSig(ll) 1-logSig(ll)],'LineWidth',5);
                 %plot(t(ll)+dt*[-0.5 0.5], [95 95],'-','Color',[1 sig(ll) sig(ll)],'LineWidth',5);
             end
 

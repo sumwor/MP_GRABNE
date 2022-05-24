@@ -5,21 +5,14 @@ function audi_GRAB_summary(dataIndex,savefigpath)
 % NE tone response
 % load PSTH results, calculate the mean (and STE)
 
-Ach = [39,41,42,44,45];
+Ach = [38,41,42,44,45];
 NE = [27,29,31,33];
 nFiles = size(dataIndex,1);
 
-% rise time: from cue to 90% amplitude
-% decay time, from peak to exponential decay constant
 PSTH_ave_Ach = [];
-riseTime_Ach = [];
-decayTime_Ach = [];
 PSTH_ave_AchPup = [];
 PSTH_ave_NE = [];
 PSTH_ave_NEPup= [];
-riseTime_NE= [];
-decayTime_NE = [];
-
 for ii = 1:length(Ach)
      fn_beh = dir(fullfile(dataIndex.BehPath{Ach(ii)},'*beh.mat'));
       date = num2str(dataIndex.DateNumber(Ach(ii)));
@@ -32,8 +25,7 @@ for ii = 1:length(Ach)
     psth_AchPup.t = psthpupil_panel(1).sig{1}.t;
     for jj = 1:length(psth_panel)
         PSTH_ave_Ach = [PSTH_ave_Ach;psth_panel(jj).sig{1}.signal'];
-        % fit for rise time and decay time
-
+        % fit for rise time an
     end
     PSTH_ave_AchPup = [PSTH_ave_AchPup;psthpupil_panel(1).sig{1}.signal'];
 end
