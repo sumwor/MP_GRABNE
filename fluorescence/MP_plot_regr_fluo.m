@@ -181,7 +181,7 @@ for l=1:nPredictor
                 plot([0 0],[0 100],'k','LineWidth',1);
                 xlim([floor(t(1)) ceil(t(end))]);
                 xticks([floor(t(1)):1:ceil(t(end))]);
-                ylim([0 100]);
+                ylim([0 50]);
                 title([tlabel{currPredictor-1}]);
                 if if_xlabel == 1
                     xlabel(xtitle);
@@ -201,7 +201,7 @@ for l=1:nPredictor
                     end
                     for ll=1:numel(sig)
                         if sig(ll)<pvalThresh
-                            plot(t(ll)+dt*[-0.5 0.5],[100 100],'k-','LineWidth',5);
+                            plot(t(ll)+dt*[-0.5 0.5],[50 50],'k-','LineWidth',5);
                         end
                     end
                 else
