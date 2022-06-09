@@ -1,4 +1,4 @@
-function tempData = getRegautoCorrData(reg_cr,label,Ind, sigThresh, savefluofigpath)
+function tempData = getRegautoCorrData(reg_cr,label,Ind, timeRange, sigThresh, savefluofigpath)
 
 Mat = selectRg2D(reg_cr,Ind,[]);
 
@@ -29,6 +29,8 @@ for ss = 1:size(Mat.coeff,1)
         end
     end
 end
+tempData.maxX = maxX;
+tempData.maxY = maxY;
 
 for zz = 1:size(Mat.coeff,3)
     temp = squeeze(Mat.coeff(:,:,zz));
@@ -43,11 +45,13 @@ if ~exist(savepath)
 end
 
 % temporal correlation of coefficient, for significant grids only
+        t = reg_cr{1}.regr_time; tInd = (t>=timeRange(1) & t<=timeRange(2));
+
 tempData.tempCorrCoeff = NaN(size(Mat.coeff,1),size(Mat.coeff,2));
 tempData.tempCorrLag = NaN(size(Mat.coeff,1),size(Mat.coeff,2));
 tempData.tempCorrMax = NaN(size(Mat.coeff,1),size(Mat.coeff,2));
-tempData.corrcoef = NaN(size(Mat.coeff,1),size(Mat.coeff,2),size(Mat.coeff,3)*2-1);
-tempData.lag = NaN(size(Mat.coeff,1),size(Mat.coeff,2),size(Mat.coeff,3)*2-1);
+tempData.corrcoef = NaN(size(Mat.coeff,1),size(Mat.coeff,2),sum(tInd)*2-1);
+tempData.lag = NaN(size(Mat.coeff,1),size(Mat.coeff,2),sum(tInd)*2-1);
 
 if maxX~=0 
 refCoeff = squeeze(Mat.coeff(maxX,maxY,:));
@@ -63,8 +67,10 @@ for ss = 1:size(Mat.coeff,1)
 
                 sigCoeff1 = fillmissing(sigCoeff1,'linear');
             end
-            [tempData.corrcoef(ss,uu,:),tempData.lag(ss,uu,:)] = xcorr(sigCoeff1,refCoeff,'normalized');
-            tempData.tempCorrCoeff(ss,uu) = tempData.corrcoef(ss,uu,size(Mat.coeff,3));
+            % calculate temporal correlation within a time range
+    
+            [tempData.corrcoef(ss,uu,:),tempData.lag(ss,uu,:)] = xcorr(sigCoeff1(tInd),refCoeff(tInd),'normalized');
+            tempData.tempCorrCoeff(ss,uu) = tempData.corrcoef(ss,uu,sum(tInd));
             % find max
             [~,maxLag] = max(abs(squeeze(tempData.corrcoef(ss,uu,:))));
             tempData.tempCorrLag(ss,uu) = tempData.lag(ss,uu,maxLag)*0.1;
@@ -80,7 +86,7 @@ end
      
 figure;
 subplot(1,2,1)
-colorRange=[-3 3];
+colorRange=[-0.5 0.5];
 b=image(tempData.tempCorrLag,'CDataMapping','scaled'); %,
 set(b,'AlphaData',~isnan(tempData.tempCorrLag));
 set(gca, 'Color', [0.7, 0.7, 0.7])

@@ -142,12 +142,12 @@ for ii = 1:nFiles
         sigInd = allInd(sigGrid(:));
         outcomeSel.sigInd = sigInd;
         outcomeSel.sigMat = sigGrid;
-        clustId = regCoef_cluster(outcomeSel,tlabel1,xtitle,savefluofigpath);
+        clustId = regCoef_cluster(outcomeSel,[0.5,4],tlabel1,xtitle,savefluofigpath);
 
-        saveData.clustID = clustId;
-        saveData.t = outcomeSel.t;
-        saveData.coeff = outcomeSel.coeff;
-        save(fullfile(savematpath,[tlabel1,' cluster.mat']), 'saveData');
+        saveData.clustID = T;
+        saveData.t = input.t;
+saveData.coeff = input.coeff;
+save
             %end
         % save the result
 
@@ -188,18 +188,18 @@ for ii = 1:nFiles
 % 
 %         % x(n) regression mask
         %if ~exist('xntempData','var') % if choice regression mask not computed
-%             label = 'interaction';
-%             
-%             xnInd = 11;
-%             xntempData = getRegautoCorrData(reg_cr{1}.reg_cr,label,xnInd,[0 3],sigThresh,savefluofigpath);
-%             tlabel1='Interaction coefficient';
-%             sigGrid =~isnan(xntempData.tempCorrCoeff);
-%             xnSel.t = reg_cr{1}.reg_cr{1}.regr_time;
-%             xnSel.coeff= xntempData.coeff(sigGrid(:),:);
-%             xnSel.lag = xntempData.tempCorrLag(sigGrid);
-% %             outcomeSel.coeff= outcometempData.coeff;
-% %             outcomeSel.lag = outcometempData.tempCorrLag;
-%         plot_coeff_sort(xnSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath)
+            label = 'interaction';
+            
+            xnInd = 11;
+            xntempData = getRegautoCorrData(reg_cr{1}.reg_cr,label,xnInd,[0 3],sigThresh,savefluofigpath);
+            tlabel1='Interaction coefficient';
+            sigGrid =~isnan(xntempData.tempCorrCoeff);
+            xnSel.t = reg_cr{1}.reg_cr{1}.regr_time;
+            xnSel.coeff= xntempData.coeff(sigGrid(:),:);
+            xnSel.lag = xntempData.tempCorrLag(sigGrid);
+%             outcomeSel.coeff= outcometempData.coeff;
+%             outcomeSel.lag = outcometempData.tempCorrLag;
+        plot_coeff_sort(xnSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath)
         %end
 % 
 %          if ~exist('xn__1tempData','var')
@@ -268,7 +268,7 @@ for ii = 1:nFiles
 %                              'RPEtempData', 'CKEtempData')
 %         
 close all;
-     %  save(saveregpath,'outcometempData','choicetempData','xntempData');
+       save(saveregpath,'outcometempData','choicetempData','xntempData');
     end
 
         close all

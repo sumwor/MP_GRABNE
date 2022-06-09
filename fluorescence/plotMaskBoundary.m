@@ -13,13 +13,18 @@ elseif isSig == 0
     colors=flipud(colors);
     colorRange = [-1 1];
      titleText = ['Average ', label, ' coefficient sign mask'];
-else   
+elseif isSig == 2
     colors=cbrewer('div','RdBu',256);
     colors=flipud(colors);
-    bound = max(abs(max(max(nanmean(mergeMask,3)))),abs(min(min(nanmean(mergeMask,3)))));
     
     colorRange = [-0.05, 0.05];
      titleText = ['Average ', label, ' sig coefficient value mask'];
+     elseif isSig == 3
+    colors=cbrewer('div','RdBu',256);
+    colors=flipud(colors);
+    
+    colorRange = [-0.05, 0.05];
+     titleText = ['Average ', label, ' coefficient value mask'];
 end
 
 

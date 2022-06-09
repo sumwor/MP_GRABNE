@@ -35,7 +35,7 @@ GRAB_pattern(dataIndex(13,:));
 % use subject 902
 
 
-audi_GRAB_pupil_plots(dataIndex([25],:));
+audi_GRAB_pupil_plots(dataIndex([24:45],:));
 
 savefigpath = fullfile(root_path,'summary');
 audi_GRAB_summary(dataIndex,savefigpath);
@@ -46,7 +46,7 @@ audi_GRAB_summary(dataIndex,savefigpath);
 % spontaneous, GRAB_Ach, before MP. 5,8,10,12
 
 % coherence and cross spectrum
-fluo_pupil_plots(dataIndex([1:18],:));
+fluo_pupil_plots(dataIndex(7,:));
 fluo_pupil_GRAB_summary(dataIndex, savefigpath);
 % coherence
 coherence_plots(dataIndex,savefigpath);

@@ -1,4 +1,4 @@
-function newDataIndex = MP_createBehMatFiles(dataIndex)
+function newDataIndex = MP_createBehMatFiles(dataIndex,Mol)
 % % MP_createBehMatFiles %
 %PURPOSE:   Analyze each logfile specified in dataIndex and save the
 %           results in a behavioral .mat file, for matching pennies task
@@ -87,16 +87,22 @@ for ii = 1:nFile
     % record from left or right hemisphere
     
     %%
-    clearvars -except nFile i dataIndex behIndex
+    clearvars -except nFile i dataIndex behIndex Mol
     
 end
 % 891,893,894,895,896,897. sub 894 is not sure
 %subList = {'891';'893';'894';'895';'896';'897'};
 % %recordSite = {'left','right','right','left','right','right'};
-% subList = {'910';'912';'913';'914';'915'};
- %recordSite = {'left','left','right','left','right'};
-subList = {'921','922';'923','926'};
-recordSite = {'right','right','left','right'};
+
+
+ if strcmp(Mol,'NE')
+    subList = {'921','922';'923','926'};
+    recordSite = {'right','right','left','right'};
+ elseif strcmp(Mol,'ACh')
+     subList = {'910';'912';'913';'914';'915'};
+    recordSite = {'left','left','right','left','right'};
+ end
+
 for ii = 1:nFile
     Index = strcmp(subList, behIndex.Animal{ii});
     behIndex.RecordingSite{ii} = recordSite{Index};

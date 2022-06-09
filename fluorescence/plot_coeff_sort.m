@@ -1,4 +1,4 @@
-function cellOrder = plot_coeff_sort(input,sortParam,tlabel,xtitle,colorRange,savepath)
+function cellOrder = plot_coeff_sort(input,sortParam,tlabel,xtitle,colorRange,savefluofigpath)
 % % plot_selectivity %
 %PURPOSE:   Plot selectivity, based on PSTHs from two conditions
 %AUTHORS:   AC Kwan 170515
@@ -33,7 +33,7 @@ end
 
 %%
 
-
+savepath = fullfile(savefluofigpath,'tempCorr');
 if numel(sortParam) == 2
     %sort by amplitude at specified time
 %     tIdx=[max([sum(t<=sortParam(1)) 1]):sum(t<=sortParam(2))];  %index should start from at least value of 1
@@ -77,20 +77,26 @@ colormap(colors);
 caxis([colorRange(1) colorRange(2)]);      %normalize dF/F heatmap to max of all conditions
 ylabel('Cells');
 xlabel(xtitle);
+title(tlabel);
 subplot(1,3,2)
 for nn = 1:nCells
     barh(nn,input.lag(nn));
     hold on;
 end
-%title({tlabel;['A=' input{1}.input1_label];['B=' input{1}.input2_label]});
+title('Lags');
 
 %make a color scale bar
 subplot(3,20,60);
 image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
 colormap(colors);
 caxis([colorRange(1) colorRange(2)]);
-title(['(A-B)/(A+B)']);
+title(['Coefficient']);
 set(gca,'YDir','normal');
 set(gca,'XTick',[]);
+
+print(gcf,'-dpng',fullfile(savepath,[tlabel,' sorted']));
+saveas(gcf, fullfile(savepath,[tlabel,' sorted']), 'fig');
+saveas(gcf, fullfile(savepath,[tlabel,' sorted']), 'svg');
+
 
 end

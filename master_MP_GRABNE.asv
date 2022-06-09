@@ -12,7 +12,7 @@ setup_figprop;
 %root_path = 'V:\HongliWang\NE_analysis';
 
 root_path_NE = 'Y:\HongliWang\NE_analysis_784';
-root_path_ACh = 'Y:\HongliWang\ACh_analysis_784';
+root_path_ACh = 'Y:\HongliWang\Ach_analysis_784';
 %root_path = 'Y:\HongliWang\Ach_784';
 
 %root_path = 'K:\Ach_784';
@@ -32,7 +32,7 @@ analysispath_NE = fullfile(root_path_NE,'analysis');
 dataIndex_NE = makeDataIndex(logfilepath_NE, analysispath_NE);
 
 % Parse and analyze each logfile, save as .mat files, as needed
-dataIndex_NE = MP_createBehMatFiles(dataIndex_NE,'NE');
+dataIndex_NE = MP_createBehMatFiles(dataIndex_NE);
 
 % sort Index according to experiment data
 
@@ -47,7 +47,7 @@ analysispath_ACh = fullfile(root_path_ACh,'analysis');
 dataIndex_ACh = makeDataIndex(logfilepath_ACh, analysispath_ACh);
 
 % Parse and analyze each logfile, save as .mat files, as needed
-dataIndex_ACh = MP_createBehMatFiles(dataIndex_ACh,'ACh');
+dataIndex_ACh = MP_createBehMatFiles(dataIndex_ACh);
 
 % sort Index according to experiment data
 
@@ -189,7 +189,7 @@ MP_GRAB_MLR_separateSummary(dataIndex_ACh, save_path_fluo_ACh);
 MP_GRABRL_MLR(dataIndex_NE([10:17],:))
 MP_GRABRL_MLR_acrossSessions(dataIndex_NE([1:9,19:end],:), save_path_fluo_NE)
 
-MP_GRABRL_sumQ_MLR(dataIndex_NE([10:17],:))
+MP_GRABRL_sumQ_MLR(dataIndex_NE[10:17],:))
 MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
 MP_GRABRL_RPE_MLR(dataIndex_NE);
@@ -208,28 +208,21 @@ MP_GRAB_RPE_MLR_acrossAnimals(dataIndex_ACh, save_path_fluo_ACh)
 MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh)
 
 %% spatial & temporal patterns
+MP_GRAB_selectivitySpatial(dataIndex);
+MP_GRAB_selectivityCorr(dataIndex);
+MP_GRAB_selectivitySummary(dataIndex([1:9,18:end],:), save_path_fluo);
 
-% NE
-MP_GRAB_selectivitySpatial(dataIndex_NE);
-MP_GRAB_selectivityCorr(dataIndex_NE);
-MP_GRAB_selectivitySummary(dataIndex_NE([1:9,18:end],:), save_path_fluo_NE);
-
-MP_GRAB_temporalCorr(dataIndex_NE);
-save_path_mat_NE = fullfile(root_path_NE,'summary','data_summary');
-MP_GRAB_temporalCorrSummary(dataIndex_NE([1:9,18:end],:),save_path_mat_NE)
+MP_GRAB_temporalCorr(dataIndex);
+MP_GRAB_temporalCorrSummary(dataIndex)
 % temporal correlation (same grid, correlation of different variables)
 
-% ACh
-MP_GRAB_selectivitySpatial(dataIndex_ACh);
-MP_GRAB_selectivityCorr(dataIndex_ACh);
-MP_GRAB_selectivitySummary(dataIndex_ACh, save_path_fluo_ACh);
+MP_GRAB_selectivitySpatial(dataIndex);
+MP_GRAB_selectivityCorr(dataIndex);
+MP_GRAB_selectivitySummary(dataIndex([1:9,18:end],:), save_path_fluo);
 
-MP_GRAB_temporalCorr(dataIndex_ACh);
-save_path_mat_ACh = fullfile(root_path_ACh,'summary','data_summary');
-MP_GRAB_temporalCorrSummary(dataIndex_ACh, save_path_mat_ACh)
+MP_GRAB_temporalCorr(dataIndex);
+MP_GRAB_temporalCorrSummary(dataIndex)
 
-% compare NE and ACh result
-MP_GRAB_tempComp(save_path_mat_NE, save_path_mat_ACh)
 
 %% random forest is better in estimating weak signals
 % MP_GRAB_RF(dataIndex);
