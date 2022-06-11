@@ -1,4 +1,4 @@
-function clustID = regCoef_cluster(input,tlabel,xtitle,savefluofigpath)
+function clustID = regCoef_cluster(input,tRange, numClust, tlabel,xtitle,savefluofigpath)
 % % plot_selectivity %
 %PURPOSE:   Plot selectivity, based on PSTHs from two conditions
 %AUTHORS:   AC Kwan 170515
@@ -32,11 +32,11 @@ for j=1:nCells
 end
 
 %%
-
-clusterMat = pref';
+tInd = (t<tRange(2) & t>tRange(1));
+clusterMat = pref(tInd,:)';
        
         
-        maxclust = 3;
+        maxclust = numClust;
         T = clusterdata(clusterMat,'Linkage','ward','SaveMemory','on','Maxclust',maxclust,'distance','correlation');
         
 
@@ -140,6 +140,7 @@ set(gca,'box','off');
 % check the spatial position of different clusters
     % plot coefficient by cluster
 % 
+if isfield(input,'sigMat')
 clustMat = NaN(size(input.sigMat,1),size(input.sigMat,2));
     tempind = 1;
 for xx = 1:size(input.sigMat,1)
@@ -165,7 +166,7 @@ yticklabels({})
 %title(titleText);
 
 %plot in pseudocolor
-
+end
 
 subplot(1,3,1);
 image(t,1:nCells,pref(:,clustInd)','CDataMapping','scaled');

@@ -1,4 +1,4 @@
-function clustID = regCoef_cluster(input,tlabel,xtitle,savefluofigpath)
+function clustID = regCoef_cluster(input,tRange, numClust, tlabel,xtitle,savefluofigpath)
 % % plot_selectivity %
 %PURPOSE:   Plot selectivity, based on PSTHs from two conditions
 %AUTHORS:   AC Kwan 170515
@@ -32,29 +32,29 @@ for j=1:nCells
 end
 
 %%
-
-clusterMat = pref';
+tInd = (t<tRange(2) & t>tRange(1));
+clusterMat = pref(tInd,:)';
        
         
-        maxclust = 3;
+        maxclust = numClust;
         T = clusterdata(clusterMat,'Linkage','ward','SaveMemory','on','Maxclust',maxclust,'distance','correlation');
         
 
         % rearrange the groups by the covered area of the first 2 seconds
-          cellInd = 1:nCells;
-        line11 = nanmean(pref(:,cellInd(T==1)),2);
-        line22 = nanmean(pref(:,cellInd(T==2)),2);
-        line33 = nanmean(pref(:,cellInd(T==3)),2);
-        areaUnder = zeros(1,maxclust);
-        areaUnder(1) = trapz(t(t>1&t<2.5),line11(t>1 & t<2.5));
-        areaUnder(2) = trapz(t(t>1&t<2.5),line22(t>1&t<2.5));
-        areaUnder(3) = trapz(t(t>1&t<2.5),line33(t>1&t<2.5));
-        [sorted,ind] = sort(areaUnder);
-
-        tempT = T;
-        T(tempT==in) = ind(1);
-        T(tempT==2) = ind(2);
-        T(tempT==3) = ind(3);
+%           cellInd = 1:nCells;
+%         line11 = nanmean(pref(:,cellInd(T==1)),2);
+%         line22 = nanmean(pref(:,cellInd(T==2)),2);
+%         line33 = nanmean(pref(:,cellInd(T==3)),2);
+%         areaUnder = zeros(1,maxclust);
+%         areaUnder(1) = trapz(t(t>1&t<2.5),line11(t>1 & t<2.5));
+%         areaUnder(2) = trapz(t(t>1&t<2.5),line22(t>1&t<2.5));
+%         areaUnder(3) = trapz(t(t>1&t<2.5),line33(t>1&t<2.5));
+%         [sorted,ind] = sort(areaUnder);
+% 
+%         tempT = T;
+%         T(tempT==ind(1)) = 1;
+%         T(tempT==ind(2)) = 2;
+%         T(tempT==ind(3)) = 3;
         
         clustID = T;
 % save the data
@@ -140,6 +140,7 @@ set(gca,'box','off');
 % check the spatial position of different clusters
     % plot coefficient by cluster
 % 
+if isfield(input,'sigMat')
 clustMat = NaN(size(input.sigMat,1),size(input.sigMat,2));
     tempind = 1;
 for xx = 1:size(input.sigMat,1)
@@ -165,9 +166,10 @@ yticklabels({})
 %title(titleText);
 
 %plot in pseudocolor
-
+end
 
 subplot(1,3,1);
+figure
 image(t,1:nCells,pref(:,clustInd)','CDataMapping','scaled');
 hold on; plot([0 0],[0 nCells+1],'w');
 hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
