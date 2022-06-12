@@ -175,6 +175,9 @@ MP_GRAB_MLR_separateSummary(dataIndex_NE, save_path_fluo_NE);
 
 % ACh
 MP_GRAB_MLR(dataIndex_ACh);
+
+% bootstrap not useful, estimation still unsmooth
+% MP_GRAB_MLR_bootstrap(dataIndex_ACh);
 % regression results seems unstable, try amount of variance explained?
 MP_GRAB_MLR_analysis(dataIndex_ACh);
 MP_GRAB_MLR_acrossAnimals(dataIndex_ACh,save_path_fluo_ACh);
@@ -216,7 +219,7 @@ MP_GRAB_selectivitySummary(dataIndex_NE([1:9,18:end],:), save_path_fluo_NE);
 
 MP_GRAB_temporalCorr(dataIndex_NE);
 save_path_mat_NE = fullfile(root_path_NE,'summary','data_summary');
-MP_GRAB_temporalCorrSummary(dataIndex_NE([1:9,18:end],:),save_path_mat_NE)
+MP_GRAB_temporalCorrSummary(dataIndex_NE([1:9,18:end],:),save_path_fluo_NE,save_path_mat_NE)
 % temporal correlation (same grid, correlation of different variables)
 
 % ACh
@@ -226,7 +229,7 @@ MP_GRAB_selectivitySummary(dataIndex_ACh, save_path_fluo_ACh);
 
 MP_GRAB_temporalCorr(dataIndex_ACh);
 save_path_mat_ACh = fullfile(root_path_ACh,'summary','data_summary');
-MP_GRAB_temporalCorrSummary(dataIndex_ACh, save_path_mat_ACh)
+MP_GRAB_temporalCorrSummary(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
 
 % compare NE and ACh result
 MP_GRAB_tempComp(save_path_mat_NE, save_path_mat_ACh)

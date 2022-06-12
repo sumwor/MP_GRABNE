@@ -177,13 +177,24 @@ for ii = 1:nFiles
                 reg_dFF = cells.dFF;
             end
             tic
+            bootNum = 100;
             for j=1:numel(reg_dFF)
                 if length(reg_t) > length(reg_dFF{1})
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t(1:length(cells.dFF{1})), future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
+                    % bootstrap trials
+                   reg_cr_ori{j} = linear_regr( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
+                   tic
+                   for bb = 1:bootNum
+                   trialInd = randsample(length(trialData.cueTimes),length(trialData.cueTimes),'true');
+                    reg_cr_boot{bb}=linear_regr_bootstrap( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialInd, params );
+                   end
+                   toc
+                   compare_reg(reg_cr_ori{j},reg_cr_boot);
+                   
                 else
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t, future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr(reg_dFF{j}(1:length(reg_t)), reg_t, future_event, params.trigTime, trialMask, params );
+                     trialInd = randsample(length(trialData.cueTimes),length(trialData.cueTimes),'true');
+                    reg_cr{j}=linear_regr_bootstrap(reg_dFF{j}(1:length(reg_t)), reg_t, future_event, params.trigTime, trialInd, params );
                 end
             end
             toc

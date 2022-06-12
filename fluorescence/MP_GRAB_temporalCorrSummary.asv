@@ -1,4 +1,4 @@
-function MP_GRAB_temporalCorrSummary(dataIndex, savematsumpath)
+function MP_GRAB_temporalCorrSummary(dataIndex, savesumfigpath,savematsumpath)
 
 % calculate temporal correlation of different varible coefficients within
 % grids
@@ -8,7 +8,6 @@ function MP_GRAB_temporalCorrSummary(dataIndex, savematsumpath)
 % then average
 
 nFiles = size(dataIndex,1);
-
 
 %% get clustering results, average similar clusters, also rerun clustering on all grids together
 rCoeff = cell(0); rClust = cell(0);
@@ -97,13 +96,13 @@ for gg = 1:nFiles
     rLPeakT = [rLPeakT, rt(minInd1)];
     oriGroup = [oriGroup,1];
     % fit for tau
-    if maxInd1<length(rt)
-        f1 = fit(rt(maxInd1:end),smoothed1(maxInd1:end),'exp1');
-        rDecayTau = [rDecayTau, f1.b];
-    else
-        f1 = [];
-        rDecayTau = [rDecayTau,NaN];
-    end
+    %     if maxInd1<length(rt)
+    %         f1 = fit(rt(maxInd1:end),smoothed1(maxInd1:end),'exp1');
+    %         rDecayTau = [rDecayTau, f1.b];
+    %     else
+    %         f1 = [];
+    %         rDecayTau = [rDecayTau,NaN];
+    %     end
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==1,:);
     newInd = newInd+1;
 
@@ -117,13 +116,13 @@ for gg = 1:nFiles
     rLPeakT = [rLPeakT, rt(minInd2)];
     oriGroup = [oriGroup,2];
     % fit for tau
-    if maxInd2<length(rt)
-        f2 = fit(rt(maxInd2:end),smoothed2(maxInd2:end),'exp1');
-        rDecayTau = [rDecayTau, f2.b];
-    else
-        f2 = [];
-        rDecayTau = [rDecayTau,NaN];
-    end
+    %     if maxInd2<length(rt)
+    %         f2 = fit(rt(maxInd2:end),smoothed2(maxInd2:end),'exp1');
+    %         rDecayTau = [rDecayTau, f2.b];
+    %     else
+    %         f2 = [];
+    %         rDecayTau = [rDecayTau,NaN];
+    %     end
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==2,:);
     newInd = newInd+1;
 
@@ -137,13 +136,13 @@ for gg = 1:nFiles
     rLPeakT = [rLPeakT, rt(minInd3)];
     oriGroup = [oriGroup,3];
     % fit for tau
-    if maxInd3<length(rt)
-        f3 = fit(rt(maxInd3:end),smoothed3(maxInd3:end),'exp1');
-        rDecayTau = [rDecayTau, f3.b];
-    else
-        f3 = [];
-        rDecayTau = [rDecayTau,NaN];
-    end
+    %     if maxInd3<length(rt)
+    %         f3 = fit(rt(maxInd3:end),smoothed3(maxInd3:end),'exp1');
+    %         rDecayTau = [rDecayTau, f3.b];
+    %     else
+    %         f3 = [];
+    %         rDecayTau = [rDecayTau,NaN];
+    %     end
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==3,:);
     newInd = newInd+1;
 
@@ -233,64 +232,186 @@ for gg = 1:nFiles
     %          end
     %     end
 
-          clustCoeff = [clustCoeff;rCoeff{gg}];
+    clustCoeff = [clustCoeff;rCoeff{gg}];
     % how to determine the group?
     % in ACh use the first session as the reference group
 
 end
 
 % average
-group1 = []; group2 = []; group3 = [];
+group1 = []; group2 = []; group3 = []; %group4 = [];
+
+% if the surface area between (0,2) less than 0, group1
+% if the surface area between (2,4) less than 0, group4
 for ggg = 1:length(rCoeff_new)
     if oriGroup(ggg) == 1
-        group1 = [group1;rCoeff_new{ggg}];
+        line11 = nanmean(rCoeff_new{ggg},1);
+        areaUnder1 = trapz(rt(rt>0&rt<2),line11(rt>0 & rt<2));
+       %areaUnder2 = trapz(rt(rt>3&rt<4),line11(rt>3 & rt<4));
+        if areaUnder1 < 0 %& areaUnder2 > areaUnder1
+            group1 = [group1;rCoeff_new{ggg}];
+%         elseif areaUnder2 < 0
+%             group4 = [group4;rCoeff_new{ggg}];
+        else
+            group2 = [group2;rCoeff_new{ggg}];
+        end
     elseif oriGroup(ggg) == 2
-        group2 = [group2;rCoeff_new{ggg}];
+        line11 = nanmean(rCoeff_new{ggg},1);
+        areaUnder1 = trapz(rt(rt>0&rt<2),line11(rt>0 & rt<2));
+        %areaUnder2 = trapz(rt(rt>3&rt<4),line11(rt>3 & rt<4));
+        if areaUnder1 < 0 %& areaUnder2 > areaUnder1
+            group1 = [group1;rCoeff_new{ggg}];
+%         elseif areaUnder2 < 0
+%             group4 = [group4;rCoeff_new{ggg}];
+        else
+            group2 = [group2;rCoeff_new{ggg}];
+        end
     else
-        group3 = [group3;rCoeff_new{ggg}];
+%         areaUnder2 = trapz(rt(rt>3&rt<4),line11(rt>3 & rt<4));
+%         if areaUnder2 < 0
+%             group4 = [group4;rCoeff_new{ggg}];
+%         else
+            group3 = [group3;rCoeff_new{ggg}];
+        %end
     end
 end
-figure;plot(nanmean(group1,1));
-hold on;plot(nanmean(group2,1));
-hold on;plot(nanmean(group3,1));
+
+% sort group2 and group3
+g2.coeff =group2; g2.t = rt;
+g2sortOrd = coeff_sort(g2,[0,3]);
+g3.coeff = group3; g3.t = rt;
+g3sortOrd = coeff_sort(g3,[0,3]);
+
+temp2 = group2(g2sortOrd,:); group2 = temp2;
+temp3 = group3(g3sortOrd,:); group3 = temp3;
+
+% calculate correlation
+nCells = size(group1,1)+size(group2,1) + size(group3,1);
+ corrMat = zeros(nCells);
+         %regroup the cells with cluster results
+       
+ total = [group1;group2;group3];
+         
+        for gg=1:nCells
+            for yy = gg:nCells
+                coeff = corrcoef(total(gg,:),total(yy,:));
+                corrMat(gg,yy) = coeff(1,2);
+            end
+        end
+        
+        for yy=1:nCells
+            for gg = yy+1:nCells
+                
+                corrMat(gg,yy) = corrMat(yy,gg);
+            end
+        end
+
+figure;
+subplot(1,3,1);
+
+image(rt,1:nCells,[group1;group2;group3],'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([rt(1) rt(end)],[size(group1,1) size(group1,1)],'Color',[241, 84, 18]/255)
+hold on; plot([rt(1) rt(end)],[size(group1,1)+size(group2,1) size(group1,1)+size(group2,1)],'k')
+%hold on; plot([rt(1) rt(end)],[size(group1,1)+size(group2,1)+size(group3,1) size(group1,1)+size(group2,1)+size(group3,1)],'k')
+colors=cbrewer('div','RdBu',256);
+colors=flipud(colors);
+colorRange = [-1 1];
+colormap(colors);
+caxis([-0.05 0.05]);      %normalize dF/F heatmap to max of all conditions
+ylabel('Cells');
+
+
+
+% plot the cross correlation
+clusterNum = [size(group1,1),size(group2,1),size(group3,1)];
+ subplot(2,2,2)
+     image(corrMat,'CDataMapping','scaled')
+        %hold on;dendrogram(z)
+         axis square;
+            colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+    colormap(colors);
+    caxis([-1 1]);
+    hold on;
+    for cc = 1:length(clusterNum)
+        startInd = 1+sum(clusterNum(1:cc-1));
+        endInd = sum(clusterNum(1:cc));
+        if cc==1
+            color = [241, 84, 18]/255;
+        elseif cc == 2
+            color = [0 0 0];
+        elseif cc == 3
+            color = [52, 179, 241]/255;
+        end
+        plot([startInd endInd endInd startInd startInd],[startInd startInd endInd endInd startInd],':','Color',color);
+    end
+    xticklabels({})
+yticklabels({})
+
+subplot(2,2,4)
+line1 = group1';
+ste = nanstd(line1,0,2)/sqrt(size(line1,2));
+plot(rt,nanmean(line1,2),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(rt,nanmean(line1,2)-ste,nanmean(line1,2)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = group2';
+ste = nanstd(line2,0,2)/sqrt(size(line2,2));
+plot(rt,nanmean(line2,2),'k');
+errorshade(rt,nanmean(line2,2)-ste,nanmean(line2,2)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 = group3';
+ste = nanstd(line3,0,2)/sqrt(size(line3,2));
+plot(rt,nanmean(line3,2), 'Color',[52, 179, 241]/255);
+errorshade(rt,nanmean(line3,2)-ste,nanmean(line3,2)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+
+tlabel = 'Outcome';
+print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,' cluster-summary']));
+saveas(gcf, fullfile(savesumfigpath,[tlabel,' cluster-summary']), 'fig');
+saveas(gcf, fullfile(savepath,[tlabel,' cluster-summary']), 'svg');
+
+savesumfigpath
 
 %% using the average to regroup?
 % newGroup = oriGroup;
-% 
+%
 % ref1 = nanmean(group1,1);
 % ref2 = nanmean(group2,1);
 % ref3 = nanmean(group3,1);
 % outInd  =1;
 % outlierGroups = cell(0);
-% 
+%
 % for nn = 1:length(rCoeff_new)
 %     % ACh, first session as ref group
-% 
-% 
+%
+%
 %     g1Num = sum(rClust{nn}==1); g2Num = sum(rClust{nn}==2); g3Num = sum(rClust{nn}==3);
 %     % calculate the average coefficient with in 1-2.5s for each group
 %     g1Mean =nanmean(rCoeff{nn}(rClust{nn}==1,:),1);  g2Mean = nanmean(rCoeff{nn}(rClust{nn}==2,:),1); g3Mean =nanmean(rCoeff{nn}(rClust{nn}==3,:),1);
-% 
-% 
+%
+%
 %     figure;plot(rt,ref1);hold on;
 %     plot(rt,ref2);plot(rt,ref3);
 %     plot(rt,g1Mean)
-% 
+%
 %     figure;plot(rt,ref1);hold on;
 %     plot(rt,ref2);plot(rt,ref3);
 %     plot(rt,g2Mean)
-% 
+%
 %     figure;plot(rt,ref1);hold on;
 %     plot(rt,ref2);plot(rt,ref3);
 %     plot(rt,g3Mean)
 %     corr11 = corrcoef(g1Mean(rt>t0 & rt<t1),ref1(rt>t0 & rt<t1)); corr12 = corrcoef(g1Mean(rt>t0 & rt<t1),ref2(rt>t0 & rt<t1)); corr13 = corrcoef(g1Mean(rt>t0 & rt<t1),ref3(rt>t0 & rt<t1));
 %     corr21 = corrcoef(g2Mean(rt>t0 & rt<t1),ref1(rt>t0 & rt<t1)); corr22 = corrcoef(g2Mean(rt>t0 & rt<t1),ref2(rt>t0 & rt<t1)); corr23 = corrcoef(g2Mean(rt>t0 & rt<t1),ref3(rt>t0 & rt<t1));
 %     corr31 = corrcoef(g3Mean(rt>t0 & rt<t1),ref1(rt>t0 & rt<t1)); corr32 = corrcoef(g3Mean(rt>t0 & rt<t1),ref2(rt>t0 & rt<t1)); corr33 = corrcoef(g3Mean(rt>t0 & rt<t1),ref3(rt>t0 & rt<t1));
-% 
+%
 %     corr1 = [corr11(1,2),corr12(1,2),corr13(1,2)];
 %     corr2 = [corr21(1,2),corr22(1,2),corr23(1,2)];
 %     corr3 = [corr31(1,2),corr32(1,2),corr33(1,2)];
-% 
+%
 %     [maxCorr,ind] = max(corr1);
 %     if maxCorr>0.5 & g1Num > 25
 %         newGroup(nn) = ind;
@@ -310,7 +431,7 @@ hold on;plot(nanmean(group3,1));
 %     [maxCorr,ind] = max(corr3);
 %     if maxCorr>0.5 & g3Num > 25
 %         newGroup(nn) = ind;
-% 
+%
 %     else
 %         newGroup(nn) =4; % 4 means outlier
 %         outlierGroups{outInd} = rCoeff{nn}(rClust{nn}==3,:);
@@ -320,10 +441,10 @@ hold on;plot(nanmean(group3,1));
 
 
 
-clust.t = rt;
-clust.coeff = clustCoeff;
-tRange = [-3,5]; numClust=6;
-regCoef_cluster(clust,tRange,numClust,tlabel1,'Time from cue(s)',savefluofigpath);
+% clust.t = rt;
+% clust.coeff = clustCoeff;
+% tRange = [-3,5]; numClust=6;
+% regCoef_cluster(clust,tRange,numClust,tlabel1,'Time from cue(s)',savefluofigpath);
 
 
 %% get lag

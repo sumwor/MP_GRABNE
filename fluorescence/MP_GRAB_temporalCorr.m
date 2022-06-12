@@ -142,7 +142,7 @@ for ii = 1:nFiles
         sigInd = allInd(sigGrid(:));
         outcomeSel.sigInd = sigInd;
         outcomeSel.sigMat = sigGrid;
-        clustId = regCoef_cluster(outcomeSel,tlabel1,xtitle,savefluofigpath);
+        clustId = regCoef_cluster(outcomeSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
 
         saveData.clustID = clustId;
         saveData.t = outcomeSel.t;

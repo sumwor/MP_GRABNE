@@ -174,7 +174,7 @@ for ii = 1:nFiles
                 reg_dFF = cells.dFF;
             end
             tic
-            parfor j=1:numel(reg_dFF)
+            for j=1:numel(reg_dFF)
                 if length(reg_t) > length(reg_dFF{1})
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t(1:length(cells.dFF{1})), future_event, params.trigTime, trialMask, params );
                     reg_cr{j}=linear_regr( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
