@@ -220,9 +220,9 @@ for ii = 1:nFiles
         clustId = regCoef_cluster(xnSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
 
         saveDataxn.clustID = clustId;
-        saveDataxn.t = xnSel.t;
-        saveDataxn.coeff = xnSel.coeff;
-        saveDataxn.sigInd = xnSel.sigInd;
+        saveDataxn.t = outcomeSel.t;
+        saveDataxn.coeff = outcomeSel.coeff;
+        saveDatax.sigInd = outcomeSel.sigInd;
  %       end
 % 
 %          if ~exist('xn__1tempData','var')
@@ -275,26 +275,7 @@ for ii = 1:nFiles
 %         if ~exist('RPEtempData','var') % if choice regression mask not computed
             label = 'RPE';
             RPEInd = 6;
-            RPEtempData = getRegautoCorrData(reg_cr{3}.reg_cr,label,RPEInd,[0 3],sigThresh,savefluofigpath) ;
-            tlabel1='RPE coefficient';
-            sigGrid =~isnan(RPEtempData.tempCorrCoeff);
-            RPESel.t = reg_cr{1}.reg_cr{1}.regr_time;
-            RPESel.coeff= RPEtempData.coeff(sigGrid(:),:);
-            RPESel.lag = RPEtempData.tempCorrLag(sigGrid);
-%             outcomeSel.coeff= outcometempData.coeff;
-%             outcomeSel.lag = outcometempData.tempCorrLag;
-        plot_coeff_sort(RPESel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
-
-         allInd = 1:size(RPEtempData.coeff,1);
-        sigInd = allInd(sigGrid(:));
-        RPESel.sigInd = sigInd;
-        RPESel.sigMat = sigGrid;
-        clustId = regCoef_cluster(RPESel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
-
-        saveDataRPE.clustID = clustId;
-        saveDataRPE.t = RPESel.t;
-        saveDataRPE.coeff = RPESel.coeff;
-        saveDataRPE.sigInd = RPESel.sigInd;
+            RPEtempData = getRegautoCorrData(reg_cr{3}.reg_cr,label,RPEInd,sigThresh,savefluofigpath) ;
 %         end
 % 
 %         if ~exist('CKEtempData','var') % if choice regression mask not computed
@@ -310,7 +291,7 @@ for ii = 1:nFiles
 %                              'RPEtempData', 'CKEtempData')
 %         
 close all;
-     save(fullfile(savematpath,'cluster.mat'), 'saveDataChoice', 'saveDataOutcome','saveDataxn','saveDataRPE');
+     save(fullfile(savematpath,'cluster.mat'), 'saveData');
      %  save(saveregpath,'outcometempData','choicetempData','xntempData');
     end
 
