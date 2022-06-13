@@ -125,7 +125,11 @@ for ii = 1:nFiles
         sigInd = allInd(sigGrid(:));
         choiceSel.sigInd = sigInd;
         choiceSel.sigMat = sigGrid;
-        clustId = regCoef_cluster(choiceSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+        if length(sigInd) > 1
+            clustId = regCoef_cluster(choiceSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+        else
+            clustId = NaN;
+        end
         saveDataChoice.clustID = clustId;
         saveDataChoice.t = choiceSel.t;
         saveDataChoice.coeff = choiceSel.coeff;
@@ -217,7 +221,11 @@ for ii = 1:nFiles
         sigInd = allInd(sigGrid(:));
         xnSel.sigInd = sigInd;
         xnSel.sigMat = sigGrid;
-        clustId = regCoef_cluster(xnSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+        if length(sigInd) > 1
+            clustId = regCoef_cluster(xnSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+        else
+            clustInd = NaN;
+        end
 
         saveDataxn.clustID = clustId;
         saveDataxn.t = xnSel.t;
