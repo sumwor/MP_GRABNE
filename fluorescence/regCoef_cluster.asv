@@ -82,7 +82,7 @@ clusterMat = pref(tInd,input.sigInd)';
         end
         
         for yy=1:length(clustID)
-            for gg = yy+1:length(clustID)
+            for gg = yy+1:length(clustInd)
                 
                 corrMat(gg,yy) = corrMat(yy,gg);
             end
