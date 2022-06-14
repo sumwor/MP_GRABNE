@@ -69,8 +69,7 @@ for ii = 1:nFiles
         saveRPEName = fullfile(savematpath,'regRL_RPE_norm.mat');
           if exist(saveRPEName)
             reg_cr{3} = load(saveRPEName);
-          end
-        
+          end  
          % get corresponding coefficient
          numGrids = numel(reg_cr{1}.reg_cr);
           varName = {'cn+1','cn','cn-1','rn','rn-1','xn','xn-1','ave_r','Cum_r','dQ','chosenQ','dK','chosenK','RPE','CKE'};
@@ -111,59 +110,69 @@ for ii = 1:nFiles
             choiceInd = 3;
 
             choicetempData = getRegautoCorrData(reg_cr{1}.reg_cr,label,choiceInd,[0 3],sigThresh,savefluofigpath);
-            tlabel1='Choice coefficient';
-            xtitle='Time from cue(s)';colorRange = [-0.05 0.05];
-            sigGrid =~isnan(choicetempData.tempCorrCoeff);
-            
-            choiceSel.t = reg_cr{1}.reg_cr{1}.regr_time;
-            choiceSel.coeff= choicetempData.coeff(sigGrid(:),:);
-            choiceSel.lag = choicetempData.tempCorrLag(sigGrid);
-       plot_coeff_sort(choiceSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
-
-        % cluster grid based on the correlation within 0.5-4s
-        allInd = 1:size(choicetempData.coeff,1);
-        sigInd = allInd(sigGrid(:));
-        choiceSel.sigInd = sigInd;
-        choiceSel.sigMat = sigGrid;
-        if length(sigInd) > 1
-            clustId = regCoef_cluster(choiceSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
-        else
-            clustId = NaN;
-        end
-        saveDataChoice.clustID = clustId;
-        saveDataChoice.t = choiceSel.t;
-        saveDataChoice.coeff = choiceSel.coeff;
-        saveDataChoice.sigInd = choiceSel.sigInd;
+%             tlabel1='Choice coefficient';
+%             xtitle='Time from cue(s)';colorRange = [-0.05 0.05];
+%             sigGrid =~isnan(choicetempData.tempCorrCoeff);
+%             
+%             choiceSel.t = reg_cr{1}.reg_cr{1}.regr_time;
+%             choiceSel.coeff= choicetempData.coeff(sigGrid(:),:);
+%             choiceSel.lag = choicetempData.tempCorrLag(sigGrid);
+%        plot_coeff_sort(choiceSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
+% 
+%         % cluster grid based on the correlation within 0.5-4s
+%         allInd = 1:size(choicetempData.coeff,1);
+%         sigInd = allInd(sigGrid(:));
+%         choiceSel.sigInd = sigInd;
+%         choiceSel.sigMat = sigGrid;
+%         if length(sigInd) > 1
+%             clustId = regCoef_cluster(choiceSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+%         else
+%             clustId = NaN;
+%         end
+%         saveDataChoice.clustID = clustId;
+%         saveDataChoice.t = choiceSel.t;
+%         saveDataChoice.coeff = choiceSel.coeff;
+%         saveDataChoice.sigInd = choiceSel.sigInd;
         %end
 
         % outcome regression mask
         
-        %if ~exist('outcometempData','var') % if choice regression mask not computed
+        if ~exist('outcometempData','var') % if choice regression mask not computed
             label = 'outcome';
             outcomeInd = 7;
             outcometempData = getRegautoCorrData(reg_cr{1}.reg_cr,label,outcomeInd,[0,3],sigThresh,savefluofigpath);
-         tlabel1='Outcome coefficient';
-            xtitle='Time from cue(s)';colorRange = [-0.05 0.05];
+          tlabel1='Outcome coefficient';
+             xtitle='Time from cue(s)';colorRange = [-0.05 0.05];
             sigGrid =~isnan(outcometempData.tempCorrCoeff);
             outcomeSel.t = reg_cr{1}.reg_cr{1}.regr_time;
-            outcomeSel.coeff= outcometempData.coeff(sigGrid(:),:);
-            outcomeSel.lag = outcometempData.tempCorrLag(sigGrid);
-%             outcomeSel.coeff= outcometempData.coeff;
-%             outcomeSel.lag = outcometempData.tempCorrLag;
-        plot_coeff_sort(outcomeSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
+            %outcomeSel.coeff= outcometempData.coeff(sigGrid(:),:);
+            %outcomeSel.lag = outcometempData.tempCorrLag(sigGrid);
+            outcomeSel.coeff= outcometempData.coeff;
+            %outcomeSel.lag = outcometempData.tempCorrLag;
+       %plot_coeff_sort(outcomeSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
 
-        % cluster grid based on the correlation within 0.5-4s
+        %cluster grid based on the correlation within 0.5-4s
         allInd = 1:size(outcometempData.coeff,1);
         sigInd = allInd(sigGrid(:));
         outcomeSel.sigInd = sigInd;
         outcomeSel.sigMat = sigGrid;
-        clustId = regCoef_cluster(outcomeSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+        [clustId, oriInd] = regCoef_cluster(outcomeSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+         
+%           outcome.t = reg_cr{1}.reg_cr{1}.regr_time;
+%             outcome.coeff= outcometempData.coeff;
+%            clustId = regCoef_cluster(outcomeSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
 
         saveDataOutcome.clustID = clustId;
+        saveDataOutcome.oriInd = oriInd;
+        saveDataOutcome.T = zeros(1,length(oriInd));
+        clusterNum = [sum(saveDataOutcome.clustID==1), sum(saveDataOutcome.clustID==2), sum(saveDataOutcome.clustID==3)];
+         saveDataOutcome.T(1:clusterNum(1)) = 1;
+         saveDataOutcome.T(clusterNum(1)+1:sum(clusterNum(1:2))) = 2;
+         saveDataOutcome.T(sum(clusterNum(1:2))+1:end) = 3;
         saveDataOutcome.t = outcomeSel.t;
         saveDataOutcome.coeff = outcomeSel.coeff;
         saveDataOutcome.sigInd = outcomeSel.sigInd;
-   
+%    
             %end
         % save the result
 
@@ -208,29 +217,29 @@ for ii = 1:nFiles
             
             xnInd = 11;
             xntempData = getRegautoCorrData(reg_cr{1}.reg_cr,label,xnInd,[0 3],sigThresh,savefluofigpath);
-            tlabel1='Interaction coefficient';
-            sigGrid =~isnan(xntempData.tempCorrCoeff);
-            xnSel.t = reg_cr{1}.reg_cr{1}.regr_time;
-            xnSel.coeff= xntempData.coeff(sigGrid(:),:);
-            xnSel.lag = xntempData.tempCorrLag(sigGrid);
-%             outcomeSel.coeff= outcometempData.coeff;
-%             outcomeSel.lag = outcometempData.tempCorrLag;
-        plot_coeff_sort(xnSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath)
-
-         allInd = 1:size(xntempData.coeff,1);
-        sigInd = allInd(sigGrid(:));
-        xnSel.sigInd = sigInd;
-        xnSel.sigMat = sigGrid;
-        if length(sigInd) > 1
-            clustId = regCoef_cluster(xnSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
-        else
-            clustInd = NaN;
-        end
-
-        saveDataxn.clustID = clustId;
-        saveDataxn.t = xnSel.t;
-        saveDataxn.coeff = xnSel.coeff;
-        saveDataxn.sigInd = xnSel.sigInd;
+%             tlabel1='Interaction coefficient';
+%             sigGrid =~isnan(xntempData.tempCorrCoeff);
+%             xnSel.t = reg_cr{1}.reg_cr{1}.regr_time;
+%             xnSel.coeff= xntempData.coeff(sigGrid(:),:);
+%             xnSel.lag = xntempData.tempCorrLag(sigGrid);
+% %             outcomeSel.coeff= outcometempData.coeff;
+% %             outcomeSel.lag = outcometempData.tempCorrLag;
+%         plot_coeff_sort(xnSel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath)
+% 
+%          allInd = 1:size(xntempData.coeff,1);
+%         sigInd = allInd(sigGrid(:));
+%         xnSel.sigInd = sigInd;
+%         xnSel.sigMat = sigGrid;
+%         if length(sigInd) > 1
+%             clustId = regCoef_cluster(xnSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+%         else
+%             clustInd = NaN;
+%         end
+% 
+%         saveDataxn.clustID = clustId;
+%         saveDataxn.t = xnSel.t;
+%         saveDataxn.coeff = xnSel.coeff;
+%         saveDataxn.sigInd = xnSel.sigInd;
  %       end
 % 
 %          if ~exist('xn__1tempData','var')
@@ -281,28 +290,28 @@ for ii = 1:nFiles
 %         %% regression 3-----------------------------------------------------------------------
 % 
 %         if ~exist('RPEtempData','var') % if choice regression mask not computed
-            label = 'RPE';
-            RPEInd = 6;
-            RPEtempData = getRegautoCorrData(reg_cr{3}.reg_cr,label,RPEInd,[0 3],sigThresh,savefluofigpath) ;
-            tlabel1='RPE coefficient';
-            sigGrid =~isnan(RPEtempData.tempCorrCoeff);
-            RPESel.t = reg_cr{1}.reg_cr{1}.regr_time;
-            RPESel.coeff= RPEtempData.coeff(sigGrid(:),:);
-            RPESel.lag = RPEtempData.tempCorrLag(sigGrid);
-%             outcomeSel.coeff= outcometempData.coeff;
-%             outcomeSel.lag = outcometempData.tempCorrLag;
-        plot_coeff_sort(RPESel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
-
-         allInd = 1:size(RPEtempData.coeff,1);
-        sigInd = allInd(sigGrid(:));
-        RPESel.sigInd = sigInd;
-        RPESel.sigMat = sigGrid;
-        clustId = regCoef_cluster(RPESel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
-
-        saveDataRPE.clustID = clustId;
-        saveDataRPE.t = RPESel.t;
-        saveDataRPE.coeff = RPESel.coeff;
-        saveDataRPE.sigInd = RPESel.sigInd;
+%             label = 'RPE';
+%             RPEInd = 6;
+%             RPEtempData = getRegautoCorrData(reg_cr{3}.reg_cr,label,RPEInd,[0 3],sigThresh,savefluofigpath) ;
+%             tlabel1='RPE coefficient';
+%             sigGrid =~isnan(RPEtempData.tempCorrCoeff);
+%             RPESel.t = reg_cr{1}.reg_cr{1}.regr_time;
+%             RPESel.coeff= RPEtempData.coeff(sigGrid(:),:);
+%             RPESel.lag = RPEtempData.tempCorrLag(sigGrid);
+% %             outcomeSel.coeff= outcometempData.coeff;
+% %             outcomeSel.lag = outcometempData.tempCorrLag;
+%         plot_coeff_sort(RPESel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
+% 
+%          allInd = 1:size(RPEtempData.coeff,1);
+%         sigInd = allInd(sigGrid(:));
+%         RPESel.sigInd = sigInd;
+%         RPESel.sigMat = sigGrid;
+%         clustId = regCoef_cluster(RPESel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+% 
+%         saveDataRPE.clustID = clustId;
+%         saveDataRPE.t = RPESel.t;
+%         saveDataRPE.coeff = RPESel.coeff;
+%         saveDataRPE.sigInd = RPESel.sigInd;
 %         end
 % 
 %         if ~exist('CKEtempData','var') % if choice regression mask not computed
@@ -311,15 +320,265 @@ for ii = 1:nFiles
 %             CKEtempData = getRegautoCorrData(reg_cr{3}.reg_cr,label,CKEInd,sigThresh,savefluofigpath) ;
 %         end
 % 
+%      pos/neg RPE use all grids with coefficient
+        label = 'posRPE';
+        RPEInd = 6;
+        posRPEtempData = getRegautoCorrData(reg_cr{3}.reg_cr_pos,label,RPEInd,[0 3],sigThresh,savefluofigpath) ;
+%             tlabel1='posRPE coefficient';
+%              xtitle='Time from cue(s)';
+%             posRPESel.t = reg_cr{1}.reg_cr{1}.regr_time;
+%             posRPESel.coeff= posRPEtempData.coeff;
+%             %RPESel.lag = RPEtempData.tempCorrLag(sigGrid);
+% %             outcomeSel.coeff= outcometempData.coeff;
+% %             outcomeSel.lag = outcometempData.tempCorrLag;
+%         %plot_coeff_sort(posRPESel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
+% 
+%          allInd = 1:size(posRPEtempData.coeff,1);
+%          posclustId = regCoef_cluster(posRPESel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+%            saveDataOutcome.clustID = clustId;
+%         saveDataOutcome.clustInd = clustInd;
+%         saveDataOutcome.t = outcomeSel.t;
+%         saveDataOutcome.coeff = outcomeSel.coeff;
+%         saveDataOutcome.sigInd = outcomeSel.sigInd;
+          label = 'negRPE';
+        RPEInd = 6;
+        negRPEtempData = getRegautoCorrData(reg_cr{3}.reg_cr_neg,label,RPEInd,[0 3],sigThresh,savefluofigpath) ;
+%             tlabel1='negRPE coefficient';
+%             negRPESel.t = reg_cr{1}.reg_cr{1}.regr_time;
+%             negRPESel.coeff= negRPEtempData.coeff;
+%             %RPESel.lag = RPEtempData.tempCorrLag(sigGrid);
+% %             outcomeSel.coeff= outcometempData.coeff;
+% %             outcomeSel.lag = outcometempData.tempCorrLag;
+%         %plot_coeff_sort(negRPESel,[0 3],tlabel1,xtitle,colorRange,savefluofigpath);
+% 
+%          allInd = 1:size(negRPEtempData.coeff,1);
+%          negclustId = regCoef_cluster(negRPESel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+% 
+%         saveDataRPE.clustID = clustId;
+%         saveDataRPE.t = RPESel.t;
+%         saveDataRPE.coeff = RPESel.coeff;
+%         saveDataRPE.sigInd = RPESel.sigInd;
 %         %% save the results
 %         save(saveregpath,'outcometempData','choicetempData','cn_1tempData','cn__1tempData',...
 %                              'rn_1tempData','rn__1tempData', 'xntempData', 'xn__1tempData', 'ave_rtempData', 'cum_rtempData',...
 %                              'dQtempData', 'chosenQtempData','dKtempData','chosenKtempData',...
 %                              'RPEtempData', 'CKEtempData')
+
+%% based on the outcome result, plot pos/neg RPE coefficient, choice/interaction of the corresponding results
+t =  reg_cr{1}.reg_cr{1}.regr_time;
+nCells = length(saveDataOutcome.oriInd);
+
+figure;
+subplot(2,3,1)
+tlabel = 'Outcome';
+image(t,1:nCells,outcometempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel);
+
+subplot(2,3,4)
+
+line1 = outcometempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = outcometempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  outcometempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+
+% plot pos RPE
+subplot(2,3,2)
+tlabel = 'posRPE';
+image(t,1:nCells, posRPEtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel);
+
+subplot(2,3,5)
+
+line1 = posRPEtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = posRPEtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  posRPEtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+
+% plot neg RPE
+subplot(2,3,3)
+tlabel = 'negRPE';
+image(t,1:nCells, negRPEtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel)
+subplot(2,3,6)
+
+line1 = negRPEtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = negRPEtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  negRPEtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+
+savepath = fullfile(savefluofigpath,'clustering');
+if ~exist(savepath)
+    mkdir(savepath)
+end
+
+print(gcf,'-dpng',fullfile(savepath,[tlabel,' outcome-RPE-cluster']));
+saveas(gcf, fullfile(savepath,[tlabel,' outcome-RPE-cluster']), 'fig');
+saveas(gcf, fullfile(savepath,[tlabel,' outcome-RPE-cluster']), 'svg');
+
+%% outcome, choice, interaction
+figure;
+subplot(2,3,1)
+tlabel = 'Outcome';
+image(t,1:nCells,outcometempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel);
+
+subplot(2,3,4)
+
+line1 = outcometempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = outcometempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  outcometempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+% plot choice
+subplot(2,3,2)
+tlabel = 'Choice';
+image(t,1:nCells, choicetempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel);
+subplot(2,3,5)
+
+line1 = choicetempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = choicetempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  choicetempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+
+
+% plot interaction
+subplot(2,3,3)
+tlabel = 'Interaction';
+image(t,1:nCells,xntempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel);
+subplot(2,3,6)
+
+line1 = xntempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = xntempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  xntempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+
+print(gcf,'-dpng',fullfile(savepath,[tlabel,' outcome-choice-cluster']));
+saveas(gcf, fullfile(savepath,[tlabel,' outcome-choice-cluster']), 'fig');
+saveas(gcf, fullfile(savepath,[tlabel,' outcome-choice-cluster']), 'svg');
 %         
 close all;
-     save(fullfile(savematpath,'cluster.mat'), 'saveDataChoice', 'saveDataOutcome','saveDataxn','saveDataRPE');
-     %  save(saveregpath,'outcometempData','choicetempData','xntempData');
+     save(fullfile(savematpath,'cluster.mat'), 'saveDataOutcome','choicetempData','xntempData','posRPEtempData','negRPEtempData');
     end
 
         close all
