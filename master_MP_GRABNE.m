@@ -11,8 +11,8 @@ setup_figprop;
 
 %root_path = 'V:\HongliWang\NE_analysis';
 
-root_path_NE = 'Y:\HongliWang\NE_analysis_784';
-root_path_ACh = 'Y:\HongliWang\ACh_analysis_784';
+root_path_NE = 'V:\HongliWang\NE_analysis_784';
+root_path_ACh = 'V:\HongliWang\ACh_analysis_784';
 %root_path = 'Y:\HongliWang\Ach_784';
 
 %root_path = 'K:\Ach_784';
@@ -142,14 +142,14 @@ save_path_fluo_NE = fullfile(root_path_NE,'summary','figs_summary_fluo');
 model_path_ACh = fullfile(root_path_ACh,'mat_models');
 
 save_path_fluo_ACh = fullfile(root_path_ACh,'summary','figs_summary_fluo');
-% 
+%
 
-% 
+%
 % % choice/reward selevitivty
-% 
+%
 % MP_GRAB_selectivity(dataIndex(11,:));
 % MP_GRAB_prev_selectivity(dataIndex);
-% 
+%
 % % calculate px selectivity
 % MP_GRAB_selectivity_px(dataIndex);
 % % make videos of choice/outcome selectivity
@@ -188,7 +188,7 @@ MP_GRAB_MLR_separateSummary(dataIndex_ACh, save_path_fluo_ACh);
 
 %% latent variable
 
-%NE 
+%NE
 MP_GRABRL_MLR(dataIndex_NE([10:17],:))
 MP_GRABRL_MLR_acrossSessions(dataIndex_NE([1:9,19:end],:), save_path_fluo_NE)
 
@@ -237,17 +237,17 @@ MP_GRAB_tempComp(save_path_mat_NE, save_path_mat_ACh)
 %% random forest is better in estimating weak signals
 % MP_GRAB_RF(dataIndex);
 % MP_GRAB_RF_acrossSessions(dataIndex, save_path_fluo)
-% 
+%
 % MP_GRAB_RF_RL(dataIndex);
 % MP_GRAB_RF_RL_acrossSessions(dataIndex, save_path_fluo)
-% 
+%
 % % motion kernel?
 % % df/f - reward rate/latent variable (sum of Q etc. )
 % MP_GRAB_tonic(dataIndex)
-% 
+%
 % %% GLM
 % MP_GRAB_GLM_findlambda(dataIndex);
-% 
+%
 % lambda = 0.2;  % manually picking lambda = 0.2 for every session for now
 % MP_GRAB_GLM(dataIndex,lambda);
 % % bayesian linear regression

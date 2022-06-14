@@ -39,20 +39,20 @@ disp(['--- Detected: ' int2str(nFile) ' behavioral logfiles.']);
 disp(['-----------------------------------------------------------']);
 
 for ii = 1:nFile
-    
+
     % Is the analysis file already created?
     fn = dir(fullfile(dataIndex.BehPath{ii},[dataIndex.LogFileName{ii}(1:end-4),'_beh.mat']));
     if size(fn,1)>0
         behIndex.BehCreated(ii) = 1;
     end
-    
+
     if isnan(behIndex.BehCreated(ii))
         disp(['Parsing file #' int2str(ii) '.']);
         disp(['    ' dataIndex.LogFileName{ii}]);
-        
+
         % extract data for each trial from raw logfile
         [ logData ] = MP_parseLogfile(dataIndex.LogFilePath{ii}, dataIndex.LogFileName{ii});
-        
+
         logfileData.Animal = logData.subject;
         logfileData.Experiment = logData.scenario;
         yr=num2str(logData.dateTime{1}(9:10));
@@ -61,34 +61,34 @@ for ii = 1:nFile
         hr=num2str(logData.dateTime{2}(1:2));
         min=num2str(logData.dateTime{2}(4:5));
         logfileData.DateNumber=str2num([yr mo day hr min]);
-        
-        
+
+
         [ sessionData, trialData ] = MP_getSessionData(logData);
         trials = MP_getTrialMasks(trialData);
         %save behavioral .mat file
         save(fullfile(dataIndex.BehPath{ii}, [dataIndex.LogFileName{ii}(1:end-4),'_beh'])',...
             'sessionData','trialData','logfileData', 'trials');
-        
+
         behIndex.BehCreated(ii) = 1;
-        
+
     else  %else if the behavioral .mat file already created
         disp(['Loading file #' int2str(ii) '.']);
         disp(['    ' dataIndex.LogFileName{ii}]);
 
         load(fullfile(dataIndex.BehPath{ii},[dataIndex.LogFileName{ii}(1:end-4),'_beh.mat']));
     end
-    
+
     Ind = strfind(dataIndex.LogFilePath{ii},filesep);
-    
-    
+
+
     behIndex.Animal(ii) = {dataIndex.LogFilePath{ii}(Ind(end-1)+1:Ind(end)-1)};
     behIndex.Experiment(ii) = logfileData.Experiment;
     behIndex.DateNumber(ii) = logfileData.DateNumber;
     % record from left or right hemisphere
-    
+
     %%
     clearvars -except nFile i dataIndex behIndex Mol
-    
+
 end
 % 891,893,894,895,896,897. sub 894 is not sure
 %subList = {'891';'893';'894';'895';'896';'897'};
