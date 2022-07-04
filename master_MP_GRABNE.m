@@ -70,7 +70,7 @@ save_path_NE = fullfile(root_path_NE,'summary','figs_summary');
 
 MP_GRAB_behaviorPerAnimal(dataIndex_NE,save_path_NE);
 
-MP_GRAB_behaviorAll(dataIndex_NE, save_path_NE);
+MP_GRAB_behaviorAll(dataIndex_NE([1:9,19:end],:), save_path_NE);
 
 % ACh
 nFiles_ACh = size(dataIndex_ACh,1);
@@ -86,6 +86,7 @@ MP_GRAB_behaviorPerAnimal(dataIndex_ACh,save_path_ACh);
 
 MP_GRAB_behaviorAll(dataIndex_ACh, save_path_ACh);
 
+MP_GRAB_behComp(dataIndex_ACh, dataIndex_NE([1:9,19:end],:), save_path_ACh)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Behavior - Model fitting
 
@@ -230,9 +231,11 @@ MP_GRAB_selectivitySummary(dataIndex_ACh, save_path_fluo_ACh);
 MP_GRAB_temporalCorr(dataIndex_ACh);
 save_path_mat_ACh = fullfile(root_path_ACh,'summary','data_summary');
 MP_GRAB_temporalCorrSummary(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
+%MP_GRAB_temporalCorrSummary_old(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
+
 
 % compare NE and ACh result
-MP_GRAB_tempComp(save_path_mat_NE, save_path_mat_ACh)
+MP_GRAB_tempComp(save_path_mat_NE, save_path_mat_ACh,save_path_fluo_ACh)
 
 %% random forest is better in estimating weak signals
 % MP_GRAB_RF(dataIndex);

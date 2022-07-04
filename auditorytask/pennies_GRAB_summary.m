@@ -300,7 +300,7 @@ subplot(2,3,1); hold on;
 %boxplot(nTrial_array,'Colors','k','Notch','off','Labels',[char(956),'=',num2str(round(mean(nTrial_array)))]);
 boxplot(nTrial_array,'Colors','k','Notch','off');
 %boxplot(nTrial_array,'Colors','k','Notch','off');
-ylim([0 800]); 
+ylim([0 1000]); 
 ylabel(['Trials performed']);
 set(gca,'box','off') 
 

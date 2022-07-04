@@ -52,6 +52,8 @@ tempData.tempCorrLag = NaN(size(Mat.coeff,1),size(Mat.coeff,2));
 tempData.tempCorrMax = NaN(size(Mat.coeff,1),size(Mat.coeff,2));
 tempData.corrcoef = NaN(size(Mat.coeff,1),size(Mat.coeff,2),sum(tInd)*2-1);
 tempData.lag = NaN(size(Mat.coeff,1),size(Mat.coeff,2),sum(tInd)*2-1);
+index = 1:size(tempData.coeff,1);
+tempData.isSig = logical(sigMat(:));
 
 if maxX~=0 
 refCoeff = squeeze(Mat.coeff(maxX,maxY,:));

@@ -264,9 +264,9 @@ for ii = 1:nFiles
 % 
 %         %% regression 2-----------------------------------------------------------------------
 %         if ~exist('dQtempData','var') % if choice regression mask not computed
-%             label = 'delta Q';
-%             dQInd = 8;
-%             dQtempData = getRegautoCorrData(reg_cr{2}.reg_cr,label,dQInd,sigThresh,savefluofigpath) ;
+            label = 'delta Q';
+            dQInd = 8;
+            dQtempData = getRegautoCorrData(reg_cr{2}.reg_cr,label,dQInd,[0,3],sigThresh,savefluofigpath) ;
 %         end
 % 
 %         if ~exist('chosenQtempData','var') % if choice regression mask not computed
@@ -276,9 +276,9 @@ for ii = 1:nFiles
 %         end
 % 
 %         if ~exist('dKtempData','var') % if choice regression mask not computed
-%             label = 'delta K';
-%             dKInd = 10;
-%             dKtempData = getRegautoCorrData(reg_cr{2}.reg_cr,label,dKInd,sigThresh,savefluofigpath) ;
+            label = 'delta K';
+            dKInd = 10;
+            dKtempData = getRegautoCorrData(reg_cr{2}.reg_cr,label,dKInd,[0,3],sigThresh,savefluofigpath) ;
 %         end
 % 
 %         if ~exist('chosenKtempData','var') % if choice regression mask not computed
@@ -315,9 +315,9 @@ for ii = 1:nFiles
 %         end
 % 
 %         if ~exist('CKEtempData','var') % if choice regression mask not computed
-%             label = 'CKE';
-%             CKEInd = 8;
-%             CKEtempData = getRegautoCorrData(reg_cr{3}.reg_cr,label,CKEInd,sigThresh,savefluofigpath) ;
+            label = 'CKE';
+            CKEInd = 8;
+            CKEtempData = getRegautoCorrData(reg_cr{3}.reg_cr,label,CKEInd,[0,3],sigThresh,savefluofigpath) ;
 %         end
 % 
 %      pos/neg RPE use all grids with coefficient
@@ -577,8 +577,112 @@ print(gcf,'-dpng',fullfile(savepath,[tlabel,' outcome-choice-cluster']));
 saveas(gcf, fullfile(savepath,[tlabel,' outcome-choice-cluster']), 'fig');
 saveas(gcf, fullfile(savepath,[tlabel,' outcome-choice-cluster']), 'svg');
 %         
+
+%% outcome, dQ, dK
+%% outcome, choice, interaction
+figure;
+subplot(2,3,1)
+tlabel = 'Outcome';
+image(t,1:nCells,outcometempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel);
+
+subplot(2,3,4)
+
+line1 = outcometempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = outcometempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  outcometempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+% plot dQ
+subplot(2,3,2)
+tlabel = 'dQ';
+image(t,1:nCells, dQtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel);
+subplot(2,3,5)
+
+line1 = dQtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = dQtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  dQtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+
+
+% plot dK
+subplot(2,3,3)
+tlabel = 'dK';
+image(t,1:nCells,dKtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+hold on; plot([0 0],[0 nCells+1],'w');
+hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+   colors=cbrewer('div','RdBu',256);
+        colors=flipud(colors);
+        colorRange = [-1 1];
+colormap(colors);
+caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+title(tlabel);
+subplot(2,3,6)
+
+line1 = dKtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+hold on;
+line2 = dKtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+plot(t,nanmean(line2,1),'k');
+errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+hold on;
+line3 =  dKtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+set(gca,'box','off');
+
+print(gcf,'-dpng',fullfile(savepath,[tlabel,' outcome-dQ-cluster']));
+saveas(gcf, fullfile(savepath,[tlabel,' outcome-dQ-cluster']), 'fig');
+saveas(gcf, fullfile(savepath,[tlabel,' outcome-dQ-cluster']), 'svg');
+%         
 close all;
-     save(fullfile(savematpath,'cluster.mat'), 'saveDataOutcome','choicetempData','xntempData','posRPEtempData','negRPEtempData');
+     save(fullfile(savematpath,'cluster.mat'), 'saveDataOutcome','choicetempData','xntempData','posRPEtempData','negRPEtempData','dQtempData','dKtempData','CKEtempData');
     end
 
         close all
