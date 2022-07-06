@@ -777,7 +777,7 @@ g2sortOrd = coeff_sort(g2,[0,3]);
 g3.coeff = group3; g3.t = rt;
 g3sortOrd = coeff_sort(g3,[0,3]);
 
-% temp1 = group1(g1sortOrd,:); group1 = temp1;
+temp1 = group1(g1sortOrd,:); group1 = temp1;
 temp2 = group2(g2sortOrd,:); group2 = temp2;
 temp3 = group3(g3sortOrd,:); group3 = temp3;
 

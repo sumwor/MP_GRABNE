@@ -1,5 +1,219 @@
 function plot_groupSummary(group1,group2, group3, group4, rt, tlabel,savesumfigpath)
 
+
+%% plot groups separately
+
+%% group1
+h1=figure;
+sgtitle([tlabel,'-group1'])
+subplot(1,3,1);
+
+nCells = size(group1,1);
+
+image(rt,1:nCells,group1,'CDataMapping','scaled');
+
+hold on; plot([0 0],[0 nCells+1],'w');
+colors=cbrewer('div','RdBu',256);
+colorRange = [-1 1];
+colormap(colors);
+colors=flipud(colors);
+colorRange(1)=-0.1;
+colorRange(2)=0.1;
+caxis([colorRange(1) colorRange(2)]);
+ylabel('Cells');
+
+%subplot
+subplot(3,20,48);
+image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);
+
+subplot(2,2,4)
+line1 = group1';
+ste = nanstd(line1,0,2)/sqrt(size(line1,2));
+plot(rt,nanmean(line1,2),'Color',[241, 84, 18]/255);
+hold on;
+errorshade(rt,nanmean(line1,2)-ste,nanmean(line1,2)+ste,[241, 84, 18]/255,0.5);
+% hold on;
+% line2 = group2';
+% ste = nanstd(line2,0,2)/sqrt(size(line2,2));
+% plot(rt,nanmean(line2,2),'k');
+% errorshade(rt,nanmean(line2,2)-ste,nanmean(line2,2)+ste,[0 0 0]/255,0.5);
+% hold on;
+% line3 = group3';
+% ste = nanstd(line3,0,2)/sqrt(size(line3,2));
+% plot(rt,nanmean(line3,2), 'Color',[52, 179, 241]/255);
+% errorshade(rt,nanmean(line3,2)-ste,nanmean(line3,2)+ste,[52, 179, 241]/255,0.5);
+% if ~isempty(group4)
+%     line4 = group4';
+%     ste = nanstd(line4,0,2)/sqrt(size(line4,2));
+%     plot(rt,nanmean(line4,2), 'Color',[238, 238, 238]/255);
+%     errorshade(rt,nanmean(line4,2)-ste,nanmean(line4,2)+ste,[100,100,100]/255,0.5);
+% 
+% end
+ylim([-0.1 0.1])
+yticks([-0.1:0.1:0.1])
+set(gca,'box','off');
+print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-cluster-summary-group1']));
+savefig(h1,fullfile(savesumfigpath,[tlabel,'-cluster-summary-group1.fig']));
+%saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary-group1']), 'svg');
+
+%% group2
+h1=figure;
+sgtitle([tlabel,'-group2'])
+subplot(1,3,1);
+
+nCells = size(group2,1);
+
+image(rt,1:nCells,group2,'CDataMapping','scaled');
+
+hold on; plot([0 0],[0 nCells+1],'w');
+colors=cbrewer('div','RdBu',256);
+colorRange = [-1 1];
+colormap(colors);
+colors=flipud(colors);
+colorRange(1)=-0.1;
+colorRange(2)=0.1;
+caxis([colorRange(1) colorRange(2)]);
+ylabel('Cells');
+
+%subplot
+subplot(3,20,48);
+image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);
+
+subplot(2,2,4)
+%% NE,interaction
+sepPoint = 600; %NE,interaction
+line1 = group2(1:sepPoint,:)';
+ste = nanstd(line1,0,2)/sqrt(size(line1,2));
+plot(rt,nanmean(line1,2));
+hold on;
+errorshade(rt,nanmean(line1,2)-ste,nanmean(line1,2)+ste,0.5);
+plot(rt,nanmean(line1,2));
+hold on;
+line2 = group2(sepPoint+1:end,:)';
+ste = nanstd(line2,0,2)/sqrt(size(line2,2));
+plot(rt,nanmean(line2,2),'k');
+errorshade(rt,nanmean(line2,2)-ste,nanmean(line2,2)+ste,0.5);
+plot(rt,nanmean(line2,2));
+
+
+
+%% normal
+line2 = group2';
+ste = nanstd(line2,0,2)/sqrt(size(line2,2));
+plot(rt,nanmean(line2,2),'k');
+hold on; errorshade(rt,nanmean(line2,2)-ste,nanmean(line2,2)+ste,[0 0 0]/255,0.5);
+ylim([-0.1 0.1])
+yticks([-0.1:0.1:0.1])
+set(gca,'box','off');
+print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-cluster-summary-group2']));
+savefig(h1,fullfile(savesumfigpath,[tlabel,'-cluster-summary-group2.fig']));
+%saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary-group2']), 'svg');
+
+%% group3
+h1=figure;
+sgtitle([tlabel,'-group3'])
+subplot(1,3,1);
+
+nCells = size(group3,1);
+
+image(rt,1:nCells,group3,'CDataMapping','scaled');
+
+hold on; plot([0 0],[0 nCells+1],'w');
+colors=cbrewer('div','RdBu',256);
+colorRange = [-1 1];
+colormap(colors);
+colors=flipud(colors);
+colorRange(1)=-0.1;
+colorRange(2)=0.1;
+caxis([colorRange(1) colorRange(2)]);
+ylabel('Cells');
+
+%subplot
+subplot(3,20,48);
+image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);
+
+subplot(2,2,4)
+line3 = group3';
+ste = nanstd(line3,0,2)/sqrt(size(line3,2));
+plot(rt,nanmean(line3,2), 'Color',[52, 179, 241]/255);
+hold on; errorshade(rt,nanmean(line3,2)-ste,nanmean(line3,2)+ste,[52, 179, 241]/255,0.5);
+ylim([-0.1 0.1])
+yticks([-0.1:0.1:0.1])
+set(gca,'box','off');
+print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-cluster-summary-group3']));
+savefig(h1,fullfile(savesumfigpath,[tlabel,'-cluster-summary-group3.fig']));
+%saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary-group3']), 'svg');
+
+%% group4
+   % sort group4
+  
+if ~isempty(group4)
+
+      g4.coeff=group4;g4.t = rt;
+    g4sortOrd = coeff_sort(g4,[0,3]);
+    group4= group4(g4sortOrd,:);
+h1=figure;
+sgtitle([tlabel,'-group4'])
+subplot(1,3,1);
+
+nCells = size(group4,1);
+
+image(rt,1:nCells,group4,'CDataMapping','scaled');
+
+hold on; plot([0 0],[0 nCells+1],'w');
+colors=cbrewer('div','RdBu',256);
+colorRange = [-1 1];
+colormap(colors);
+colors=flipud(colors);
+colorRange(1)=-0.1;
+colorRange(2)=0.1;
+caxis([colorRange(1) colorRange(2)]);
+ylabel('Cells');
+
+%subplot
+subplot(3,20,48);
+image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+colormap(colors);
+caxis([colorRange(1) colorRange(2)]);
+
+subplot(2,2,4)
+
+ % sepPoint = 657; % ACh, choice
+% sepPoint = 131; %ACh, xn
+%sepPoint = size(group4,1); %NE, choice
+sepPoint = 841; %NE,interaction
+line1 = group4(1:sepPoint,:)';
+ste = nanstd(line1,0,2)/sqrt(size(line1,2));
+plot(rt,nanmean(line1,2));
+hold on;
+errorshade(rt,nanmean(line1,2)-ste,nanmean(line1,2)+ste,0.5);
+plot(rt,nanmean(line1,2));
+hold on;
+line2 = group4(sepPoint+1:end,:)';
+ste = nanstd(line2,0,2)/sqrt(size(line2,2));
+plot(rt,nanmean(line2,2),'k');
+errorshade(rt,nanmean(line2,2)-ste,nanmean(line2,2)+ste,0.5);
+plot(rt,nanmean(line2,2));
+set(gca,'box','off')
+ylim([-0.1 0.1])
+yticks([-0.1:0.1:0.1])
+set(gca,'box','off');
+print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-cluster-summary-group4']));
+savefig(h1,fullfile(savesumfigpath,[tlabel,'-cluster-summary-group4.fig']));
+%saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary-group4']), 'svg');
+
+end
+
 % calculate correlation
 if isempty(group4)
     nCells = size(group1,1)+size(group2,1) + size(group3,1);
@@ -17,10 +231,7 @@ else
 % %     g3sortOrd = coeff_sort(g3,[0,3]);
 % %     group3= group3(g3sortOrd,:);
 %     end
-    % sort group4
-    g4.coeff=group4;g4.t = rt;
-    g4sortOrd = coeff_sort(g4,[0,3]);
-    group4= group4(g4sortOrd,:);
+ 
     nCells = size(group1,1)+size(group2,1) + size(group3,1) + size(group4,1);
     total = [group1;group2;group3;group4];
 end
@@ -230,93 +441,7 @@ savefig(h1,fullfile(savesumfigpath,[tlabel,'-group3.fig']));
 %saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
 saveas(gcf, fullfile(savesumfigpath,[tlabel,'-group3']), 'svg');
 
-% plot group4 separately
-if ~isempty(group4)
-    figure;
-    subplot(1,3,1);
-    image(rt,1:size(group4,1),[group4],'CDataMapping','scaled');
-    hold on; plot([0 0],[0 nCells+1],'w');
-    colors=cbrewer('div','RdBu',256);
-    colors=flipud(colors);
-    colormap(colors);
-    % if contains(tlabel,'RPE')
-    %     colorRange(1)=-0.7;
-    %     colorRange(2)=0.7;
-    % else
-    colorRange(1)=-2;
-    colorRange(2)=2;
-    %normalize dF/F heatmap to max of all conditions
-    % end
-    caxis([colorRange(1) colorRange(2)]);
-    ylabel('Cells');
-
-    %subplot
-    subplot(3,20,48);
-    image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-    colormap(colors);
-    caxis([colorRange(1) colorRange(2)]);
-
-    subplot(2,2,2)
-image(corrMat(end-size(group4,1)+1:end,end-size(group4,1)+1:end),'CDataMapping','scaled');
-%hold on;dendrogram(z)
-axis square;
-colors=cbrewer('div','RdBu',256);
-colors=flipud(colors);
-colorRange = [-1 1];
-colormap(colors);
-caxis([-1 1]);
-xticklabels({})
-yticklabels({})
-
-subplot(2,2,4)
-sepPoint = 657; % ACh, choice
-line1 = group4(1:sepPoint,:)';
-ste = nanstd(line1,0,2)/sqrt(size(line1,2));
-plot(rt,nanmean(line1,2));
-hold on;
-errorshade(rt,nanmean(line1,2)-ste,nanmean(line1,2)+ste,0.5);
-plot(rt,nanmean(line1,2));
-hold on;
-line2 = group4(sepPoint+1:end,:)';
-ste = nanstd(line2,0,2)/sqrt(size(line2,2));
-plot(rt,nanmean(line2,2),'k');
-errorshade(rt,nanmean(line2,2)-ste,nanmean(line2,2)+ste,0.5);
-plot(rt,nanmean(line2,2));
-set(gca,'box','off')
-
-print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-cluster4']));
-savefig(h1,fullfile(savesumfigpath,[tlabel,'-cluster4.fig']));
-%saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
-saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster4']), 'svg');
 
 % 
-g3.coeff=group3;g3.t = rt;
-    g3sortOrd = coeff_sort(g3,[0,3]);
-    group3Sort= group3(g3sortOrd,:);
- figure;
-    subplot(1,3,1);
-    image(rt,1:size(group3Sort,1),[group4],'CDataMapping','scaled');
-    hold on; plot([0 0],[0 nCells+1],'w');
-    colors=cbrewer('div','RdBu',256);
-    colors=flipud(colors);
-    colormap(colors);
-    % if contains(tlabel,'RPE')
-    %     colorRange(1)=-0.7;
-    %     colorRange(2)=0.7;
-    % else
-    colorRange(1)=-2;
-    colorRange(2)=2;
-    %normalize dF/F heatmap to max of all conditions
-    % end
-    caxis([colorRange(1) colorRange(2)]);
-    ylabel('Cells');
-
-    %subplot
-    subplot(3,20,48);
-    image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-    colormap(colors);
-    caxis([colorRange(1) colorRange(2)]);
-
-end
 
 close;
