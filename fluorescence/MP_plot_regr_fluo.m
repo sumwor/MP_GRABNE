@@ -84,7 +84,7 @@ for l=1:nPredictor
         percentage = 100*sum(pval(:,currPredictor,:)<pvalThresh,3)/nCells;
         %plot(t,percentage,'k.-','MarkerSize',15);
         %if isempty(input_ctrl)
-        plot(t,percentage,'k.-');
+        plot(t,percentage,'-','Color',[255, 189, 53]/255); % [63,167,150]/255 (NE)
 %         else
 %             fieldName = ['trigEvent',num2str(currPredictor-1)];
 %             for ll=1:numel(percentage)
@@ -113,7 +113,8 @@ for l=1:nPredictor
         plot([0 0],[0 100],'k','LineWidth',1);
         xlim([floor(t(1)) ceil(t(end))]);
         xticks([floor(t(1)):1:ceil(t(end))]);
-        ylim([0 54]);
+        yticks([0,70]);
+        ylim([0 70]);
         title(tlabel{currPredictor-1});
         if if_xlabel ~= 1
             set(gca,'xticklabel',[])
@@ -129,6 +130,7 @@ for l=1:nPredictor
         %identifying significant points via binomial test
         if isempty(input_ctrl) % if no input control regression, use binomial test
             sig=[];
+            sig = double(sig);
             for ll=1:numel(t)
                 [p]=myBinomTest(sum(pval(ll,currPredictor,:)<pvalThresh,3),nCells,pvalThresh);
                 sig(ll)=p;
@@ -136,11 +138,11 @@ for l=1:nPredictor
             %ifSig = sig<pvalThresh/10;
             %start1 = strfind([0, ifSig],[0,1]);
             %end1 = strfind([ifSig, 0],[1,0]);
-            sig(sig<=1e-20) = 1e-20;
+            sig(sig<=1e-100) = 1e-100;
             sig(sig>=0.05) = 1;
-            logSig = log(sig)/log(1e-20);
+            logSig = log(sig)/log(1e-100);
             for ll=1:numel(sig)
-                plot(t(ll)+dt*[-0.5 0.5], [50 50],'-','Color',[1 1-logSig(ll) 1-logSig(ll)],'LineWidth',5);
+                plot(t(ll)+dt*[-0.5 0.5], [65 65],'-','Color',[1 1-logSig(ll) 1-logSig(ll)],'LineWidth',5);
                 %plot(t(ll)+dt*[-0.5 0.5], [95 95],'-','Color',[1 sig(ll) sig(ll)],'LineWidth',5);
             end
 

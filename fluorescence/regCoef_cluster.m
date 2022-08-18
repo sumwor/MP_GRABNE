@@ -37,7 +37,7 @@ clusterMat = pref(tInd,input.sigInd)';
        
         
         maxclust = numClust;
-        T = clusterdata(clusterMat,'Linkage','ward','SaveMemory','off','Maxclust',maxclust,'distance','correlation');
+        T = clusterdata(clusterMat,'Linkage','average','SaveMemory','off','Maxclust',maxclust,'distance','correlation');
         
 
         % rearrange the groups by the covered area of the first 2 seconds

@@ -163,6 +163,7 @@ g1=cell(0); g2 = cell(0); g3 = cell(0);
 clustCoeff = []; clustMean = [];
 rClust_new = cell(0);
 rCoeff_new = cell(0);
+rSes = []; % session number,outcome
 cCoeff_new = cell(0);
 xCoeff_new = cell(0);
 posRPECoeff_new = cell(0);
@@ -235,6 +236,7 @@ for gg = 1:nFiles
     %         rDecayTau = [rDecayTau,NaN];
     %     end
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==1,:);
+    rSes = [rSes,gg];
     cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==1),:);
     xCoeff_new{newInd} = xnCoeff{gg}(rOriID{gg}(rClust{gg}==1),:);
     posRPECoeff_new{newInd} = posRPECoeff{gg}(rOriID{gg}(rClust{gg}==1),:);
@@ -328,6 +330,7 @@ for gg = 1:nFiles
     %         rDecayTau = [rDecayTau,NaN];
     %     end
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==2,:);
+     rSes = [rSes,gg];
      cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
     xCoeff_new{newInd} = xnCoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
     posRPECoeff_new{newInd} = posRPECoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
@@ -403,6 +406,7 @@ for gg = 1:nFiles
     %         rDecayTau = [rDecayTau,NaN];
     %     end
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==3,:);
+     rSes = [rSes,gg];
      cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
     xCoeff_new{newInd} = xnCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
     posRPECoeff_new{newInd} = posRPECoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
@@ -472,7 +476,10 @@ end
 
 % regroup with criteria *area under curve
 group1 = []; group2 = []; group3 = []; %group4 = [];
+o1SesInd = []; o2SesInd = []; o3SesInd = []; % keep track of the session number
 choice1 = []; choice2 = []; choice3 = [];
+c1SesInd = []; c2SesInd = []; c3SesInd = [];
+
 cSig1 = []; cSig2 = []; cSig3 = [];
 %choice1Sig = [];choice2Sig = [];choice3Sig = [];
 xn1 = []; xn2 = []; xn3 = [];
@@ -508,6 +515,7 @@ for ggg = 1:length(rCoeff_new)
        %areaUnder2 = trapz(rt(rt>3&rt<4),line11(rt>3 & rt<4));
         if areaUnder1 < 0 %& areaUnder2 > areaUnder1
             group1 = [group1;rCoeff_new{ggg}];
+            o1SesInd = [o1SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg1(2,animalInd) = numSigVarg1(2,animalInd) + size(rCoeff_new{ggg},1);
             choice1 = [choice1; cCoeff_new{ggg}]; cSig1 = [cSig1,cisSig{ggg}];%choice1Sig = [choice1Sig; cCoeff_Sig{ggg}];
             numSigVarg1(1,animalInd) = numSigVarg1(1,animalInd) + sum(cisSig{ggg});
@@ -526,6 +534,7 @@ for ggg = 1:length(rCoeff_new)
             
         else
             group2 = [group2;rCoeff_new{ggg}];
+            o2SesInd = [o2SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg2(2,animalInd) = numSigVarg2(2,animalInd) + size(rCoeff_new{ggg},1);
             choice2 = [choice2; cCoeff_new{ggg}]; cSig2 = [cSig2,cisSig{ggg}];%choice2Sig = [choice2Sig; cCoeff_Sig{ggg}];
             numSigVarg2(1,animalInd) = numSigVarg2(1,animalInd) + sum(cisSig{ggg});
@@ -548,6 +557,7 @@ for ggg = 1:length(rCoeff_new)
         %areaUnder2 = trapz(rt(rt>3&rt<4),line11(rt>3 & rt<4));
         if areaUnder1 < 0 %& areaUnder2 > areaUnder1
             group1 = [group1;rCoeff_new{ggg}];
+            o1SesInd = [o1SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg1(2,animalInd) = numSigVarg1(2,animalInd) + size(rCoeff_new{ggg},1);
 %         elseif areaUnder2 < 0
 %             group4 = [group4;rCoeff_new{ggg}];
@@ -568,6 +578,7 @@ for ggg = 1:length(rCoeff_new)
             
         else
             group2 = [group2;rCoeff_new{ggg}];
+            o2SesInd = [o2SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg2(2,animalInd) = numSigVarg2(2,animalInd) + size(rCoeff_new{ggg},1);
             choice2 = [choice2; cCoeff_new{ggg}]; cSig2 = [cSig2,cisSig{ggg}];%choice2Sig = [choice2Sig; cCoeff_Sig{ggg}];
             numSigVarg2(1,animalInd) = numSigVarg2(1,animalInd) + sum(cisSig{ggg});
@@ -590,6 +601,7 @@ for ggg = 1:length(rCoeff_new)
 %             group4 = [group4;rCoeff_new{ggg}];
 %         else
             group3 = [group3;rCoeff_new{ggg}];
+            o3SesInd = [o3SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg3(2,animalInd) = numSigVarg3(2,animalInd) + size(rCoeff_new{ggg},1);
             choice3 = [choice3; cCoeff_new{ggg}]; cSig3 = [cSig3,cisSig{ggg}];
             numSigVarg3(1,animalInd) = numSigVarg3(1,animalInd) + sum(cisSig{ggg});%choice3Sig = [choice3Sig; cCoeff_Sig{ggg}];
@@ -611,162 +623,6 @@ for ggg = 1:length(rCoeff_new)
     end
 end
 
-%% plot the fraction of sig grids within each group
-% figure;violinplot(numSigVarg1'./size(choiceCoeff{1},1),varList,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% ylim([0 0.8]);
-% ylabel('Fraction of significant grids, group1');
-% print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables group1'));
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group1'), 'fig');
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group1'), 'svg');
-% 
-% figure;violinplot(numSigVarg2'./size(choiceCoeff{1},1),varList,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% ylim([0 0.8]);
-% ylabel('Fraction of significant grids, group2');
-% print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables group2'));
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group2'), 'fig');
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group2'), 'svg');
-% 
-% figure;violinplot(numSigVarg3'./size(choiceCoeff{1},1),varList,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% ylim([0 0.8]);
-% ylabel('Fraction of significant grids, group3');
-% print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables group3'));
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group3'), 'fig');
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group3'), 'svg');
-% 
-% figure;violinplot(numSigVarg4'./size(choiceCoeff{1},1),varList,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% ylim([0 0.8]);
-% ylabel('Fraction of significant grids, group4');
-% print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables group4'));
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group4'), 'fig');
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group4'), 'svg');
-% 
-% % fraction of sig grids (normalized by outcome)
-% figure;violinplot((numSigVarg1./numSigVarg1(2,:))',varList,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% ylim([0 1]);
-% ylabel('Fraction of significant grids of outcome, group1');
-% print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables of outcome group1'));
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables of outcome group1'), 'fig');
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables of outcome group1'), 'svg');
-% 
-% figure;violinplot((numSigVarg2./numSigVarg2(2,:))',varList,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% ylim([0 1]);
-% ylabel('Fraction of significant grids of outcome, group2');
-% print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables of outcome group2'));
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables of outcome group2'), 'fig');
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables of outcome group2'), 'svg');
-% 
-% figure;violinplot((numSigVarg3./numSigVarg3(2,:))',varList,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% ylim([0 1]);
-% ylabel('Fraction of significant grids of outcome, group3');
-% print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables of outcome group3'));
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables of outcome group3'), 'fig');
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables of outcome group3'), 'svg');
-% 
-% close all;
-
-%% test for sigficance between different groups
-%figure;
-%violinplot([numSigVarg1(1,:)./numSigVarg1(2,:);numSigVarg3(1,:)./numSigVarg3(2,:);numSigVarg3(1,:)./numSigVarg3(2,:)]',{'group1','group2','group3'},'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% figure;
-% boxplot([numSigVarg1(1,:)./numSigVarg1(2,:);numSigVarg2(1,:)./numSigVarg2(2,:);numSigVarg3(1,:)./numSigVarg3(2,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(1,:)./numSigVarg1(2,:),numSigVarg2(1,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(1,:)./numSigVarg3(2,:),numSigVarg2(1,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(1,:)./numSigVarg3(2,:),numSigVarg1(1,:)./numSigVarg1(2,:))
-% 
-% figure;
-% boxplot([numSigVarg1(3,:)./numSigVarg1(2,:);numSigVarg2(3,:)./numSigVarg2(2,:);numSigVarg3(3,:)./numSigVarg3(2,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(3,:)./numSigVarg1(2,:),numSigVarg2(3,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(3,:)./numSigVarg3(2,:),numSigVarg2(3,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(3,:)./numSigVarg3(2,:),numSigVarg1(3,:)./numSigVarg1(2,:))
-% 
-% figure;
-% boxplot([numSigVarg1(4,:)./numSigVarg1(2,:);numSigVarg2(4,:)./numSigVarg2(2,:);numSigVarg3(4,:)./numSigVarg3(2,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(4,:)./numSigVarg1(2,:),numSigVarg2(4,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(4,:)./numSigVarg3(2,:),numSigVarg2(4,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(4,:)./numSigVarg3(2,:),numSigVarg1(4,:)./numSigVarg1(2,:))
-% 
-% figure;
-% boxplot([numSigVarg1(5,:)./numSigVarg1(2,:);numSigVarg2(5,:)./numSigVarg2(2,:);numSigVarg3(5,:)./numSigVarg3(2,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(5,:)./numSigVarg1(2,:),numSigVarg2(5,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(5,:)./numSigVarg3(2,:),numSigVarg2(5,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(5,:)./numSigVarg3(2,:),numSigVarg1(5,:)./numSigVarg1(2,:))
-% 
-% figure;
-% boxplot([numSigVarg1(6,:)./numSigVarg1(2,:);numSigVarg2(6,:)./numSigVarg2(2,:);numSigVarg3(6,:)./numSigVarg3(2,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(6,:)./numSigVarg1(2,:),numSigVarg2(6,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(6,:)./numSigVarg3(2,:),numSigVarg2(6,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(6,:)./numSigVarg3(2,:),numSigVarg1(6,:)./numSigVarg1(2,:))
-% 
-% figure;
-% boxplot([numSigVarg1(7,:)./numSigVarg1(2,:);numSigVarg2(7,:)./numSigVarg2(2,:);numSigVarg3(7,:)./numSigVarg3(2,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(7,:)./numSigVarg1(2,:),numSigVarg2(7,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(7,:)./numSigVarg3(2,:),numSigVarg2(7,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(7,:)./numSigVarg3(2,:),numSigVarg1(7,:)./numSigVarg1(2,:))
-% p = signrank((numSigVarg3(7,:)+numSigVarg2(7,:))./(numSigVarg3(2,:)+numSigVarg2(2,:)),numSigVarg1(7,:)./numSigVarg1(7,:))
-% 
-% figure;
-% boxplot([numSigVarg1(8,:)./numSigVarg1(2,:);numSigVarg2(8,:)./numSigVarg2(2,:);numSigVarg3(8,:)./numSigVarg3(2,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(8,:)./numSigVarg1(2,:),numSigVarg2(8,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(8,:)./numSigVarg3(2,:),numSigVarg2(8,:)./numSigVarg2(2,:))
-% p = signrank(numSigVarg3(8,:)./numSigVarg3(2,:),numSigVarg1(8,:)./numSigVarg1(2,:))
-% p = signrank(numSigVarg3(8,:)./numSigVarg3(2,:)+numSigVarg2(8,:)./numSigVarg2(2,:),numSigVarg1(8,:)./numSigVarg1(2,:))
-% 
-% %% fraction of sig over themselves
-% sumAllGroup = numSigVarg1+numSigVarg2+numSigVarg3;
-% figure;
-% boxplot([[numSigVarg1(1,:);numSigVarg2(1,:);numSigVarg3(1,:)]./sumAllGroup(1,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(1,:)./sumAllGroup(1,:),numSigVarg2(1,:)./sumAllGroup(1,:))
-% p = signrank(numSigVarg3(1,:)./sumAllGroup(1,:),numSigVarg2(1,:)./sumAllGroup(1,:))
-% p = signrank(numSigVarg3(1,:)./sumAllGroup(1,:),numSigVarg1(1,:)./sumAllGroup(1,:))
-% 
-% figure;
-% boxplot([[numSigVarg1(2,:);numSigVarg2(2,:);numSigVarg3(2,:)]./sumAllGroup(2,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(2,:)./sumAllGroup(2,:),numSigVarg2(2,:)./sumAllGroup(2,:))
-% p = signrank(numSigVarg3(2,:)./sumAllGroup(2,:),numSigVarg2(2,:)./sumAllGroup(2,:))
-% p = signrank(numSigVarg3(2,:)./sumAllGroup(2,:),numSigVarg1(2,:)./sumAllGroup(2,:))
-% 
-% figure;
-% boxplot([[numSigVarg1(3,:);numSigVarg2(3,:);numSigVarg3(3,:)]./sumAllGroup(3,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(3,:)./sumAllGroup(3,:),numSigVarg2(3,:)./sumAllGroup(3,:))
-% p = signrank(numSigVarg3(3,:)./sumAllGroup(3,:),numSigVarg2(3,:)./sumAllGroup(3,:))
-% p = signrank(numSigVarg3(3,:)./sumAllGroup(3,:),numSigVarg1(3,:)./sumAllGroup(3,:))
-% 
-% figure;
-% boxplot([[numSigVarg1(4,:);numSigVarg2(4,:);numSigVarg3(4,:)]./sumAllGroup(4,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(4,:)./sumAllGroup(4,:),numSigVarg2(4,:)./sumAllGroup(4,:))
-% p = signrank(numSigVarg3(4,:)./sumAllGroup(4,:),numSigVarg2(4,:)./sumAllGroup(4,:))
-% p = signrank(numSigVarg3(4,:)./sumAllGroup(4,:),numSigVarg1(4,:)./sumAllGroup(4,:))
-% 
-% figure;
-% boxplot([[numSigVarg1(5,:);numSigVarg2(5,:);numSigVarg3(5,:)]./sumAllGroup(5,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(5,:)./sumAllGroup(5,:),numSigVarg2(5,:)./sumAllGroup(5,:))
-% p = signrank(numSigVarg3(5,:)./sumAllGroup(5,:),numSigVarg2(5,:)./sumAllGroup(5,:))
-% p = signrank(numSigVarg3(5,:)./sumAllGroup(5,:),numSigVarg1(5,:)./sumAllGroup(5,:))
-% 
-% figure;
-% boxplot([[numSigVarg1(6,:);numSigVarg2(6,:);numSigVarg3(6,:)]./sumAllGroup(6,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(6,:)./sumAllGroup(6,:),numSigVarg2(6,:)./sumAllGroup(6,:))
-% p = signrank(numSigVarg3(6,:)./sumAllGroup(6,:),numSigVarg2(6,:)./sumAllGroup(6,:))
-% p = signrank(numSigVarg3(6,:)./sumAllGroup(6,:),numSigVarg1(6,:)./sumAllGroup(6,:))
-% 
-% figure;
-% boxplot([[numSigVarg1(7,:);numSigVarg2(7,:);numSigVarg3(7,:)]./sumAllGroup(7,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(7,:)./sumAllGroup(7,:),numSigVarg2(7,:)./sumAllGroup(7,:))
-% p = signrank(numSigVarg3(7,:)./sumAllGroup(7,:),numSigVarg2(7,:)./sumAllGroup(7,:))
-% p = signrank(numSigVarg3(7,:)./sumAllGroup(7,:),numSigVarg1(7,:)./sumAllGroup(7,:))
-% 
-% figure;
-% boxplot([[numSigVarg1(8,:);numSigVarg2(8,:);numSigVarg3(8,:)]./sumAllGroup(8,:)]','Labels',{'group1','group2','group3'});
-% p = signrank(numSigVarg1(8,:)./sumAllGroup(8,:),numSigVarg2(8,:)./sumAllGroup(8,:))
-% p = signrank(numSigVarg3(8,:)./sumAllGroup(8,:),numSigVarg2(8,:)./sumAllGroup(8,:))
-% p = signrank(numSigVarg3(8,:)./sumAllGroup(8,:),numSigVarg1(8,:)./sumAllGroup(8,:))
-% figure;violinplot(numSigVarg4'./size(choiceCoeff{1},1),varList,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
-% ylim([0 0.8]);
-% ylabel('Fraction of significant grids, group4');
-% print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables group4'));
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group4'), 'fig');
-% saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables group4'), 'fig');
-
 
 
 % sort group2 and group3
@@ -777,9 +633,9 @@ g2sortOrd = coeff_sort(g2,[0,3]);
 g3.coeff = group3; g3.t = rt;
 g3sortOrd = coeff_sort(g3,[0,3]);
 
-temp1 = group1(g1sortOrd,:); group1 = temp1;
-temp2 = group2(g2sortOrd,:); group2 = temp2;
-temp3 = group3(g3sortOrd,:); group3 = temp3;
+temp1 = group1(g1sortOrd,:); group1 = temp1; o1SesInd=o1SesInd(g1sortOrd);
+temp2 = group2(g2sortOrd,:); group2 = temp2; o2SesInd=o2SesInd(g2sortOrd);
+temp3 = group3(g3sortOrd,:); group3 = temp3; o3SesInd=o3SesInd(g3sortOrd);
 
 choice1 = choice1(g1sortOrd,:);choice2 = choice2(g2sortOrd,:);choice3 = choice3(g3sortOrd,:);
 cSig1 = logical(cSig1(g1sortOrd));cSig2 = logical(cSig2(g2sortOrd)); cSig3 = logical(cSig3(g3sortOrd));
@@ -946,9 +802,129 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % vennPlot(g3cSig,g3dKSig,g3CKESig,label,savesumfigpath);
 % close all;
 
+%% a schematic for correlation
+% figure;
+% t = -2.95:0.1:4.95;
+% example_group1 = group1([448,451,454],:);
+% example_group2 = group2([1301,1302,1303],:);
+% example_group3 = group3([54,57,73],:);
+% figure;
+% plot(t,smooth(example_group1(1,:))+1,'Color',[241, 84, 18]/255);
+% hold on;plot(t,smooth(example_group1(2,:))+0.95,'Color',[241, 84, 18]/255);
+% hold on;plot(t,smooth(example_group1(3,:))+0.9,'Color',[241, 84, 18]/255);
+% hold on;plot(t,smooth(example_group2(1,:))+0.8,'Color',[0 0 0]/255);
+% hold on;plot(t,smooth(example_group2(2,:))+0.75,'Color',[0 0 0]/255);
+% hold on;plot(t,smooth(example_group2(3,:))+0.7,'Color',[0 0 0]/255);
+% hold on;plot(t,smooth(example_group3(1,:))+0.6,'Color',[52, 179, 241]/255);
+% hold on;plot(t,smooth(example_group3(2,:))+0.55,'Color',[52, 179, 241]/255);
+% hold on;plot(t,smooth(example_group3(3,:))+0.5,'Color',[52, 179, 241]/255);
+% set(gca,'box','off')
+% h=gca;
+% h.YAxis.Visible = 'off';
+% print(gcf,'-dpng',fullfile(savesumfigpath,'cluster-example'));
+% savefig(gcf,fullfile(savesumfigpath,'cluster-example.fig'));
+% %saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+% saveas(gcf, fullfile(savesumfigpath,'cluster-example'), 'svg');
+% % calcualte correlation
+% corrExample = zeros(9);
+% exampleMat = [example_group1;example_group2;example_group3];
+% for ii=1:9
+%     for jj=1:9
+%         tempcorr = corrcoef(exampleMat(ii,:),exampleMat(jj,:));
+%     corrExample(ii,jj) =tempcorr(1,2);
+%     end
+% end
+% figure;
+% image(corrExample,'CDataMapping','scaled')
+% %hold on;dendrogram(z)
+% axis square;
+% colors=cbrewer('div','RdBu',256);
+% colors=flipud(colors);
+% colorRange = [-1 1];
+% colormap(colors);
+% caxis([-1 1]);
+% print(gcf,'-dpng',fullfile(savesumfigpath,'clusterCorr-example'));
+% savefig(gcf,fullfile(savesumfigpath,'clusterCorr-example.fig'));
+% %saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+% saveas(gcf, fullfile(savesumfigpath,'clusterCorr-example'), 'svg');
+
 % outcome
 tlabel = 'Outcome';
-plot_groupSummary(group1,group2, group3, [], rt, tlabel,savesumfigpath)
+plot_groupSummary(group3,group2, group1, [], rt, tlabel,savesumfigpath)
+
+%% stats for outcome groups
+outcome_riseT_1 = zeros(1, size(group1,1)); outcome_maxT_1 = zeros(1, size(group1,1));
+outcome_riseT_2 = zeros(1, size(group2,1)); outcome_maxT_2 = zeros(1, size(group2,1));
+outcome_riseT_3 = zeros(1, size(group3,1)); outcome_maxT_3 = zeros(1, size(group3,1));
+
+% outcome baseline: -3-0 s?
+% group1
+for rr = 1:size(group1,1)
+    sCurve = smooth(-group1(rr,:));
+    sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
+    tIntp = rt(1):0.01:rt(end);
+    [maxV,ind] = max(sIntp(tIntp>0));
+    tempt = tIntp(tIntp>0);
+    outcome_maxT_1(rr) = tempt(ind);
+    % baseline outcome
+    baseline = mean(sCurve(rt<0));
+    % find time between 10-90% value
+    t1 = findIntersect(sCurve,rt,(maxV-baseline)*0.1,0);
+    t2 = findIntersect(sCurve,rt,(maxV-baseline)*0.9,0);
+    if t1>t2
+        outcome_riseT_1(rr) = NaN;
+    elseif isempty(t1)|isempty(t2)
+        outcome_riseT_1(rr) = NaN;
+    else
+        outcome_riseT_1(rr) = t2-t1;
+    end
+end
+% group2
+for rr = 1:size(group2,1)
+    sCurve = smooth(group2(rr,:));
+   sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
+    tIntp = rt(1):0.01:rt(end);
+    [maxV,ind] = max(sIntp(tIntp>0));
+    tempt = tIntp(tIntp>0);
+    outcome_maxT_2(rr) = tempt(ind);
+    % baseline outcome
+    baseline = mean(sCurve(rt<0));
+    % find time between 10-90% value
+    t1 = findIntersect(sCurve,rt,maxV*0.1,0);
+    t2 = findIntersect(sCurve,rt,maxV*0.9,0);
+     if t1>t2
+        outcome_riseT_2(rr) = NaN;
+         elseif isempty(t1)|isempty(t2)
+        outcome_riseT_2(rr) = NaN;
+    else
+        outcome_riseT_2(rr) = t2-t1;
+    end
+end
+% group 3
+for rr = 1:size(group3,1)
+    sCurve = smooth(group3(rr,:));
+    sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
+    tIntp = rt(1):0.01:rt(end);
+    [maxV,ind] = max(sIntp(tIntp>0));
+    tempt = tIntp(tIntp>0);
+    outcome_maxT_3(rr) = tempt(ind);
+    % baseline outcome
+    baseline = mean(sCurve(rt<0));
+    % find time between 10-90% value
+    t1 = findIntersect(sCurve,rt,maxV*0.1,0);
+    t2 = findIntersect(sCurve,rt,maxV*0.9,0);
+     if t1>t2
+        outcome_riseT_3(rr) = NaN;
+         elseif isempty(t1)|isempty(t2)
+        outcome_riseT_3(rr) = NaN;
+    else
+        outcome_riseT_3(rr) = t2-t1;
+    end
+end
+savematpath = fullfile(savematsumpath,'outcome_groupstat.mat');
+save(savematpath, 'outcome_maxT_1','outcome_maxT_2','outcome_maxT_3','outcome_riseT_1','outcome_riseT_2','outcome_riseT_3');
+
+
 tlabel = 'Choice';
 plot_groupSummary(choice1,choice2, choice3, [], rt, tlabel,savesumfigpath)
 tlabel = 'Interaction';
@@ -966,8 +942,81 @@ plot_groupSummary(CKE1,CKE2, CKE3, [], rt, tlabel,savesumfigpath)
 
 tlabel = 'Choice-Sig';
 plot_groupSummary(choice1(logical(cSig1),:),choice2(logical(cSig2),:), choice3(logical(cSig3),:), cCoeff_nR, rt, tlabel,savesumfigpath)
+
+%% choice stat, for NE data, group 1 and 2 should be negative
+% for interactions, rerun cluster for each group
+choice_riseT_1 = zeros(1, size(choice1(logical(cSig1),:),1)); choice_maxT_1 = zeros(1, size(choice1(logical(cSig1),:),1));
+choice_riseT_2 = zeros(1, size(choice2(logical(cSig2),:),1)); choice_maxT_2 = zeros(1, size(choice2(logical(cSig2),:),1));
+choice_riseT_3 = zeros(1, size(choice3(logical(cSig3),:),1)); choice_maxT_3 = zeros(1, size(choice3(logical(cSig3),:),1));
+group1 = choice1(logical(cSig1),:);
+group2 = choice2(logical(cSig2),:);
+group3 = choice3(logical(cSig3),:);
+for rr = 1:size(group1,1)
+    sCurve = smooth(group1(rr,:));
+    sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
+    tIntp = rt(1):0.01:rt(end);
+    [maxV,ind] = max(sIntp(tIntp>0));
+    tempt = tIntp(tIntp>0);
+    choice_maxT_1(rr) = tempt(ind);
+    % baseline choice % since choice signal started earlier
+    baseline = mean(sCurve(rt<-1.5));
+    % find time between 10-90% value
+    t1 = findIntersect(sCurve,rt,(maxV-baseline)*0.1,-1.5);
+    t2 = findIntersect(sCurve,rt,(maxV-baseline)*0.9,-1.5);
+    if t1>t2
+        choice_riseT_1(rr) = NaN;
+    elseif isempty(t1)|isempty(t2)
+        choice_riseT_1(rr) = NaN;
+    else
+        choice_riseT_1(rr) = t2-t1;
+    end
+end
+% group2, -group2 for NE since the coefficient is negative
+for rr = 1:size(group2,1)
+    sCurve = smooth(group2(rr,:));
+   sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
+    tIntp = rt(1):0.01:rt(end);
+    [maxV,ind] = max(sIntp(tIntp>0));
+    tempt = tIntp(tIntp>0);
+    choice_maxT_2(rr) = tempt(ind);
+    % baseline outcome
+    baseline = mean(sCurve(rt<0));
+    % find time between 10-90% value
+    t1 = findIntersect(sCurve,rt,maxV*0.1,-1.5);
+    t2 = findIntersect(sCurve,rt,maxV*0.9,-1.5);
+    if t1>t2
+        choice_riseT_2(rr) = NaN;
+    elseif isempty(t1)|isempty(t2)
+        choice_riseT_2(rr) = NaN;
+    else
+        choice_riseT_2(rr) = t2-t1;
+    end
+end
+% group 3, -group3 for NE since the coefficient is negative
+for rr = 1:size(group3,1)
+    sCurve = smooth(group3(rr,:));
+    sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
+    tIntp = rt(1):0.01:rt(end);
+    [maxV,ind] = max(sIntp(tIntp>0));
+    tempt = tIntp(tIntp>0);
+    choice_maxT_3(rr) = tempt(ind);
+    % baseline outcome
+    baseline = mean(sCurve(rt<0));
+    % find time between 10-90% value
+    t1 = findIntersect(sCurve,rt,maxV*0.1,-1.5);
+    t2 = findIntersect(sCurve,rt,maxV*0.9,-1.5);
+     if t1>t2
+        choice_riseT_3(rr) = NaN;
+         elseif isempty(t1)|isempty(t2)
+        choice_riseT_3(rr) = NaN;
+    else
+        choice_riseT_3(rr) = t2-t1;
+    end
+end
+savematpath = fullfile(savematsumpath,'choice_groupstat.mat');
+save(savematpath, 'choice_maxT_1','choice_maxT_2','choice_maxT_3','choice_riseT_1','choice_riseT_2','choice_riseT_3');
+
 tlabel = 'Interaction-Sig';
-% for interactions, rerun cluster for each grou
 plot_groupSummary(xn1(logical(xSig1),:),xn2(logical(xSig2),:), xn3(logical(xSig3),:), xCoeff_nR, rt, tlabel,savesumfigpath)
 tlabel = 'posRPE-Sig';
 plot_groupSummary(posRPE1(logical(pRPESig1),:),posRPE2(logical(pRPESig2),:), posRPE3(logical(pRPESig3),:), posRPECoeff_nR, rt, tlabel,savesumfigpath)

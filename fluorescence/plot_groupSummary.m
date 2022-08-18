@@ -86,19 +86,19 @@ caxis([colorRange(1) colorRange(2)]);
 
 subplot(2,2,4)
 %% NE,interaction
-sepPoint = 600; %NE,interaction
-line1 = group2(1:sepPoint,:)';
-ste = nanstd(line1,0,2)/sqrt(size(line1,2));
-plot(rt,nanmean(line1,2));
-hold on;
-errorshade(rt,nanmean(line1,2)-ste,nanmean(line1,2)+ste,0.5);
-plot(rt,nanmean(line1,2));
-hold on;
-line2 = group2(sepPoint+1:end,:)';
-ste = nanstd(line2,0,2)/sqrt(size(line2,2));
-plot(rt,nanmean(line2,2),'k');
-errorshade(rt,nanmean(line2,2)-ste,nanmean(line2,2)+ste,0.5);
-plot(rt,nanmean(line2,2));
+% sepPoint = 600; %NE,interaction
+% line1 = group2(1:sepPoint,:)';
+% ste = nanstd(line1,0,2)/sqrt(size(line1,2));
+% plot(rt,nanmean(line1,2));
+% hold on;
+% errorshade(rt,nanmean(line1,2)-ste,nanmean(line1,2)+ste,0.5);
+% plot(rt,nanmean(line1,2));
+% hold on;
+% line2 = group2(sepPoint+1:end,:)';
+% ste = nanstd(line2,0,2)/sqrt(size(line2,2));
+% plot(rt,nanmean(line2,2),'k');
+% errorshade(rt,nanmean(line2,2)-ste,nanmean(line2,2)+ste,0.5);
+% plot(rt,nanmean(line2,2));
 
 
 
@@ -351,95 +351,104 @@ savefig(h1,fullfile(savesumfigpath,[tlabel,'-cluster-summary.fig']));
 %saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
 saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'svg');
 
+%% go through group 1 and 2 for rise time
+% rise time: time from 10% to 90% maximum
+% max time: time to get to maximum relative to the cue
+
+% Two-Sample Kolmogorov-Smirnov Test to determine if group 2 and 3 are
+% different
+aveGroup2 = mean(line2,2);aveGroup3 = mean(line3,2);
+[h,p] = kstest2(aveGroup2,aveGroup3)
 
 
-figure;
-subplot(1,3,1)
-image(rt,1:size(group2,1),group2,'CDataMapping','scaled');
 
-hold on; plot([0 0],[0 size(group2,1)+1],'w');
-hold on; plot([rt(1) rt(end)],[334 334],'b')
-hold on; plot([rt(1) rt(end)],[884 884],'k')
-colors=cbrewer('div','RdBu',256);
-colorRange = [-1 1];
-colormap(colors);
-colors=flipud(colors);
-% if contains(tlabel,'RPE')
-%     colorRange(1)=-0.7;
-%     colorRange(2)=0.7;
-% else
-colorRange(1)=-0.1;
-colorRange(2)=0.1;
-%normalize dF/F heatmap to max of all conditions
-% end
-caxis([colorRange(1) colorRange(2)]);
-ylabel('Cells');
-title('Interaction coefficient group2')
-subplot(3,20,48);
-image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-colormap(colors);
-caxis([colorRange(1) colorRange(2)]);
+% figure;
+% subplot(1,3,1)
+% image(rt,1:size(group2,1),group2,'CDataMapping','scaled');
+% 
+% hold on; plot([0 0],[0 size(group2,1)+1],'w');
+% hold on; plot([rt(1) rt(end)],[334 334],'b')
+% hold on; plot([rt(1) rt(end)],[884 884],'k')
+% colors=cbrewer('div','RdBu',256);
+% colorRange = [-1 1];
+% colormap(colors);
+% colors=flipud(colors);
+% % if contains(tlabel,'RPE')
+% %     colorRange(1)=-0.7;
+% %     colorRange(2)=0.7;
+% % else
+% colorRange(1)=-0.1;
+% colorRange(2)=0.1;
+% %normalize dF/F heatmap to max of all conditions
+% % end
+% caxis([colorRange(1) colorRange(2)]);
+% ylabel('Cells');
+% title('Interaction coefficient group2')
+% subplot(3,20,48);
+% image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+% colormap(colors);
+% caxis([colorRange(1) colorRange(2)]);
+% 
+% subplot(2,2,4)
+% plot(rt, nanmean(group2(1:334,:)),'b')
+% hold on;  ste = nanstd(group2(1:334,:),0,1)/sqrt(size(group2(1:334,:),1));
+%     errorshade(rt,nanmean(group2(1:334,:))-ste,nanmean(group2(1:334,:))+ste,'b',0.5);
+% 
+% hold on;plot(rt, nanmean(group2(335:884,:)),'k')
+% hold on;  ste = nanstd(group2(335:884,:),0,1)/sqrt(size(group2(335:884,:),1));
+%     errorshade(rt,nanmean(group2(335:884,:))-ste,nanmean(group2(335:884,:))+ste,'k',0.5);
+% 
+% plot(rt,nanmean(group2(885:end,:)),'r')
+% hold on;  ste = nanstd(group2(885:end,:),0,1)/sqrt(size(group2(885:end,:),1));
+%     errorshade(rt,nanmean(group2(885:end,:))-ste,nanmean(group2(885:end,:))+ste,'r',0.5);
+% ylim([-0.1 0.1])
+% yticks([-0.1:0.1:0.1])
+% set(gca,'box','off')
+% print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-group2']));
+% savefig(h1,fullfile(savesumfigpath,[tlabel,'-group2.fig']));
+% %saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+% saveas(gcf, fullfile(savesumfigpath,[tlabel,'-group2']), 'svg');
 
-subplot(2,2,4)
-plot(rt, nanmean(group2(1:334,:)),'b')
-hold on;  ste = nanstd(group2(1:334,:),0,1)/sqrt(size(group2(1:334,:),1));
-    errorshade(rt,nanmean(group2(1:334,:))-ste,nanmean(group2(1:334,:))+ste,'b',0.5);
+% figure;subplot(1,3,1)
+% image(rt,1:size(group3,1),group3,'CDataMapping','scaled');
+% 
+% hold on; plot([0 0],[0 size(group3,1)+1],'w');
+% hold on; plot([rt(1) rt(end)],[1344 1344],'b')
+% colors=cbrewer('div','RdBu',256);
+% colorRange = [-1 1];
+% colormap(colors);
+% colors=flipud(colors);
+% % if contains(tlabel,'RPE')
+% %     colorRange(1)=-0.7;
+% %     colorRange(2)=0.7;
+% % else
+% colorRange(1)=-0.1;
+% colorRange(2)=0.1;
+% %normalize dF/F heatmap to max of all conditions
+% % end
+% caxis([colorRange(1) colorRange(2)]);
+% ylabel('Cells');
+% title('Interaction coefficient group3')
+% subplot(3,20,48);
+% image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
+% colormap(colors);
+% caxis([colorRange(1) colorRange(2)]);
 
-hold on;plot(rt, nanmean(group2(335:884,:)),'k')
-hold on;  ste = nanstd(group2(335:884,:),0,1)/sqrt(size(group2(335:884,:),1));
-    errorshade(rt,nanmean(group2(335:884,:))-ste,nanmean(group2(335:884,:))+ste,'k',0.5);
-
-plot(rt,nanmean(group2(885:end,:)),'r')
-hold on;  ste = nanstd(group2(885:end,:),0,1)/sqrt(size(group2(885:end,:),1));
-    errorshade(rt,nanmean(group2(885:end,:))-ste,nanmean(group2(885:end,:))+ste,'r',0.5);
-ylim([-0.1 0.1])
-yticks([-0.1:0.1:0.1])
-set(gca,'box','off')
-print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-group2']));
-savefig(h1,fullfile(savesumfigpath,[tlabel,'-group2.fig']));
-%saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
-saveas(gcf, fullfile(savesumfigpath,[tlabel,'-group2']), 'svg');
-
-figure;subplot(1,3,1)
-image(rt,1:size(group3,1),group3,'CDataMapping','scaled');
-
-hold on; plot([0 0],[0 size(group3,1)+1],'w');
-hold on; plot([rt(1) rt(end)],[1344 1344],'b')
-colors=cbrewer('div','RdBu',256);
-colorRange = [-1 1];
-colormap(colors);
-colors=flipud(colors);
-% if contains(tlabel,'RPE')
-%     colorRange(1)=-0.7;
-%     colorRange(2)=0.7;
-% else
-colorRange(1)=-0.1;
-colorRange(2)=0.1;
-%normalize dF/F heatmap to max of all conditions
-% end
-caxis([colorRange(1) colorRange(2)]);
-ylabel('Cells');
-title('Interaction coefficient group3')
-subplot(3,20,48);
-image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-colormap(colors);
-caxis([colorRange(1) colorRange(2)]);
-
-subplot(2,2,4)
-plot(rt, nanmean(group3(1:1344,:)),'b')
-hold on;  ste = nanstd(group3(1:1344,:),0,1)/sqrt(size(group3(1:1344,:),1));
-    errorshade(rt,nanmean(group3(1:1344,:))-ste,nanmean(group3(1:1344,:))+ste,'b',0.5);
-
-plot(rt,nanmean(group3(1344:end,:)),'r')
-hold on;  ste = nanstd(group3(1344:end,:),0,1)/sqrt(size(group3(1344:end,:),1));
-errorshade(rt,nanmean(group3(1344:end,:))-ste,nanmean(group3(1344:end,:))+ste,'r',0.5);
-ylim([-0.1 0.1])
-yticks([-0.1:0.1:0.1])
-set(gca,'box','off')
-print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-group3']));
-savefig(h1,fullfile(savesumfigpath,[tlabel,'-group3.fig']));
-%saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
-saveas(gcf, fullfile(savesumfigpath,[tlabel,'-group3']), 'svg');
+% subplot(2,2,4)
+% plot(rt, nanmean(group3(1:1344,:)),'b')
+% hold on;  ste = nanstd(group3(1:1344,:),0,1)/sqrt(size(group3(1:1344,:),1));
+%     errorshade(rt,nanmean(group3(1:1344,:))-ste,nanmean(group3(1:1344,:))+ste,'b',0.5);
+% 
+% plot(rt,nanmean(group3(1344:end,:)),'r')
+% hold on;  ste = nanstd(group3(1344:end,:),0,1)/sqrt(size(group3(1344:end,:),1));
+% errorshade(rt,nanmean(group3(1344:end,:))-ste,nanmean(group3(1344:end,:))+ste,'r',0.5);
+% ylim([-0.1 0.1])
+% yticks([-0.1:0.1:0.1])
+% set(gca,'box','off')
+% print(gcf,'-dpng',fullfile(savesumfigpath,[tlabel,'-group3']));
+% savefig(h1,fullfile(savesumfigpath,[tlabel,'-group3.fig']));
+% %saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+% saveas(gcf, fullfile(savesumfigpath,[tlabel,'-group3']), 'svg');
 
 
 % 

@@ -11,8 +11,8 @@ setup_figprop;
 
 %root_path = 'V:\HongliWang\NE_analysis';
 
-root_path_NE = 'V:\HongliWang\NE_analysis_784';
-root_path_ACh = 'V:\HongliWang\ACh_analysis_784';
+root_path_NE = 'K:\NE_analysis_784';
+root_path_ACh = 'K:\ACh_analysis_784';
 %root_path = 'Y:\HongliWang\Ach_784';
 
 %root_path = 'K:\Ach_784';
@@ -86,6 +86,7 @@ MP_GRAB_behaviorPerAnimal(dataIndex_ACh,save_path_ACh);
 
 MP_GRAB_behaviorAll(dataIndex_ACh, save_path_ACh);
 
+% summary
 MP_GRAB_behComp(dataIndex_ACh, dataIndex_NE([1:9,19:end],:), save_path_ACh)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Behavior - Model fitting
@@ -169,7 +170,7 @@ MP_GRAB_MLR(dataIndex_NE);
 % regression results seems unstable, try amount of variance explained?
 MP_GRAB_MLR_analysis(dataIndex_NE);
 MP_GRAB_MLR_acrossAnimals(dataIndex_NE,save_path_fluo_NE);
-MP_GRAB_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
+MP_GRAB_MLR_acrossSessions(dataIndex_NE([1:9,18:end],:), save_path_fluo_NE)
 
 MP_GRAB_MLR_separateSession(dataIndex_NE);
 MP_GRAB_MLR_separateSummary(dataIndex_NE, save_path_fluo_NE);
@@ -187,6 +188,10 @@ MP_GRAB_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh);
 MP_GRAB_MLR_separateSession(dataIndex_ACh);
 MP_GRAB_MLR_separateSummary(dataIndex_ACh, save_path_fluo_ACh);
 
+
+% compare ACh and NE outcome curves
+MP_GRAB_MLR_comp(dataIndex_ACh,dataIndex_NE([1:9,18:end],:));
+
 %% latent variable
 
 %NE
@@ -198,7 +203,7 @@ MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
 MP_GRABRL_RPE_MLR(dataIndex_NE);
 MP_GRAB_RPE_MLR_acrossAnimals(dataIndex_NE, save_path_fluo_NE)
-MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
+MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_NE([1:9,19:end],:), save_path_fluo_NE)
 
 % ACh
 MP_GRABRL_MLR(dataIndex_ACh)
@@ -227,6 +232,8 @@ MP_GRAB_temporalCorrSummary(dataIndex_NE([1:9,18:end],:),save_path_fluo_NE,save_
 MP_GRAB_selectivitySpatial(dataIndex_ACh);
 MP_GRAB_selectivityCorr(dataIndex_ACh);
 MP_GRAB_selectivitySummary(dataIndex_ACh, save_path_fluo_ACh);
+
+MP_GRAB_clusterEval(dataIndex_ACh, save_path_fluo_ACh, save_path_mat_ACh)
 
 MP_GRAB_temporalCorr(dataIndex_ACh);
 save_path_mat_ACh = fullfile(root_path_ACh,'summary','data_summary');

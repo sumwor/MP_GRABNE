@@ -141,7 +141,7 @@ plot([-1 3],[3 3],'k--','LineWidth',2);
 ylim([2 3.1]); 
 ylabel('Entropy (bits)');
 set(gca,'box','off') 
-[h,p] = ranksum(entro_array_NE,entro_array_ACh)
+[h,p] = ttest2(entro_array_NE,entro_array_ACh)
 
 subplot(2,3,3); hold on;
 %plot(rand(1,numel(rrate_array)),100*rrate_array,'k^','MarkerSize',15);
@@ -152,6 +152,9 @@ ylim([20 65]);
 ylabel('Reward rate (%)');
 set(gca,'box','off') 
 [h,p]=ttest2(rrate_array_NE*100,rrate_array_ACh*100)
+
+[h,p]=ttest(rrate_array_NE*100,50)
+[h,p]=ttest(rrate_array_ACh*100,50)
 
 print(gcf,'-dpng',fullfile(save_path_ACh,'summary-All'));    %png format
 saveas(gcf,fullfile(save_path_ACh,'summary-All'), 'fig');
