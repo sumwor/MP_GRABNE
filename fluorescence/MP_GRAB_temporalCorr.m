@@ -156,7 +156,7 @@ for ii = 1:nFiles
         sigInd = allInd(sigGrid(:));
         outcomeSel.sigInd = sigInd;
         outcomeSel.sigMat = sigGrid;
-        [clustId, oriInd] = regCoef_cluster(outcomeSel, [-3, 5], 3, tlabel1,xtitle,savefluofigpath);
+        [clustId, oriInd] = regCoef_cluster(outcomeSel, [-3, 5], 2, tlabel1,xtitle,savefluofigpath);
          
 %           outcome.t = reg_cr{1}.reg_cr{1}.regr_time;
 %             outcome.coeff= outcometempData.coeff;
