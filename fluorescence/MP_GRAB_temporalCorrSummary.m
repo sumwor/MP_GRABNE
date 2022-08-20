@@ -853,9 +853,9 @@ tlabel = 'Outcome';
 plot_groupSummary(group3,group2, group1, [], rt, tlabel,savesumfigpath)
 
 %% stats for outcome groups
-outcome_riseT_1 = zeros(1, size(group1,1)); outcome_maxT_1 = zeros(1, size(group1,1));
-outcome_riseT_2 = zeros(1, size(group2,1)); outcome_maxT_2 = zeros(1, size(group2,1));
-outcome_riseT_3 = zeros(1, size(group3,1)); outcome_maxT_3 = zeros(1, size(group3,1));
+outcome_maxT_1 = zeros(1, size(group1,1)); outcome_maxV_1 = zeros(1,size(group1,1));
+outcome_maxT_2 = zeros(1, size(group2,1)); outcome_maxV_2 = zeros(1,size(group2,1));
+%outcome_riseT_3 = zeros(1, size(group3,1)); outcome_maxT_3 = zeros(1, size(group3,1));
 
 % outcome baseline: -3-0 s?
 % group1
@@ -864,20 +864,23 @@ for rr = 1:size(group1,1)
     sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
     tIntp = rt(1):0.01:rt(end);
     [maxV,ind] = max(sIntp(tIntp>0));
+    outcome_maxV_1(rr) = maxV;
     tempt = tIntp(tIntp>0);
     outcome_maxT_1(rr) = tempt(ind);
+    
+    % rise time 
     % baseline outcome
-    baseline = mean(sCurve(rt<0));
-    % find time between 10-90% value
-    t1 = findIntersect(sCurve,rt,(maxV-baseline)*0.1,0);
-    t2 = findIntersect(sCurve,rt,(maxV-baseline)*0.9,0);
-    if t1>t2
-        outcome_riseT_1(rr) = NaN;
-    elseif isempty(t1)|isempty(t2)
-        outcome_riseT_1(rr) = NaN;
-    else
-        outcome_riseT_1(rr) = t2-t1;
-    end
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,(maxV-baseline)*0.1,0);
+%     t2 = findIntersect(sCurve,rt,(maxV-baseline)*0.9,0);
+%     if t1>t2
+%         outcome_riseT_1(rr) = NaN;
+%     elseif isempty(t1)|isempty(t2)
+%         outcome_riseT_1(rr) = NaN;
+%     else
+%         outcome_riseT_1(rr) = t2-t1;
+%     end
 end
 % group2
 for rr = 1:size(group2,1)
@@ -885,44 +888,45 @@ for rr = 1:size(group2,1)
    sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
     tIntp = rt(1):0.01:rt(end);
     [maxV,ind] = max(sIntp(tIntp>0));
+    outcome_maxV_2(rr) = maxV;
     tempt = tIntp(tIntp>0);
     outcome_maxT_2(rr) = tempt(ind);
     % baseline outcome
-    baseline = mean(sCurve(rt<0));
-    % find time between 10-90% value
-    t1 = findIntersect(sCurve,rt,maxV*0.1,0);
-    t2 = findIntersect(sCurve,rt,maxV*0.9,0);
-     if t1>t2
-        outcome_riseT_2(rr) = NaN;
-         elseif isempty(t1)|isempty(t2)
-        outcome_riseT_2(rr) = NaN;
-    else
-        outcome_riseT_2(rr) = t2-t1;
-    end
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,maxV*0.1,0);
+%     t2 = findIntersect(sCurve,rt,maxV*0.9,0);
+%      if t1>t2
+%         outcome_riseT_2(rr) = NaN;
+%          elseif isempty(t1)|isempty(t2)
+%         outcome_riseT_2(rr) = NaN;
+%     else
+%         outcome_riseT_2(rr) = t2-t1;
+%     end
 end
 % group 3
-for rr = 1:size(group3,1)
-    sCurve = smooth(group3(rr,:));
-    sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
-    tIntp = rt(1):0.01:rt(end);
-    [maxV,ind] = max(sIntp(tIntp>0));
-    tempt = tIntp(tIntp>0);
-    outcome_maxT_3(rr) = tempt(ind);
-    % baseline outcome
-    baseline = mean(sCurve(rt<0));
-    % find time between 10-90% value
-    t1 = findIntersect(sCurve,rt,maxV*0.1,0);
-    t2 = findIntersect(sCurve,rt,maxV*0.9,0);
-     if t1>t2
-        outcome_riseT_3(rr) = NaN;
-         elseif isempty(t1)|isempty(t2)
-        outcome_riseT_3(rr) = NaN;
-    else
-        outcome_riseT_3(rr) = t2-t1;
-    end
-end
+% for rr = 1:size(group3,1)
+%     sCurve = smooth(group3(rr,:));
+%     sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
+%     tIntp = rt(1):0.01:rt(end);
+%     [maxV,ind] = max(sIntp(tIntp>0));
+%     tempt = tIntp(tIntp>0);
+%     outcome_maxT_3(rr) = tempt(ind);
+%     % baseline outcome
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,maxV*0.1,0);
+%     t2 = findIntersect(sCurve,rt,maxV*0.9,0);
+%      if t1>t2
+%         outcome_riseT_3(rr) = NaN;
+%          elseif isempty(t1)|isempty(t2)
+%         outcome_riseT_3(rr) = NaN;
+%     else
+%         outcome_riseT_3(rr) = t2-t1;
+%     end
+% end
 savematpath = fullfile(savematsumpath,'outcome_groupstat.mat');
-save(savematpath, 'outcome_maxT_1','outcome_maxT_2','outcome_maxT_3','outcome_riseT_1','outcome_riseT_2','outcome_riseT_3');
+save(savematpath, 'outcome_maxT_1','outcome_maxT_2','outcome_maxV_1','outcome_maxV_2');
 
 
 tlabel = 'Choice';
@@ -945,31 +949,34 @@ plot_groupSummary(choice1(logical(cSig1),:),choice2(logical(cSig2),:), choice3(l
 
 %% choice stat, for NE data, group 1 and 2 should be negative
 % for interactions, rerun cluster for each group
-choice_riseT_1 = zeros(1, size(choice1(logical(cSig1),:),1)); choice_maxT_1 = zeros(1, size(choice1(logical(cSig1),:),1));
-choice_riseT_2 = zeros(1, size(choice2(logical(cSig2),:),1)); choice_maxT_2 = zeros(1, size(choice2(logical(cSig2),:),1));
-choice_riseT_3 = zeros(1, size(choice3(logical(cSig3),:),1)); choice_maxT_3 = zeros(1, size(choice3(logical(cSig3),:),1));
+choice_maxV_1 = zeros(1, size(choice1(logical(cSig1),:),1)); choice_maxT_1 = zeros(1, size(choice1(logical(cSig1),:),1));
+choice_maxV_2 = zeros(1, size(choice2(logical(cSig2),:),1)); choice_maxT_2 = zeros(1, size(choice2(logical(cSig2),:),1));
+choice_maxV_3 = zeros(1, size(choice3(logical(cSig3),:),1)); choice_maxT_3 = zeros(1, size(choice3(logical(cSig3),:),1));
+
 group1 = choice1(logical(cSig1),:);
 group2 = choice2(logical(cSig2),:);
 group3 = choice3(logical(cSig3),:);
+
 for rr = 1:size(group1,1)
     sCurve = smooth(group1(rr,:));
     sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
     tIntp = rt(1):0.01:rt(end);
     [maxV,ind] = max(sIntp(tIntp>0));
+    choice_maxV_1(rr) = maxV;
     tempt = tIntp(tIntp>0);
     choice_maxT_1(rr) = tempt(ind);
     % baseline choice % since choice signal started earlier
-    baseline = mean(sCurve(rt<-1.5));
-    % find time between 10-90% value
-    t1 = findIntersect(sCurve,rt,(maxV-baseline)*0.1,-1.5);
-    t2 = findIntersect(sCurve,rt,(maxV-baseline)*0.9,-1.5);
-    if t1>t2
-        choice_riseT_1(rr) = NaN;
-    elseif isempty(t1)|isempty(t2)
-        choice_riseT_1(rr) = NaN;
-    else
-        choice_riseT_1(rr) = t2-t1;
-    end
+%     baseline = mean(sCurve(rt<-1.5));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,(maxV-baseline)*0.1,-1.5);
+%     t2 = findIntersect(sCurve,rt,(maxV-baseline)*0.9,-1.5);
+%     if t1>t2
+%         choice_riseT_1(rr) = NaN;
+%     elseif isempty(t1)|isempty(t2)
+%         choice_riseT_1(rr) = NaN;
+%     else
+%         choice_riseT_1(rr) = t2-t1;
+%     end
 end
 % group2, -group2 for NE since the coefficient is negative
 for rr = 1:size(group2,1)
@@ -977,20 +984,21 @@ for rr = 1:size(group2,1)
    sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
     tIntp = rt(1):0.01:rt(end);
     [maxV,ind] = max(sIntp(tIntp>0));
+    choice_maxV_2(rr) = maxV;
     tempt = tIntp(tIntp>0);
-    choice_maxT_2(rr) = tempt(ind);
-    % baseline outcome
-    baseline = mean(sCurve(rt<0));
-    % find time between 10-90% value
-    t1 = findIntersect(sCurve,rt,maxV*0.1,-1.5);
-    t2 = findIntersect(sCurve,rt,maxV*0.9,-1.5);
-    if t1>t2
-        choice_riseT_2(rr) = NaN;
-    elseif isempty(t1)|isempty(t2)
-        choice_riseT_2(rr) = NaN;
-    else
-        choice_riseT_2(rr) = t2-t1;
-    end
+%     choice_maxT_2(rr) = tempt(ind);
+%     % baseline outcome
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,maxV*0.1,-1.5);
+%     t2 = findIntersect(sCurve,rt,maxV*0.9,-1.5);
+%     if t1>t2
+%         choice_riseT_2(rr) = NaN;
+%     elseif isempty(t1)|isempty(t2)
+%         choice_riseT_2(rr) = NaN;
+%     else
+%         choice_riseT_2(rr) = t2-t1;
+%     end
 end
 % group 3, -group3 for NE since the coefficient is negative
 for rr = 1:size(group3,1)
@@ -998,23 +1006,24 @@ for rr = 1:size(group3,1)
     sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
     tIntp = rt(1):0.01:rt(end);
     [maxV,ind] = max(sIntp(tIntp>0));
+    choice_maxV_3(rr) = maxV;
     tempt = tIntp(tIntp>0);
     choice_maxT_3(rr) = tempt(ind);
     % baseline outcome
-    baseline = mean(sCurve(rt<0));
-    % find time between 10-90% value
-    t1 = findIntersect(sCurve,rt,maxV*0.1,-1.5);
-    t2 = findIntersect(sCurve,rt,maxV*0.9,-1.5);
-     if t1>t2
-        choice_riseT_3(rr) = NaN;
-         elseif isempty(t1)|isempty(t2)
-        choice_riseT_3(rr) = NaN;
-    else
-        choice_riseT_3(rr) = t2-t1;
-    end
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,maxV*0.1,-1.5);
+%     t2 = findIntersect(sCurve,rt,maxV*0.9,-1.5);
+%      if t1>t2
+%         choice_riseT_3(rr) = NaN;
+%          elseif isempty(t1)|isempty(t2)
+%         choice_riseT_3(rr) = NaN;
+%     else
+%         choice_riseT_3(rr) = t2-t1;
+%     end
 end
 savematpath = fullfile(savematsumpath,'choice_groupstat.mat');
-save(savematpath, 'choice_maxT_1','choice_maxT_2','choice_maxT_3','choice_riseT_1','choice_riseT_2','choice_riseT_3');
+save(savematpath, 'choice_maxT_1','choice_maxT_2','choice_maxT_3','choice_maxV_1','choice_maxV_2','choice_maxV_3');
 
 tlabel = 'Interaction-Sig';
 plot_groupSummary(xn1(logical(xSig1),:),xn2(logical(xSig2),:), xn3(logical(xSig3),:), xCoeff_nR, rt, tlabel,savesumfigpath)
