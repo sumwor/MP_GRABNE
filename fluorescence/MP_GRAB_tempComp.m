@@ -21,7 +21,7 @@ xcOverlap_ACh = zeros(1,nFileACh);
 oxOverlap_ACh = zeros(1,nFileACh);
 xoOverlap_ACh = zeros(1,nFileACh);
 
-minGrid = 50;
+minGrid = 100;
 for aa = 1:nFileACh
     c = sigACh.SigList.c(sigACh.SigList.session==aa);
     cList_ACh = [cList_ACh,c];
@@ -112,8 +112,15 @@ pcx = x2testOverlap(cList_ACh,xList_ACh,length(cList_ACh))
 pox = x2testOverlap(oList_ACh,xList_ACh,length(cList_ACh)) 
 
 
-       
-pOC = ranksum(ocOverlap_ACh, ocOverlap_NE)
+pOC = mediantest(ocOverlap_ACh(~isnan(ocOverlap_ACh)), ocOverlap_NE(~isnan(ocOverlap_NE)))
+pCO = mediantest(coOverlap_ACh(~isnan(coOverlap_ACh)), coOverlap_NE(~isnan(coOverlap_NE)))
+pOX = mediantest(oxOverlap_ACh(~isnan(oxOverlap_ACh)), oxOverlap_NE(~isnan(oxOverlap_NE)))
+pXO = mediantest(xoOverlap_ACh(~isnan(xoOverlap_ACh)), xoOverlap_NE(~isnan(xoOverlap_NE)))
+pXC = mediantest(xcOverlap_ACh(~isnan(xcOverlap_ACh)), xcOverlap_NE(~isnan(xcOverlap_NE)))
+pCX = mediantest(cxOverlap_ACh(~isnan(cxOverlap_ACh)), cxOverlap_NE(~isnan(cxOverlap_NE)))
+
+pXO = ranksum(oxOverlap_ACh, oxOverlap_NE)
+pOC = ranksum(ocOverlap_ACh, ocOverlap_NE,'method','exact')
 pCO = ranksum(coOverlap_ACh, coOverlap_NE)
 pCX = ranksum(cxOverlap_ACh, cxOverlap_NE)
 pXC = ranksum(xcOverlap_ACh, xcOverlap_NE)
