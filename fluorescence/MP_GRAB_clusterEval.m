@@ -5,7 +5,7 @@ function MP_GRAB_clusterEval(dataIndex, savesumfigpath,savematsumpath)
 % observation
 
 nFiles = size(dataIndex,1);
-numClust = 2:5;
+numClust = 1:5;
 
 aveSil = zeros(length(numClust),nFiles);
 for ii = 1:nFiles
@@ -72,7 +72,7 @@ for ii = 1:nFiles
              clusterMat = pref(:,outcomeSel.sigInd)';
         for cc = 1:length(numClust)
             maxclust = numClust(cc);
-            T = clusterdata(clusterMat,'Linkage','average','SaveMemory','off','Maxclust',maxclust,'distance','correlation');           
+            T = clusterdata(clusterMat,'Linkage','complete','SaveMemory','off','Maxclust',maxclust,'distance','correlation');           
             [s,h] = silhouette(clusterMat,T,'correlation');
             aveSil(cc,ii) = mean(s);
         end

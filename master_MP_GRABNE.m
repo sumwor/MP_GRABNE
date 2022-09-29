@@ -11,10 +11,11 @@ setup_figprop;
 
 %root_path = 'V:\HongliWang\NE_analysis';
 
-root_path_NE = 'K:\NE_analysis_784';
-root_path_ACh = 'K:\ACh_analysis_784';
+% root_path_NE = 'K:\NE_analysis_784';
+% root_path_ACh = 'K:\ACh_analysis_784';
 %root_path = 'Y:\HongliWang\Ach_784';
-
+root_path_NE = 'V:\HongliWang\NE_analysis_784';
+root_path_ACh = 'V:\HongliWang\ACh_analysis_784';
 %root_path = 'K:\Ach_784';
 
 
@@ -223,6 +224,8 @@ MP_GRAB_selectivitySpatial(dataIndex_NE);
 MP_GRAB_selectivityCorr(dataIndex_NE);
 MP_GRAB_selectivitySummary(dataIndex_NE([1:9,18:end],:), save_path_fluo_NE);
 
+MP_GRAB_clusterEval(dataIndex_NE([1:9,18:end],:), save_path_fluo_NE, save_path_mat_NE)
+
 MP_GRAB_temporalCorr(dataIndex_NE);
 save_path_mat_NE = fullfile(root_path_NE,'summary','data_summary');
 MP_GRAB_temporalCorrSummary(dataIndex_NE([1:9,18:end],:),save_path_fluo_NE,save_path_mat_NE)
@@ -237,8 +240,7 @@ MP_GRAB_clusterEval(dataIndex_ACh, save_path_fluo_ACh, save_path_mat_ACh)
 
 MP_GRAB_temporalCorr(dataIndex_ACh);
 save_path_mat_ACh = fullfile(root_path_ACh,'summary','data_summary');
-MP_GRAB_temporalCorrSummary(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
-%MP_GRAB_temporalCorrSummary_old(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
+   %MP_GRAB_temporalCorrSummary_old(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
 
 
 % compare NE and ACh result

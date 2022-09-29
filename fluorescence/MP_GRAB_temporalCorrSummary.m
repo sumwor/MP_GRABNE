@@ -47,7 +47,7 @@ for ii = 1:nFiles
         if ~exist(savematpath,'dir')
             mkdir(savematpath);
         end
-        
+
         % LOAD SAVED DATA
         saveregpath = fullfile(savematpath,'cluster.mat');
         if exist(saveregpath)
@@ -65,7 +65,7 @@ for ii = 1:nFiles
         rOriID{ii} = saveDataOutcome.oriInd;
         numSigVar(2,ii) = length(saveDataOutcome.oriInd);
         rt = saveDataOutcome.t;
-        
+
         choiceCoeff{ii} = choicetempData.coeff;choiceisSig{ii} = choicetempData.isSig; numSigVar(1,ii) = sum(choicetempData.isSig);
         xnCoeff{ii} = xntempData.coeff;xnisSig{ii} = xntempData.isSig;numSigVar(3,ii) = sum(xntempData.isSig);
         posRPECoeff{ii} = posRPEtempData.coeff; posRPEisSig{ii} = posRPEtempData.isSig;numSigVar(6,ii) = sum(posRPEtempData.isSig);
@@ -74,7 +74,7 @@ for ii = 1:nFiles
         dQCoeff{ii} = dQtempData.coeff; dQisSig{ii} = dQtempData.isSig;numSigVar(4,ii) = sum(dQtempData.isSig);
         dKCoeff{ii} = dKtempData.coeff; dKisSig{ii} = dKtempData.isSig;numSigVar(5,ii) = sum(dKtempData.isSig);
         CKECoeff{ii} = CKEtempData.coeff; CKEisSig{ii} = CKEtempData.isSig;numSigVar(8,ii) = sum(CKEtempData.isSig);
-        
+
         % sig list for venn plot
         SigList.session = [SigList.session,ii*ones(1,length(choicetempData.isSig))];
         SigList.c= [SigList.c,choicetempData.isSig'];
@@ -102,7 +102,7 @@ save(fullfile(savematsumpath,'sigNum.mat'),'numSigVar','numSigTotal');
 %% plot percentage of significant grids
 sigForAny = SigList.c|SigList.r|SigList.x|SigList.dQ|SigList.dK|SigList.pRPE|SigList.nRPE|SigList.CKE;
 numSigAny = sum(sigForAny);
-figure; 
+figure;
 explode = [0 1];
 p=pie([numSigAny,length(sigForAny)-numSigAny],explode);
 print(gcf,'-dpng',fullfile(savesumfigpath,'Percentage of significant grids All'));
@@ -116,9 +116,9 @@ print(gcf,'-dpng',fullfile(savesumfigpath,'Fraction of sig variables'));
 saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables'), 'fig');
 saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables'), 'svg');
 
-% 
+%
 
-%% venn diagram showing overlap 
+%% venn diagram showing overlap
 
 allInd = 1:length(SigList.c);
 cSigInd = allInd(logical(SigList.c)); rSigInd = allInd(logical(SigList.r)); xSigInd = allInd(logical(SigList.x));
@@ -130,16 +130,16 @@ CKESigInd = allInd(logical(SigList.CKE));
 
 % figure;
 % h = vennEulerDiagram({dQSigInd;dKSigInd;pRPESigInd;nRPESigInd}, 'drawProportional', true, 'SetLabels', ["dQ"; "dK"; "posRPE"; "negRPE"]);
-% 
+%
 % figure;
 % h = vennEulerDiagram({rSigInd;dQSigInd;pRPESigInd;nRPESigInd}, 'drawProportional', true, 'SetLabels', ["Outcome"; "dQ";"posRPE"; "negRPE"]);
-% 
+%
 % figure;
 % h = vennEulerDiagram({dQSigInd;pRPESigInd;nRPESigInd}, 'drawProportional', true, 'SetLabels', ["dQ"; "posRPE"; "negRPE"]);
-% 
+%
 % figure;
 % h = vennEulerDiagram({cSigInd;xSigInd;dKSigInd}, 'drawProportional', true, 'SetLabels', ["choice"; "interaction"; "dK"]);
-% 
+%
 % figure;
 % h = vennEulerDiagram({cSigInd;xSigInd;dQSigInd;dKSigInd}, 'drawProportional', true, 'SetLabels', ["choice"; "interaction"; 'dQ'; 'dK']);
 
@@ -298,7 +298,7 @@ for gg = 1:nFiles
 %     xCoeff_Sig{newInd} = xnCoeff{gg}(group1Sig & xnisSig{gg},:);
 %     posRPECoeff_Sig{newInd} = posRPECoeff{gg}(group1Sig & posRPEisSig{gg},:);
 %     negRPECoeff_Sig{newInd} = negRPECoeff{gg}(group1Sig & negRPEisSig{gg},:);
-%     
+%
     RisSig = zeros(1,size(choiceCoeff{1},1));
     RisSig(rOriID{gg}) = 1;
 
@@ -385,7 +385,7 @@ for gg = 1:nFiles
 %      xCoeff_Sig{newInd} = xnCoeff{gg}(group2Sig & xnisSig{gg},:);
 %     posRPECoeff_Sig{newInd} = posRPECoeff{gg}(group2Sig & posRPEisSig{gg},:);
 %     negRPECoeff_Sig{newInd} = negRPECoeff{gg}(group2Sig & negRPEisSig{gg},:);
-%     
+%
     newInd = newInd+1;
 
     % group 3
@@ -462,7 +462,7 @@ for gg = 1:nFiles
 %      xCoeff_Sig{newInd} = xnCoeff{gg}(group3Sig & xnisSig{gg},:);
 %      posRPECoeff_Sig{newInd} = posRPECoeff{gg}(group3Sig & posRPEisSig{gg},:);
 %      negRPECoeff_Sig{newInd} = negRPECoeff{gg}(group3Sig & negRPEisSig{gg},:);
-%     
+%
     newInd = newInd+1;
 
     % plot the fit results
@@ -470,7 +470,7 @@ for gg = 1:nFiles
     if ~exist(savefigpath)
         mkdir(savefigpath)
     end
-  
+
 
 end
 
@@ -484,13 +484,13 @@ cSig1 = []; cSig2 = []; cSig3 = [];
 %choice1Sig = [];choice2Sig = [];choice3Sig = [];
 xn1 = []; xn2 = []; xn3 = [];
 xSig1 = []; xSig2 = []; xSig3 = [];
-%xn1Sig = []; xn2Sig = []; xn3Sig = []; 
+%xn1Sig = []; xn2Sig = []; xn3Sig = [];
 posRPE1 = []; posRPE2 = []; posRPE3 = [];
 pRPESig1 = []; pRPESig2 = []; pRPESig3 = [];
-%posRPE1Sig = []; posRPE2Sig = []; posRPE3Sig = []; 
+%posRPE1Sig = []; posRPE2Sig = []; posRPE3Sig = [];
 negRPE1 = []; negRPE2 = []; negRPE3 = [];
 nRPESig1 = []; nRPESig2 = []; nRPESig3 = [];
-%negRPE1Sig = []; negRPE2Sig = []; negRPE3Sig = []; 
+%negRPE1Sig = []; negRPE2Sig = []; negRPE3Sig = [];
 dQ1 = []; dQ2 = []; dQ3 = [];
 dQSig1 = []; dQSig2 = []; dQSig3 = [];
 
@@ -531,7 +531,7 @@ for ggg = 1:length(rCoeff_new)
             numSigVarg1(5,animalInd) = numSigVarg1(5,animalInd) + sum(dkisSig{ggg});
             CKE1 = [CKE1; CKECoeff_new{ggg}]; CKESig1 = [CKESig1,ckeisSig{ggg}];
             numSigVarg1(8,animalInd) = numSigVarg1(8,animalInd) + sum(ckeisSig{ggg});
-            
+
         else
             group2 = [group2;rCoeff_new{ggg}];
             o2SesInd = [o2SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
@@ -543,7 +543,7 @@ for ggg = 1:length(rCoeff_new)
             posRPE2 = [posRPE2; posRPECoeff_new{ggg}]; pRPESig2 = [pRPESig2,pRPEisSig{ggg}]; %posRPE2Sig = [posRPE2Sig; posRPECoeff_Sig{ggg}];
             numSigVarg2(6,animalInd) = numSigVarg2(6,animalInd) + sum(pRPEisSig{ggg});
             negRPE2 = [negRPE2; negRPECoeff_new{ggg}]; nRPESig2 = [nRPESig2,nRPEisSig{ggg}];%negRPE2Sig = [negRPE2Sig; negRPECoeff_Sig{ggg}];
-            numSigVarg2(7,animalInd) = numSigVarg2(7,animalInd) + sum(nRPEisSig{ggg}); 
+            numSigVarg2(7,animalInd) = numSigVarg2(7,animalInd) + sum(nRPEisSig{ggg});
             dQ2 = [dQ2; dQCoeff_new{ggg}]; dQSig2 = [dQSig2,dqisSig{ggg}];
             numSigVarg2(4,animalInd) = numSigVarg2(4,animalInd) + sum(dqisSig{ggg});
              dK2 = [dK2; dKCoeff_new{ggg}]; dKSig2 = [dKSig2,dkisSig{ggg}];
@@ -568,14 +568,14 @@ for ggg = 1:length(rCoeff_new)
             posRPE1 = [posRPE1; posRPECoeff_new{ggg}]; pRPESig1 = [pRPESig1,pRPEisSig{ggg}];%posRPE1Sig = [posRPE1Sig; posRPECoeff_Sig{ggg}];
             numSigVarg1(6,animalInd) = numSigVarg1(6,animalInd) + sum(pRPEisSig{ggg});
             negRPE1 = [negRPE1; negRPECoeff_new{ggg}]; nRPESig1 = [nRPESig1,nRPEisSig{ggg}];%negRPE2Sig = [negRPE2Sig; negRPECoeff_Sig{ggg}];
-            numSigVarg1(7,animalInd) = numSigVarg1(7,animalInd) + sum(nRPEisSig{ggg});  
+            numSigVarg1(7,animalInd) = numSigVarg1(7,animalInd) + sum(nRPEisSig{ggg});
             dQ1 = [dQ1; dQCoeff_new{ggg}]; dQSig1 = [dQSig1,dqisSig{ggg}];
              numSigVarg1(4,animalInd) = numSigVarg1(4,animalInd) + sum(dqisSig{ggg});
             dK1 = [dK1; dKCoeff_new{ggg}]; dKSig1 = [dKSig1,dkisSig{ggg}];
             numSigVarg1(5,animalInd) = numSigVarg1(5,animalInd) + sum(dkisSig{ggg});
             CKE1 = [CKE1; CKECoeff_new{ggg}]; CKESig1 = [CKESig1,ckeisSig{ggg}];
            numSigVarg1(8,animalInd) = numSigVarg1(8,animalInd) + sum(ckeisSig{ggg});
-            
+
         else
             group2 = [group2;rCoeff_new{ggg}];
             o2SesInd = [o2SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
@@ -617,7 +617,7 @@ for ggg = 1:length(rCoeff_new)
             numSigVarg3(5,animalInd) = numSigVarg3(5,animalInd) + sum(dkisSig{ggg});
             CKE3 = [CKE3; CKECoeff_new{ggg}]; CKESig3 = [CKESig3,ckeisSig{ggg}];
             numSigVarg3(8,animalInd) = numSigVarg3(8,animalInd) + sum(ckeisSig{ggg});
-           
+
             %end
 
     end
@@ -630,17 +630,17 @@ g1.coeff=group1;g1.t = rt;
 g1sortOrd = coeff_sort(g1,[0,3]);
 g2.coeff =group2; g2.t = rt;
 g2sortOrd = coeff_sort(g2,[0,3]);
-g3.coeff = group3; g3.t = rt;
-g3sortOrd = coeff_sort(g3,[0,3]);
+% g3.coeff = group3; g3.t = rt;
+% g3sortOrd = coeff_sort(g3,[0,3]);
 
 temp1 = group1(g1sortOrd,:); group1 = temp1; o1SesInd=o1SesInd(g1sortOrd);
 temp2 = group2(g2sortOrd,:); group2 = temp2; o2SesInd=o2SesInd(g2sortOrd);
-temp3 = group3(g3sortOrd,:); group3 = temp3; o3SesInd=o3SesInd(g3sortOrd);
+% temp3 = group3(g3sortOrd,:); group3 = temp3; o3SesInd=o3SesInd(g3sortOrd);
 
-choice1 = choice1(g1sortOrd,:);choice2 = choice2(g2sortOrd,:);choice3 = choice3(g3sortOrd,:);
-cSig1 = logical(cSig1(g1sortOrd));cSig2 = logical(cSig2(g2sortOrd)); cSig3 = logical(cSig3(g3sortOrd));
-xn1 = xn1(g1sortOrd,:);xn2 = xn2(g2sortOrd,:);xn3 = xn3(g3sortOrd,:);
-xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = logical(xSig3(g3sortOrd));
+choice1 = choice1(g1sortOrd,:);choice2 = choice2(g2sortOrd,:);%choice3 = choice3(g3sortOrd,:);
+cSig1 = logical(cSig1(g1sortOrd));cSig2 = logical(cSig2(g2sortOrd)); %cSig3 = logical(cSig3(g3sortOrd));
+xn1 = xn1(g1sortOrd,:);xn2 = xn2(g2sortOrd,:);%xn3 = xn3(g3sortOrd,:);
+xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); %xSig3 = logical(xSig3(g3sortOrd));
 % posRPE1 = posRPE1(g1sortOrd,:);%posRPE2 = posRPE2(g2sortOrd,:);posRPE3 = posRPE3(g3sortOrd,:);
 % pRPESig1 = logical(pRPESig1(g1sortOrd));%pRPESig2 = logical(pRPESig2(g2sortOrd)); pRPESig3 = logical(pRPESig3(g3sortOrd));
 % negRPE1 = negRPE1(g1sortOrd,:);%negRPE2 = negRPE2(g2sortOrd,:);negRPE3 = negRPE3(g3sortOrd,:);
@@ -657,19 +657,19 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % venn plot for different groups
 % g1Ind = 1:length(cSig1);
 % g1cSig = g1Ind(logical(cSig1));g1oSig = g1Ind;g1xSig = g1Ind(logical(xSig1));
-% g1dQSig = g1Ind(logical(dQSig1)); g1dKSig = g1Ind(logical(dKSig1)); 
+% g1dQSig = g1Ind(logical(dQSig1)); g1dKSig = g1Ind(logical(dKSig1));
 % g1pRPESig = g1Ind(logical(pRPESig1)); g1nRPESig = g1Ind(logical(nRPESig1));
 % g1CKESig = g1Ind(logical(CKESig1));
-% 
+%
 % g2Ind = 1:length(cSig2);
 % g2cSig = g2Ind(logical(cSig2));g2oSig = g2Ind;g2xSig = g2Ind(logical(xSig2));
-% g2dQSig = g2Ind(logical(dQSig2)); g2dKSig = g2Ind(logical(dKSig2)); 
+% g2dQSig = g2Ind(logical(dQSig2)); g2dKSig = g2Ind(logical(dKSig2));
 % g2pRPESig = g2Ind(logical(pRPESig2)); g2nRPESig = g2Ind(logical(nRPESig2));
 % g2CKESig = g2Ind(logical(CKESig2));
-% 
+%
 % g3Ind = 1:length(cSig3);
 % g3cSig = g3Ind(logical(cSig3));g3oSig = g3Ind;g3xSig = g3Ind(logical(xSig3));
-% g3dQSig = g3Ind(logical(dQSig3)); g3dKSig = g3Ind(logical(dKSig3)); 
+% g3dQSig = g3Ind(logical(dQSig3)); g3dKSig = g3Ind(logical(dKSig3));
 % g3pRPESig = g3Ind(logical(pRPESig3)); g3nRPESig = g3Ind(logical(nRPESig3));
 % g3CKESig = g3Ind(logical(CKESig3));
 
@@ -678,23 +678,23 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % % c,r,x
 % label = {'choice','outcome','interaction'};
 % vennPlot(cSigInd,rSigInd,xSigInd,label,savesumfigpath);
-% 
+%
 % % r-pRPE-nRPE
 % label = {'outcome','pRPE','nRPE'};
 % vennPlot(rSigInd,pRPESigInd,nRPESigInd,label,savesumfigpath);
-% 
+%
 % % dQ-pRPE-nRPE
 % label = {'dQ','pRPE','nRPE'};
 % vennPlot(dQSigInd,pRPESigInd,nRPESigInd,label,savesumfigpath);
-% 
+%
 % % interaction-pRPE-nRPE
 % label = {'interaction','pRPE','nRPE'};
 % vennPlot(xSigInd,pRPESigInd,nRPESigInd,label,savesumfigpath);
-% 
+%
 % % choice-dQ-dK
 % label = {'choice','dQ','dK'};
 % vennPlot(cSigInd,dQSigInd,dKSigInd,label,savesumfigpath);
-% 
+%
 % % choice-dK-CKE
 % label = {'choice','dK','CKE'};
 % vennPlot(cSigInd,dKSigInd,CKESigInd,label,savesumfigpath);
@@ -711,8 +711,8 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group1'));
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group1'), 'fig');
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group1'), 'svg');
-% 
-% 
+%
+%
 % % r-pRPE-nRPE
 % figure;
 % h = vennEulerDiagram({g1oSig;g1pRPESig;g1nRPESig}, 'drawProportional', true, 'SetLabels', ["outcome"; "pRPE"; "nRPE"]);
@@ -721,7 +721,7 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids r-RPE group1'));
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids r-RPE group1'), 'fig');
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids r-RPE group1'), 'svg');
-% 
+%
 % % dQ-pRPE-nRPE
 % figure;
 % h = vennEulerDiagram({g1dQSig;g1pRPESig;g1nRPESig}, 'drawProportional', true, 'SetLabels', ["dQ"; "pRPE"; "nRPE"]);
@@ -730,8 +730,8 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids dQ-RPE group1'));
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids dQ-RPE group1'), 'fig');
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids dQ-RPE group1'), 'svg');
-% 
-% 
+%
+%
 % % interaction-pRPE-nRPE
 % figure;
 % h = vennEulerDiagram({g1xSig;g1pRPESig;g1nRPESig}, 'drawProportional', true, 'SetLabels', ["interaction"; "pRPE"; "nRPE"]);
@@ -740,15 +740,15 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids x-RPE group1'));
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids x-RPE group1'), 'fig');
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids x-RPE group1'), 'svg');
-% 
+%
 % % choice-dQ-dK
 % label = {'g1choice','dQ','dK'};
 % vennPlot(g1cSig,g1dQSig,g1dKSig,label,savesumfigpath);
-% 
+%
 % % choice-dK-CKE
 % label = {'g1choice','dK','CKE'};
 % vennPlot(g1cSig,g1dKSig,g1CKESig,label,savesumfigpath);
-% 
+%
 % % group2 venn plot
 % figure;
 % h = vennEulerDiagram({g2cSig;g2oSig;g2xSig}, 'drawProportional', true, 'SetLabels', ["choice"; "outcome"; "interaction"]);
@@ -757,8 +757,8 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group2'));
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group2'), 'fig');
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group2'), 'svg');
-% 
-% 
+%
+%
 % % r-pRPE-nRPE
 % figure;
 % h = vennEulerDiagram({g2oSig;g2pRPESig;g2nRPESig}, 'drawProportional', true, 'SetLabels', ["outcome"; "pRPE"; "nRPE"]);
@@ -767,36 +767,36 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 % print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids r-RPE group2'));
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids r-RPE group2'), 'fig');
 % saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids r-RPE group2'), 'svg');
-% 
+%
 % % dQ-pRPE-nRPE
 % label = {'g2dQ','pRPE','nRPE'};
 % vennPlot(g2dQSig,g2pRPESig,g2nRPESig,label,savesumfigpath);
-% 
+%
 % % interaction-pRPE-nRPE
 % label = {'g2interaction','pRPE','nRPE'};
 % vennPlot(g2xSig,g2pRPESig,g2nRPESig,label,savesumfigpath);
-% 
+%
 % % choice-dQ-dK
 % label = {'g2choice','dQ','dK'};
 % vennPlot(g2cSig,g2dQSig,g2dKSig,label,savesumfigpath);
-% 
+%
 % % choice-dK-CKE
 % label = {'g2choice','dK','CKE'};
 % vennPlot(g2cSig,g2dKSig,g2CKESig,label,savesumfigpath);
-% 
+%
 % % group3 venn plot
 % % dQ-pRPE-nRPE
 % label = {'g3dQ','pRPE','nRPE'};
 % vennPlot(g3dQSig,g3pRPESig,g3nRPESig,label,savesumfigpath);
-% 
+%
 % % interaction-pRPE-nRPE
 % label = {'g3interaction','pRPE','nRPE'};
 % vennPlot(g3xSig,g3pRPESig,g3nRPESig,label,savesumfigpath);
-% 
+%
 % % choice-dQ-dK
 % label = {'g3choice','dQ','dK'};
 % vennPlot(g3cSig,g3dQSig,g3dKSig,label,savesumfigpath);
-% 
+%
 % % choice-dK-CKE
 % label = {'g3choice','dK','CKE'};
 % vennPlot(g3cSig,g3dKSig,g3CKESig,label,savesumfigpath);
@@ -850,7 +850,7 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); xSig3 = log
 
 % outcome
 tlabel = 'Outcome';
-plot_groupSummary(group3,group2, group1, [], rt, tlabel,savesumfigpath)
+plot_groupSummary(group1,group2, [], rt, tlabel,savesumfigpath)
 
 %% stats for outcome groups
 outcome_maxT_1 = zeros(1, size(group1,1)); outcome_maxV_1 = zeros(1,size(group1,1));
@@ -867,8 +867,8 @@ for rr = 1:size(group1,1)
     outcome_maxV_1(rr) = maxV;
     tempt = tIntp(tIntp>0);
     outcome_maxT_1(rr) = tempt(ind);
-    
-    % rise time 
+
+    % rise time
     % baseline outcome
 %     baseline = mean(sCurve(rt<0));
 %     % find time between 10-90% value
@@ -930,7 +930,7 @@ save(savematpath, 'outcome_maxT_1','outcome_maxT_2','outcome_maxV_1','outcome_ma
 
 
 tlabel = 'Choice';
-plot_groupSummary(choice1,choice2, choice3, [], rt, tlabel,savesumfigpath)
+plot_groupSummary(choice1,choice2,  [], rt, tlabel,savesumfigpath)
 tlabel = 'Interaction';
 plot_groupSummary(xn1,xn2, xn3, [], rt, tlabel,savesumfigpath)
 tlabel = 'posRPE';
@@ -945,7 +945,7 @@ tlabel = 'CKE';
 plot_groupSummary(CKE1,CKE2, CKE3, [], rt, tlabel,savesumfigpath)
 
 tlabel = 'Choice-Sig';
-plot_groupSummary(choice1(logical(cSig1),:),choice2(logical(cSig2),:), choice3(logical(cSig3),:), cCoeff_nR, rt, tlabel,savesumfigpath)
+plot_groupSummary(choice1(logical(cSig1),:),choice2(logical(cSig2),:), cCoeff_nR, rt, tlabel,savesumfigpath)
 
 %% choice stat, for NE data, group 1 and 2 should be negative
 % for interactions, rerun cluster for each group

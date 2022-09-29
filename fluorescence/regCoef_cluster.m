@@ -37,9 +37,9 @@ clusterMat = pref(tInd,input.sigInd)';
        
         
         maxclust = numClust;
-        T = clusterdata(clusterMat,'Linkage','average','SaveMemory','off','Maxclust',maxclust,'distance','correlation');
+        T = clusterdata(clusterMat,'Linkage','complete','SaveMemory','off','Maxclust',maxclust,'distance','correlation');
+        % average;complete;single;weighted
         
-
         % rearrange the groups by the covered area of the first 2 seconds
          
         line11 = nanmean(pref(:,input.sigInd(T==1)),2);
