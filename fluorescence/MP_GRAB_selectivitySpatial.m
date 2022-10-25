@@ -33,290 +33,14 @@ for ii = 1:nFiles
             mkdir(savematpath);
         end
 
-%         saveSelName = fullfile(savematpath,'select_norm.mat');  % random forest
-%         %savePrevSelName = fullfile(savematpath,'prev_select_norm.mat');
-%         if exist(saveSelName)
-%             load(saveSelName);
-%
-%             % put the data in spatial organization
-%             edgelength = sqrt(numel(choicesel));
-%             choiceselMat = zeros(edgelength,edgelength,length(choicesel{1}.signal));
-%
-%
-%             for cc = 1:numel(choicesel)
-%                 if mod(cc,edgelength) == 0
-%                     Ind2 = edgelength;
-%                 else
-%                     Ind2 = mod(cc,(edgelength));
-%                 end
-%                 if mod(cc,edgelength) == 0
-%                     Ind1 = cc/edgelength;
-%                 else
-%                     Ind1 = floor(cc/edgelength)+1;
-%                 end
-%
-%                 % change left-right to contra-ipsi
-%
-%                     if strcmp(dataIndex.RecordingSite{ii},'left')
-%                          choiceselMat(Ind1, Ind2,:) = -choicesel{cc}.signal;
-%                     else
-%                         choiceselMat(Ind1, Ind2,:) = choicesel{cc}.signal;
-%                     end
-%             end
-%
-%
-%             %% calculate the area with bwareaopen()
-%             posMask = zeros(edgelength,edgelength,size(choiceselMat,3));
-%             negMask = zeros(edgelength,edgelength,size(choiceselMat,3));
-%             mergeMask = zeros(edgelength,edgelength,size(choiceselMat,3));
-%             for tt = 1:size(choiceselMat,3)
-%                 posBW = (choiceselMat(:,:,tt)>0); %Get logical mask of pixels exceeding threshold
-%                 posBW = ~bwareaopen(~posBW,50,8); %Remove small holes from pixel mask
-%                 posMask(:,:,tt) = bwareafilt(posBW,6,4);
-%                 negBW = (choiceselMat(:,:,tt)<0); %Get logical mask of pixels exceeding threshold
-%                 negBW = ~bwareaopen(~negBW,50,8); %Remove small holes from pixel mask
-%                 negMask(:,:,tt) = -bwareafilt(negBW,6,4);
-%
-%                 % merge the pos/neg Mask (pos px = 1; neg px = -1);
-%                 tempmerge = zeros(edgelength,edgelength);
-%                 temppos = posMask(:,:,tt); tempneg = negMask(:,:,tt);
-%                 tempmerge(temppos==1) =1;
-%                 tempmerge(tempneg==-1) = -1;
-%                 tempmerge(temppos==1 & tempneg==-1) = 0;
-%                 mergeMask(:,:,tt) = tempmerge;
-%             end
-%
-%             figure;
-%             subplot(1,2,1)
-%             image(mean(posMask,3),'CDataMapping','scaled');
-%             axis square;
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%             title('Average positive choice selecvitity mask');
-%             subplot(3,20,60);
-%             image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%             print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-pos mask'));
-%             saveas(gcf, fullfile(savefluofigpath,'c selecvitity-pos mask'), 'fig');
-%
-%             figure;
-%             subplot(1,2,1)
-%             image(mean(negMask,3),'CDataMapping','scaled');
-%             axis square;
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%              title('Average negative choice selecvitity mask');
-%             subplot(3,20,60);
-%             image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%             print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-neg mask'));
-%             saveas(gcf, fullfile(savefluofigpath,'c selecvitity-neg mask'), 'fig');
-%
-%              figure;
-%             subplot(1,2,1)
-%             image(mean(mergeMask,3),'CDataMapping','scaled');
-%             axis square;
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%             title('Average merged choice selecvitity mask');
-%             subplot(3,20,60);
-%             image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-%             colormap(colors);
-%             caxis([colorRange(1) colorRange(2)]);
-%             print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-merge mask'));
-%             saveas(gcf, fullfile(savefluofigpath,'c selecvitity-merge mask'), 'fig');
-%
-%
-% %% directly averaging the sign of every grid
-% % pos = 1; neg = -1
-% % signMask = zeros(edgelength,edgelength,size(choiceselMat,3));
-% % signMask(choiceselMat>0) = 1;
-% % signMask(choiceselMat<0) = -1;
-% % signMask(choiceselMat == 0) = 0;
-% %
-% % figure;
-% % subplot(1,2,1)
-% % image(mean(signMask,3),'CDataMapping','scaled');
-% % axis square;
-% % colormap(colors);
-% % caxis([colorRange(1) colorRange(2)]);
-% % title('Average positive choice selecvitity mask');
-% % subplot(3,20,60);
-% % image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-% % colormap(colors);
-% % caxis([colorRange(1) colorRange(2)]);
-% % print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-sign mask'));
-% % saveas(gcf, fullfile(savefluofigpath,'c selecvitity-sign mask'), 'fig');
-%
-% %% determine the area with watershed
-%
-% % meanSignMask = mean(signMask,3);
-% % %tt = bwareaopen(meanSignMask,10,8);
-% % figure;imagesc(meanSignMask)
-% % absMask = abs(meanSignMask);
-% % figure;imagesc(absMask,'CDataMapping','scaled');
-% % axis square;
-% % colormap(colors);caxis([colorRange(1) colorRange(2)]);
-% %
-% %
-% % %figure;histogram(meanSignMask(:));
-% % absMasktt = imhmin(absMask,0.2);
-% % figure;imagesc(absMasktt,'CDataMapping','scaled');
-% % axis square;
-% % colormap(colors);caxis([colorRange(1) colorRange(2)]);
-% %
-% % % convert the figure to binary
-% % level = graythresh(absMasktt);
-% % BW = im2bw(absMasktt,level);
-% %
-% % BW = ~bwareaopen(~BW,10,8);
-% % BW = bwareaopen(BW,10,8);
-% % D = bwdist(~BW);
-% % %D(~BW) = -Inf;
-% % L = watershed(D);
-% % figure;image(label2rgb(L,'jet','w'))
-% % imshow(D,[])
-% % title('Distance Transform of Binary Image')
-% % I = imhmin(meanSignMask,0.9); %20 is the height threshold for suppressing shallow minima
-% % figure;image(I,'CDataMapping','scaled')
-% % axis square;
-% % colormap(colors);caxis([colorRange(1) colorRange(2)]);
-% %
-% % L = watershed(D);
-% % figure;imagesc(L)
-%
-%             %% get the areas, plot x/y arerage as a function of time
-%             % how to split the area? using bwareaopen&bwareafilt? manually?
-%             % threshold : 0-0.3; 0.3-0.7; 0.7-1.0
-%                 area =  mean(mergeMask,3);
-%                 BW1 = (area<-0.2); %Get logical mask of pixels exceeding threshold
-%                 BW1 = ~bwareaopen(~BW1,10,4); %Remove small holes from pixel mask
-%                 AMask1 = bwareafilt(BW1,6,4);
-%                 L1 = bwlabel(AMask1);
-%                 %function to get separate masks of objects in L
-%                 Mask1 = getSepMask(L1,10);
-%
-%                 BW2 = (area>0.2); %Get logical mask of pixels exceeding threshold
-%                 BW2 = ~bwareaopen(~BW2,10,4); %Remove small holes from pixel mask
-%                 AMask2 = bwareafilt(BW2,6,4);
-%                 %CC = bwconncomp(AMask2);
-%                 L2 = bwlabel(AMask2);
-%                 Mask2 = getSepMask(L2,10);
-%
-% %                 BW3 = (area<0.65 & area>0); %Get logical mask of pixels exceeding threshold
-% %                 BW3 = ~bwareaopen(~BW3,10,8); %Remove small holes from pixel mask
-% %                 AMask3 = bwareafilt(BW3,6,4);
-% %                 %CC = bwconncomp(AMask2);
-% %                 L3 = bwlabel(AMask3);
-% %                 Mask3 = getSepMask(L3,10);
-% % %
-% %                 BW4 = (area>0.65); %Get logical mask of pixels exceeding threshold
-% %                 BW4 = ~bwareaopen(~BW4,10,8); %Remove small holes from pixel mask
-% %                 AMask4 = bwareafilt(BW4,6,4);
-% %                 %CC = bwconncomp(AMask2);
-% %                 L4 = bwlabel(AMask4);
-% %                 Mask4 = getSepMask(L4,10);
-%
-%
-%                 %% go through the different areas, plot the average choice selevitity over time
-%                 figure;
-%                 subplot(1,2,1)
-%                 image(mean(mergeMask,3),'CDataMapping','scaled');
-%                 axis square;
-%                 colormap(colors);
-%                 caxis([colorRange(1) colorRange(2)]);
-%                 title('Average choice selecvitity mask');
-%                 hold on;
-%                 %get a function to plot different Masks
-%                 plotbound(Mask1);plotbound(Mask2);%plotbound(Mask3);plotbound(Mask4);
-%                 subplot(3,20,60);
-%                 image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
-%                 colormap(colors);
-%                 caxis([colorRange(1) colorRange(2)]);
-%                 print(gcf,'-dpng',fullfile(savefluofigpath,'c selecvitity-sign mask-division'));
-%                 saveas(gcf, fullfile(savefluofigpath,'c selecvitity-sign mask-division'), 'fig');
-%
-%                 %% save the mask information
-%                 savemaskpath = fullfile(savematpath,'choiceselMask.mat');
-%                 save(savemaskpath,'Mask1','Mask2')
-% %                 %
-% %                 aveChoiceSel1 = getAveSel(choiceselMat,Mask1);
-% %                 aveChoiceSel2 = getAveSel(choiceselMat,Mask2);
-% %                 aveChoiceSel3 = getAveSel(choiceselMat,Mask3);
-% %                 aveChoiceSel4 = getAveSel(choiceselMat,Mask4);
-% %                 t = -2.95:0.1:4.95;
-% %                 figure;
-% %                 plotAveSel(t,aveChoiceSel1,[0 0.4470 0.7410]);
-% %                 plotAveSel(t,aveChoiceSel2,[0.4660 0.6740 0.1880]);
-% %                 plotAveSel(t,aveChoiceSel3,[0.9290 0.6940 0.1250]);
-% %                 plotAveSel(t,aveChoiceSel4,[0.6350 0.0780 0.1840]);
-% %                 title('Average choice selectivity according to areas');
-% %                 xlabel('Time from cue(s)');
-% %                 ylabel('Average choice selectivity');
-% %                  print(gcf,'-dpng',fullfile(savefluofigpath,'ave choice sel by area'));
-% %                 saveas(gcf, fullfile(savefluofigpath,'ave choice sel by area'), 'fig');
-% %
-%                     close all;
-%% monte carlo simulation of
-                % find the center of neg/pos areas
-                % model the area by average density distribution, with
-                % error
-                % calculate the distribution of center distance
-                % generate infinite plane by center distance and
-                % distribution
-               % poisson point process: number of points follows poisson
-               % distribution
 
-
-        warning('off','all')
 
            %% set threshold
         Thresh.pos = 0.2; Thresh.neg = -0.2; % threshold to find area with pos/neg modulation
         sigThresh.value = 0.05; sigThresh.alpha = 0.01;  % threshold to find area with significant modulation
 
         tic
-        %% choice/outcome selectivity
-%         saveSelName = fullfile(savematpath,'select_norm.mat');
-%         %savePrevSelName = fullfile(savematpath,'prev_select_norm.mat');
-%         savemaskpath = fullfile(savematpath,'selectivityMask.mat');  % file path to save the results
-%         if exist(saveSelName)
-%             load(saveSelName);
-%
-%             if exist(savemaskpath) % if mask file exist
-%                 load(savemaskpath)
-%             end
-%             % get data from selectivity
-%             % put the data in spatial organization
-%             if exist('choicesel','var') & ~exist('choiceselData', 'var') % if choice selectivity mask not computed
-%                 choiceselMat = select2D(choicesel,dataIndex.RecordingSite{ii});
-%                 % get signed average selectivity mask
-%                 label = 'choice';
-%                 choiceselData.mergeMask = getSignedSelMask(choiceselMat, label, savefluofigpath);
-%                 % get the areas
-%                 [choiceselData.negMask,choiceselData.posMask] = getPNMask(choiceselData.mergeMask, Thresh);
-%                 plotMaskBoundary(choiceselData.mergeMask,choiceselData.negMask,choiceselData.posMask,label,savefluofigpath);
-%                 % save the result
-%             end
-%
-%             if exist('outcomesel','var') & ~exist('outcomeselData', 'var') % if outcome selectivity mask not computed
-%                 % outcome
-%                 outcomeselMat = select2D(outcomesel,[]);
-%
-%                 % get signed average selectivity mask
-%                 label = 'reward';
-%                 outcomeselData.mergeMask = getSignedSelMask(outcomeselMat, label, savefluofigpath);
-%                 % get the areas
-%                 [outcomeselData.negMask,outcomeselData.posMask] = getPNMask(outcomeselData.mergeMask,Thresh);
-%                 plotMaskBoundary(outcomeselData.mergeMask,outcomeselData.negMask,outcomeselData.posMask,label, savefluofigpath);
-%
-%             end
-%
-%             save(savemaskpath,'choiceselData','outcomeselData')
-%
-%         end
-%
+        
 
         %% check other variables using regression results (should focus on significance rather than coefficient)
 
@@ -465,7 +189,13 @@ for ii = 1:nFiles
             RPEInd = 6;
             RPERegData = getRegSelData(reg3.reg_cr,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
         %end
+            label = 'posRPE';
+            RPEInd = 6;
+            posRPERegData = getRegSelData(reg3.reg_cr_pos,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
 
+            label = 'negRPE';
+            RPEInd = 6;
+            negRPERegData = getRegSelData(reg3.reg_cr_neg,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
         %if ~exist('CKERegData','var') % if choice regression mask not computed
             label = 'CKE';
             CKEInd = 8;
@@ -476,7 +206,7 @@ for ii = 1:nFiles
         save(saveregmaskpath,'outcomeRegData','choiceRegData','cn_1RegData','cn__1RegData',...
                              'rn_1RegData','rn__1RegData', 'xnRegData', 'xn__1RegData', 'ave_rRegData', 'cum_rRegData',...
                              'dQRegData', 'chosenQRegData','dKRegData','chosenKRegData',...
-                             'RPERegData', 'CKERegData')
+                             'RPERegData','posRPERegData','negRPERegData', 'CKERegData')
     end
 
         close all

@@ -3,19 +3,20 @@ function fluo_pupil_GRAB_summary(dataIndex,savefigpath)
 % summarize the results of pupil/fluorescent correlation
 % GRAB_Ach, before MP, 5,8,10,12
 
-Ach = [5,8,10,12,14];
-NE = [1:3];
+Ind = 1:size(dataIndex,1);
+ACh = Ind(strcmp(dataIndex.GRAB,'ACh'));
+NE = Ind(strcmp(dataIndex.GRAB,'NE'));
 
 nFiles = size(dataIndex,1);
-corrCoeffMat_Ach = [];
-corrPMat_Ach = [];
+corrCoeffMat_ACh = [];
+corrPMat_ACh = [];
 corrCoeffMat_NE= [];
 corrPMat_NE = [];
 for ii = 1:length(Ach)
      fn_beh = dir(fullfile(dataIndex.BehPath{Ach(ii)},'*beh.mat'));
     savematname = fullfile(fn_beh.folder,'analysis-pupil','corrPupFluo.mat');
     load(savematname);
-    corrCoeffMat_Ach = [corrCoeffMat_Ach,corrCoeff(:)'];
+    corrCoeffMat_ACh = [corrCoeffMat_ACh,corrCoeff(:)'];
     corrPMat_Ach = [corrPMat_Ach, corrP(:)'];
 end
 

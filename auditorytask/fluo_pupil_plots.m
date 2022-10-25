@@ -43,18 +43,25 @@ for ii = 1:nFiles
         %% Plot cue-aligned pupil
         
         % plot a single trace, create a gif
-        
+        %% ii=1; ACh plot; ii = 11, NE plot
        
         % tCue = trialData.cueTimes(1):trialData.cueTimes(2);
-        
-       
         pupili = interp1(pupil.t,pupil.dia,cells.t);
         
-        % paper plot 
-        avedFF = zeros(length(cells.t),1);
-        for jj  =1:length(cells.dFF)
-            avedFF = avedFF+cells.dFF{jj}/length(cells.dFF);
+        % find the ROI with maximum correlation
+        corrMat = zeros(1, length(cells.dFF));
+        for rr = 1:length(cells.dFF)
+            corrVal = corrcoef(cells.dFF{rr},pupili,'rows','pairwise');
+            corrMat(rr) = corrVal(1,2);
         end
+        [~,indFF] = max(corrMat);
+       
+        
+        % paper plot 
+%         avedFF = zeros(length(cells.t),1);
+%         for jj  =1:length(cells.dFF)
+%             avedFF = avedFF+cells.dFF{jj}/length(cells.dFF);
+%         end
         % plot the last 10 mins of recordings
         tstart = pupil.t(end) - 11*60;
         tend = pupil.t(end);
@@ -62,13 +69,14 @@ for ii = 1:nFiles
         figure;
         plot(pupil.t(pupilPlotInd),smooth(pupil.dia(pupilPlotInd),120));
        
-        ylim([-2.2,3.8]);
+        ylim([-2.4,2.6]);
         ax1 = gca;   
         ax1.YAxis.Visible = 'off'; % remove y-axis
         yyaxis right
         fluoPlotInd = cells.t<tend & cells.t>=tstart;
-        hold on;plot(cells.t(fluoPlotInd), smooth(avedFF(fluoPlotInd),120));
-        ylim([-0.02 0.48]);
+        dFFCurve = cells.dFF{indFF};
+        hold on;plot(cells.t(fluoPlotInd), smooth(dFFCurve(fluoPlotInd),120));
+        ylim([-0.04 0.46]);
          ax1 = gca;   
             ax1.YAxis(2).Visible = 'off'; % remove y-axis
              ax1.XAxis.Visible = 'off'; % remove y-axis
@@ -76,13 +84,15 @@ for ii = 1:nFiles
              
              % plot scale bar
              hold on;
-             plot([tend-30 tend], [0.38 0.38],'k-');
+             plot([tend-30 tend], [0.36 0.36],'k-');
+             text(tend-30,0.33,'30 s')
              hold on;
-             plot([tend tend],[0.38 0.48],'k-');
+             plot([tend tend],[0.36 0.46],'k-');
+             text(tend+2,0.43, 'df/f 0.1; z 1')
              
-             print(gcf,'-dpng',['spon_pupil_ave' int2str(jj)]);
-             saveas(gcf, 'spon_pupil_ave', 'fig');
-             saveas(gcf, 'spon_pupil_ave', 'svg');
+             print(gcf,'-dpng',['spon_pupil_ave_ACh']);
+             saveas(gcf, 'spon_pupil_ave_ACh', 'fig');
+             saveas(gcf, 'spon_pupil_ave_ACh', 'svg');
         % plot the whole session 
         edgelength = sqrt(numel(cells.dFF));
     corrCoeff = zeros(edgelength);

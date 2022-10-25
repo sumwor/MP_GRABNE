@@ -20,7 +20,7 @@ maxVal = ceil(nanmax(qdiff));
 minVal = floor(nanmin(qdiff));
 % find the one with larger absolute value
 limit = max(abs(maxVal),abs(minVal));
-edges=[-limit:0.2:limit];
+edges=[-limit:0.1:limit];
 edges_center=edges(1:end-1)+mean(diff(edges))/2; %center of the bins, for plotting
 
 n=histcounts(qdiff,edges);
@@ -49,6 +49,7 @@ else
     xlabel('Q_L - Q_R');
 end
 ylabel('Occurrence');
+xlim([-3,3])
 ylim([0 1.1*max(n)]);
 xlim([edges(1) edges(end)]);
 title(['Player ' int2str(x) ': ' stats{1}.playerlabel{x}],'interpreter','none');
@@ -71,6 +72,7 @@ elseif strcmp(stats{1}.playerlabel{1},'algo_DFQ') %if softmax rule was used, wha
 end
 ylabel('P_L');
 ylim([-0.02 1.02]);
+xlim([-3, 3])
 handle.YAxis(1).Color = 'k';
 handle.YAxis(2).Color = 'm';
 

@@ -15,8 +15,8 @@ sigVar = zeros(28,28,80,nFiles,15);  % load significant grids for 15 variables
 cnSigList = [];
 rnSigList = [];
 xnSigList = [];
-posRPESigList = [];
-negRPESigList = [];
+posRPEList = [];
+negRPEList = [];
 % get the pos/neg coefficient percentage data
 choicePN = [];outcomePN = [];RPEPN=[];xnPN=[];cn__1PN=[];rn__1PN=[];xn__1PN = [];
 dQPN = [];chosenQPN = []; dKPN = [];chosenKPN = [];CKEPN = [];
@@ -81,9 +81,8 @@ for ii = 1:nFiles
         cnSigList = [cnSigList,choiceRegData.sigGrid(:)'];
         rnSigList = [rnSigList,outcomeRegData.sigGrid(:)'];
         xnSigList = [xnSigList,xnRegData.sigGrid(:)'];
-        posRPESigList = [posRPESigList, posRPERegData.sigGrid(:)'];
-        negRPESigList = [negRPESigList, negRPERegData.sigGrid(:)'];
-
+        posRPEList = [posRPEList, posRPERegData.sigGrid(:)'];
+        neg
         % get pos/neg coefficient
 %         choicePN = cat(4,choicePN,choiceRegData.coeffSignSig);
 %          outcomePN = cat(4,outcomePN,outcomeRegData.coeffSignSig);
@@ -179,15 +178,13 @@ RInd = 1:length(cnSigList);
 cnInd = RInd(cnSigList==1);
 rnInd = RInd(rnSigList==1);
 xnInd = RInd(xnSigList==1);
-posRPEInd = RInd(posRPESigList==1);
-negRPEInd = RInd(negRPESigList==1);
 
 
 label = {'choice','outcome','interaction'};
 vennPlot(cnInd,rnInd,xnInd,label,save_path_fluo);
 
 label = {'Outcome','posRPE','negRPE'};
-vennPlot(rnInd,posRPEInd,negRPEInd,label,save_path_fluo);
+vennPlot(rnInd,posRPEInd,label,save_path_fluo);
 
 h = vennEulerDiagram({cnInd;rnInd;xnInd}, 'drawProportional', true, 'SetLabels', ["choice"; "reward"; "interaction"]);
 title('Ach c/r/x significant ROIs');

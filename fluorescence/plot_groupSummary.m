@@ -159,8 +159,8 @@ saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary-group2']), 'svg');
 if ~isempty(group3)
 
       g3.coeff=group3;g3.t = rt;
-    g3sortOrd = coeff_sort(g3,[0,3]);
-    group3= group3(g3sortOrd,:);
+%     g3sortOrd = coeff_sort(g3,[0,3]);
+%     group3= group3(g3sortOrd,:);
 h1=figure;
 sgtitle([tlabel,'-group3'])
 subplot(1,3,1);
@@ -190,7 +190,7 @@ subplot(2,2,4)
  % sepPoint = 657; % ACh, choice
 % sepPoint = 131; %ACh, xn
 %sepPoint = size(group4,1); %NE, choice
-sepPoint = 841; %NE,interaction
+sepPoint = 910; %NE,interaction
 line1 = group3(1:sepPoint,:)';
 ste = nanstd(line1,0,2)/sqrt(size(line1,2));
 plot(rt,nanmean(line1,2));

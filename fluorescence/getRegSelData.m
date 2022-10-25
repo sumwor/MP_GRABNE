@@ -37,7 +37,7 @@ isSig = 0;
 % plotMaskBoundary(RegData.coeffMask,RegData.negMask,RegData.posMask,label,savefluofigpath,isSig);
 
 
-%% plot absolut coefficient with significant grids onlu
+%% plot absolut coefficient with significant grids only
 isSig = 2;
 % get significant coefficient only
 sigCoeff = Mat.coeff;

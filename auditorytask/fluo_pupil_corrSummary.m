@@ -6,8 +6,10 @@ nFiles = size(dataIndex,1);
 colors=cbrewer('div','RdBu',256);
 colors=flipud(colors);
 
-Ach = [4:14];
-NE = [1:3,15:18];
+Ind = 1:size(dataIndex,1);
+Ach = Ind(strcmp(dataIndex.GRAB,'ACh'));
+NE = Ind(strcmp(dataIndex.GRAB,'NE'));
+
 
 maxLagSum_Ach = [];
 maxCorrSum_Ach = [];
@@ -28,8 +30,8 @@ for ii = 1:length(Ach)
         % plot the cross-correlation with lags
         
         if ~exist('Lag_Ach','var')
-            Lag_Ach = zeros(length(Ach),length(c),length(newlag(newlag<=20 & newlag > -20)));
-            Corr_Ach = zeros(length(Ach),length(c),length(newlag(newlag<=20 & newlag > -20)));
+            Lag_Ach = zeros(length(Ach),length(c),length(newlag(newlag<=2 & newlag > -2)));
+            Corr_Ach = zeros(length(Ach),length(c),length(newlag(newlag<=2 & newlag > -2)));
         end
         if ~exist('Lag_Achauto','var')
             Lag_Achauto= zeros(length(NE),length(c),length(newlagFluo(newlagFluo<=100 & newlagFluo>=0)));
@@ -45,8 +47,8 @@ for ii = 1:length(Ach)
         maxLag = zeros(1, length(c));
         for rr = 1:length(c)
             % get the maximum correlation and lags
-            corrInRange = c{rr}(newlag<=20 & newlag > -20);
-            lagInRange = newlag(newlag<=20 & newlag > -20);
+            corrInRange = c{rr}(newlag<=2 & newlag > -2);
+            lagInRange = newlag(newlag<=2 & newlag > -2);
             Lag_Ach(ii,rr,:) = lagInRange;
             Corr_Ach(ii,rr,:) = corrInRange;
             
@@ -60,23 +62,23 @@ for ii = 1:length(Ach)
             Corr_Achauto(ii,rr,:) = aCorrF(1:size(Lag_Achauto,3));
             
             % plot cross- and auto-correlation
-            if ~exist(fullfile(savefigpath,['CrossCorrelationRoi-',num2str(length(c)),'.fig']))
-                figure;stem(lagInRange,corrInRange);
-                print(gcf,'-dpng',fullfile(savefigpath,['CrossCorrelationRoi-',num2str(rr)]));
-                saveas(gcf, fullfile(savefigpath,['CrossCorrelationRoi-',num2str(rr)]), 'fig');
-            end
-            if ~exist(fullfile(savefigpath,['autoCorrelationRoi-',num2str(length(c)),'.fig']))
-                figure;stem(aLagF,aCorrF);
-                print(gcf,'-dpng',fullfile(savefigpath,['autoCorrelationRoi-',num2str(rr)]));
-                saveas(gcf, fullfile(savefigpath,['autoCorrelationRoi-',num2str(rr)]), 'fig');
-                close all;
-            end
+%             if ~exist(fullfile(savefigpath,['CrossCorrelationRoi-',num2str(length(c)),'.fig']))
+%                 figure;stem(lagInRange,corrInRange);
+%                 print(gcf,'-dpng',fullfile(savefigpath,['CrossCorrelationRoi-',num2str(rr)]));
+%                 saveas(gcf, fullfile(savefigpath,['CrossCorrelationRoi-',num2str(rr)]), 'fig');
+%             end
+%             if ~exist(fullfile(savefigpath,['autoCorrelationRoi-',num2str(length(c)),'.fig']))
+%                 figure;stem(aLagF,aCorrF);
+%                 print(gcf,'-dpng',fullfile(savefigpath,['autoCorrelationRoi-',num2str(rr)]));
+%                 saveas(gcf, fullfile(savefigpath,['autoCorrelationRoi-',num2str(rr)]), 'fig');
+%                 close all;
+%             end
         end
         aCorrP = autoCorrPup(newlagPup<=100 & newlagPup>=0);
         aLagP = newlagPup(newlagPup<=100 & newlagPup>=0);
-        figure;stem(aLagP,aCorrP);
-        print(gcf,'-dpng',fullfile(savefigpath,['autoCorrelationPup']));
-        saveas(gcf, fullfile(savefigpath,['autoCorrelationPup']), 'fig');
+%         figure;stem(aLagP,aCorrP);
+%         print(gcf,'-dpng',fullfile(savefigpath,['autoCorrelationPup']));
+%         saveas(gcf, fullfile(savefigpath,['autoCorrelationPup']), 'fig');
         close all;
         
         
@@ -86,32 +88,32 @@ for ii = 1:length(Ach)
         plot_xcorr(maxCorr,tlabel,colorRange,savefigpath);
         % max lag
         tlabel = 'lags';
-        colorRange = [-20 20];
+        colorRange = [-2 2];
         date = num2str(dataIndex.DateNumber(Ach(ii)));
         savefigpath = fullfile(dataIndex.BehPath{Ach(ii)},[date(1:6),'_figs-pupil']);
-        plot_xcorr(maxLag,tlabel,colorRange,savefigpath);
+%         plot_xcorr(maxLag,tlabel,colorRange,savefigpath);
         %% plot average cross correlation, check how consistent across different ROIs in the same session
         
-        figure;
-        plot(squeeze(mean(Lag_Ach(ii,:,:),2)),squeeze(mean(Corr_Ach(ii,:,:),2)));
-        print(gcf,'-dpng',fullfile(savefigpath,['ave-xcorr']));
-        saveas(gcf, fullfile(savefigpath,['ave-xcorr']), 'fig');
-        % plot individual cross correlation
-        figure;
-        for zz=1:196,hold on;plot(squeeze(Lag_Ach(ii,zz,:)),squeeze(Corr_Ach(ii,zz,:)));end
-        print(gcf,'-dpng',fullfile(savefigpath,['individual-xcorr']));
-        saveas(gcf, fullfile(savefigpath,['individual-xcorr']), 'fig');
+%         figure;
+%         plot(squeeze(mean(Lag_Ach(ii,:,:),2)),squeeze(mean(Corr_Ach(ii,:,:),2)));
+%         print(gcf,'-dpng',fullfile(savefigpath,['ave-xcorr']));
+%         saveas(gcf, fullfile(savefigpath,['ave-xcorr']), 'fig');
+%         % plot individual cross correlation
+%         figure;
+%         for zz=1:196,hold on;plot(squeeze(Lag_Ach(ii,zz,:)),squeeze(Corr_Ach(ii,zz,:)));end
+%         print(gcf,'-dpng',fullfile(savefigpath,['individual-xcorr']));
+%         saveas(gcf, fullfile(savefigpath,['individual-xcorr']), 'fig');
         
         % plot average auto correlation
-        figure;
-        plot(squeeze(mean(Lag_Achauto(ii,:,:),2)),squeeze(mean(Corr_Achauto(ii,:,:),2)));
-        print(gcf,'-dpng',fullfile(savefigpath,['ave-autocorr']));
-        saveas(gcf, fullfile(savefigpath,['ave-autocorr']), 'fig');
+%         figure;
+%         plot(squeeze(mean(Lag_Achauto(ii,:,:),2)),squeeze(mean(Corr_Achauto(ii,:,:),2)));
+%         print(gcf,'-dpng',fullfile(savefigpath,['ave-autocorr']));
+%         saveas(gcf, fullfile(savefigpath,['ave-autocorr']), 'fig');
         % plot individual cross correlation
-        figure;
-        for zz=1:196,hold on;plot(squeeze(Lag_Achauto(ii,zz,:)),squeeze(Corr_Achauto(ii,zz,:)));end
-        print(gcf,'-dpng',fullfile(savefigpath,['individual-autocorr']));
-        saveas(gcf, fullfile(savefigpath,['individual-autocorr']), 'fig');
+%         figure;
+%         for zz=1:196,hold on;plot(squeeze(Lag_Achauto(ii,zz,:)),squeeze(Corr_Achauto(ii,zz,:)));end
+%         print(gcf,'-dpng',fullfile(savefigpath,['individual-autocorr']));
+%         saveas(gcf, fullfile(savefigpath,['individual-autocorr']), 'fig');
         % plot distributions of correlation and lag within single session
         
         
@@ -135,8 +137,8 @@ for ii = 1:length(NE)
         load(savefilename);
         % plot the cross-correlation with lags
         if ~exist('Lag_NE','var')
-            Lag_NE= zeros(length(NE),length(c),length(newlag(newlag<=20 & newlag > -20)));
-            Corr_NE = zeros(length(NE),length(c),length(newlag(newlag<=20 & newlag > -20)));
+            Lag_NE= zeros(length(NE),length(c),length(newlag(newlag<=2 & newlag > -2)));
+            Corr_NE = zeros(length(NE),length(c),length(newlag(newlag<=2 & newlag > -2)));
         end
         if ~exist('Lag_NEauto','var')
             Lag_NEauto= zeros(length(NE),length(c),length(newlagFluo(newlagFluo<=100 & newlagFluo>=0)));
@@ -152,8 +154,8 @@ for ii = 1:length(NE)
         maxLag = zeros(1, length(c));
         for rr = 1:length(c)
             % get the maximum correlation and lags
-            corrInRange = c{rr}(newlag<=20 & newlag > -20);
-            lagInRange = newlag(newlag<=20 & newlag > -20);
+            corrInRange = c{rr}(newlag<=2 & newlag > -2);
+            lagInRange = newlag(newlag<=2 & newlag > -2);
             Lag_NE(ii,rr,:) = lagInRange;
             Corr_NE(ii,rr,:) = corrInRange;
             
@@ -167,25 +169,25 @@ for ii = 1:length(NE)
             Corr_NEauto(ii,rr,:) = aCorrF(1:size(Lag_NEauto,3));
             
             % plot cross- and auto-correlation
-            if ~exist(fullfile(savefigpath,['CrossCorrelationRoi-',num2str(length(c)),'.fig']))
-                figure;stem(lagInRange,corrInRange);
-                print(gcf,'-dpng',fullfile(savefigpath,['CrossCorrelationRoi-',num2str(rr)]));
-                saveas(gcf, fullfile(savefigpath,['CrossCorrelationRoi-',num2str(rr)]), 'fig');
-            end
-            if ~exist(fullfile(savefigpath,['autoCorrelationRoi-',num2str(length(c)),'.fig']))
-                figure;stem(aLagF,aCorrF);
-                print(gcf,'-dpng',fullfile(savefigpath,['autoCorrelationRoi-',num2str(rr)]));
-                saveas(gcf, fullfile(savefigpath,['autoCorrelationRoi-',num2str(rr)]), 'fig');
-                close all;
-            end
+%             if ~exist(fullfile(savefigpath,['CrossCorrelationRoi-',num2str(length(c)),'.fig']))
+%                 figure;stem(lagInRange,corrInRange);
+%                 print(gcf,'-dpng',fullfile(savefigpath,['CrossCorrelationRoi-',num2str(rr)]));
+%                 saveas(gcf, fullfile(savefigpath,['CrossCorrelationRoi-',num2str(rr)]), 'fig');
+%             end
+%             if ~exist(fullfile(savefigpath,['autoCorrelationRoi-',num2str(length(c)),'.fig']))
+%                 figure;stem(aLagF,aCorrF);
+%                 print(gcf,'-dpng',fullfile(savefigpath,['autoCorrelationRoi-',num2str(rr)]));
+%                 saveas(gcf, fullfile(savefigpath,['autoCorrelationRoi-',num2str(rr)]), 'fig');
+%                 close all;
+%             end
             
         end
         aCorrP = autoCorrPup(newlagPup<=100 & newlagPup>=0);
         aLagP = newlagPup(newlagPup<=100 & newlagPup>=0);
-        figure;stem(aLagP,aCorrP);
-        print(gcf,'-dpng',fullfile(savefigpath,['autoCorrelationPup']));
-        saveas(gcf, fullfile(savefigpath,['autoCorrelationPup']), 'fig');
-        close all;
+%         figure;stem(aLagP,aCorrP);
+%         print(gcf,'-dpng',fullfile(savefigpath,['autoCorrelationPup']));
+%         saveas(gcf, fullfile(savefigpath,['autoCorrelationPup']), 'fig');
+%         close all;
         
         
         % plot the maxcorr and maxlag in 2d
@@ -194,34 +196,34 @@ for ii = 1:length(NE)
         plot_xcorr(maxCorr,tlabel,colorRange,savefigpath);
         % max lag
         tlabel = 'lags';
-        colorRange = [-20 20];
+        colorRange = [-2 2];
         date = num2str(dataIndex.DateNumber(NE(ii)));
         savefigpath = fullfile(dataIndex.BehPath{NE(ii)},[date(1:6),'_figs-pupil']);
-        plot_xcorr(maxLag,tlabel,colorRange,savefigpath);
+%         plot_xcorr(maxLag,tlabel,colorRange,savefigpath);
         %% plot average cross correlation, check how consistent across different ROIs in the same session
         
-        figure;
-        plot(squeeze(mean(Lag_NE(ii,:,:),2)),squeeze(mean(Corr_NE(ii,:,:),2)));
-        print(gcf,'-dpng',fullfile(savefigpath,['ave-xcorr']));
-        saveas(gcf, fullfile(savefigpath,['ave-xcorr']), 'fig');
-        % plot individual cross correlation
-        figure;
-        for zz=1:196,hold on;plot(squeeze(Lag_NE(ii,zz,:)),squeeze(Corr_NE(ii,zz,:)));end
-        print(gcf,'-dpng',fullfile(savefigpath,['individual-xcorr']));
-        saveas(gcf, fullfile(savefigpath,['individual-xcorr']), 'fig');
-        % plot distributions of correlation and lag within single session
-        % plot average auto correlation
-            figure;
-            plot(squeeze(mean(Lag_NEauto(ii,:,:),2)),squeeze(mean(Corr_NEauto(ii,:,:),2)));
-            print(gcf,'-dpng',fullfile(savefigpath,['ave-autocorr']));
-            saveas(gcf, fullfile(savefigpath,['ave-autocorr']), 'fig');
-            % plot individual cross correlation
-            figure;
-            for zz=1:196,hold on;plot(squeeze(Lag_NEauto(ii,zz,:)),squeeze(Corr_NEauto(ii,zz,:)));end
-            print(gcf,'-dpng',fullfile(savefigpath,['individual-autocorr']));
-            saveas(gcf, fullfile(savefigpath,['individual-autocorr']), 'fig');
-        
-        close all;
+%         figure;
+%         plot(squeeze(mean(Lag_NE(ii,:,:),2)),squeeze(mean(Corr_NE(ii,:,:),2)));
+%         print(gcf,'-dpng',fullfile(savefigpath,['ave-xcorr']));
+%         saveas(gcf, fullfile(savefigpath,['ave-xcorr']), 'fig');
+%         % plot individual cross correlation
+%         figure;
+%         for zz=1:196,hold on;plot(squeeze(Lag_NE(ii,zz,:)),squeeze(Corr_NE(ii,zz,:)));end
+%         print(gcf,'-dpng',fullfile(savefigpath,['individual-xcorr']));
+%         saveas(gcf, fullfile(savefigpath,['individual-xcorr']), 'fig');
+%         % plot distributions of correlation and lag within single session
+%         % plot average auto correlation
+%             figure;
+%             plot(squeeze(mean(Lag_NEauto(ii,:,:),2)),squeeze(mean(Corr_NEauto(ii,:,:),2)));
+%             print(gcf,'-dpng',fullfile(savefigpath,['ave-autocorr']));
+%             saveas(gcf, fullfile(savefigpath,['ave-autocorr']), 'fig');
+%             % plot individual cross correlation
+%             figure;
+%             for zz=1:196,hold on;plot(squeeze(Lag_NEauto(ii,zz,:)),squeeze(Corr_NEauto(ii,zz,:)));end
+%             print(gcf,'-dpng',fullfile(savefigpath,['individual-autocorr']));
+%             saveas(gcf, fullfile(savefigpath,['individual-autocorr']), 'fig');
+%         
+%         close all;
         maxCorrSum_NE = cat(1,maxCorrSum_NE, maxCorr);
         maxLagSum_NE= cat(1, maxLagSum_NE, maxLag);
         
@@ -234,8 +236,8 @@ end
 display('Sum');
 
 %% plot correlation coefficient
-figure;histogram(maxCorrSum_NE(:),'Normalization','probability','FaceColor',[255 189 53]/255,'EdgeColor',[255 189 53]/255);
-hold on;histogram(maxCorrSum_Ach(:),'Normalization','probability','FaceColor',[63,167,150]/255,'EdgeColor',[63,167,150]/255);
+figure;histogram(maxCorrSum_NE(:),'Normalization','probability','FaceColor',[63,167,150]/255,'EdgeColor',[63,167,150]/255);
+hold on;histogram(maxCorrSum_Ach(:),'Normalization','probability','FaceColor',[255 189 53]/255,'EdgeColor',[255 189 53]/255);
 set(gca,'box','off');
 leg = legend('NE','Ach');
 set(leg,'Box','off')
@@ -244,12 +246,12 @@ xlabel('Correlation coefficient');
 ylabel('Probability');
 
 print(gcf,'-dpng',fullfile(savesumpath,'GRAB-pupil-spon-corrcoeff'));    %png format
-saveas(gcf, fullfile(savefigpath,'GRAB-pupil-spon-corrcoeff'), 'fig');
-saveas(gcf, fullfile(savefigpath,'GRAB-pupil-spon-corrcoeff'),'svg');
+saveas(gcf, fullfile(savesumpath,'GRAB-pupil-spon-corrcoeff'), 'fig');
+saveas(gcf, fullfile(savesumpath,'GRAB-pupil-spon-corrcoeff'),'svg');
 
 %% plot lag
-figure;histogram(maxLagSum_NE(:),'Normalization','probability','FaceColor',[255 189 53]/255,'EdgeColor',[255 189 53]/255,'BinWidth',0.1);
-hold on;histogram(maxLagSum_Ach(:),'Normalization','probability','FaceColor',[63,167,150]/255,'EdgeColor',[63,167,150]/255,'BinWidth',0.1);
+figure;histogram(maxLagSum_NE(:),'Normalization','probability','FaceColor',[63,167,150]/255,'EdgeColor',[63,167,150]/255,'BinWidth',0.1);
+hold on;histogram(maxLagSum_Ach(:),'Normalization','probability','FaceColor',[255 189 53]/255,'EdgeColor',[255 189 53]/255,'BinWidth',0.1);
 set(gca,'box','off');
 leg = legend('NE','Ach');
 set(leg,'Box','off')
@@ -258,8 +260,8 @@ xlabel('Max lag (s)');
 ylabel('Probability');
 
 print(gcf,'-dpng',fullfile(savesumpath,'GRAB-pupil-spon-lag'));    %png format
-saveas(gcf, fullfile(savefigpath,'GRAB-pupil-spon-lag'), 'fig');
-saveas(gcf, fullfile(savefigpath,'GRAB-pupil-spon-lag'),'svg');
+saveas(gcf, fullfile(savesumpath,'GRAB-pupil-spon-lag'), 'fig');
+saveas(gcf, fullfile(savesumpath,'GRAB-pupil-spon-lag'),'svg');
 
 %% plot corr and lag within (-2,2)s
 corrNE = maxCorrSum_NE(:);lagNE = maxLagSum_NE(:);
@@ -294,10 +296,9 @@ saveas(gcf, fullfile(savefigpath,'GRAB-pupil-spon-corrcoeff-(lag0-2)'), 'fig');
 saveas(gcf, fullfile(savefigpath,'GRAB-pupil-spon-corrcoeff-(lag0-2)'),'svg');
 
 
-end
-
 %% plot lag and max corr
-figure;scatter(lagNE(lagNE>-2 & lagNE<2),corrNE(lagNE>-2 & lagNE<2),200,[255 189 53]/255,'.');
+figure
+scatter(lagNE(lagNE>-2 & lagNE<2),corrNE(lagNE>-2 & lagNE<2),200,[255 189 53]/255,'.');
 hold on; scatter(lagAch(lagAch>-2 & lagAch<2),corrAch(lagAch>-2 & lagAch<2),200,[63,167,150]/255,'.');
 set(gca,'box','off');
 leg = legend('NE','Ach');
