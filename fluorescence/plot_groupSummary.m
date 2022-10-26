@@ -28,6 +28,27 @@ image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRa
 colormap(colors);
 caxis([colorRange(1) colorRange(2)]);
 
+% calculating correlations
+corrMat = zeros(size(group1,1));
+
+for xx = 1:size(group1,1)
+    for yy = xx:size(group1,1)
+        tempCorr = corrcoef(group1(xx,:),group1(yy,:));
+        corrMat(xx,yy) = tempCorr(1,2);
+    end
+end
+for xx = 1:size(group1,1)
+    for yy = 1:xx-1
+        corrMat(xx,yy) = corrMat(yy,xx);
+    end
+end
+subplot(2,2,2)
+image(corrMat,'CDataMapping','scaled')
+colormap(colors);
+xlim([1, size(group1,1)])
+caxis([-1 1]);
+set(gca,'dataAspectRatio',[1 1 1])
+
 subplot(2,2,4)
 line1 = group1';
 ste = nanstd(line1,0,2)/sqrt(size(line1,2));
@@ -83,6 +104,26 @@ subplot(3,20,48);
 image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
 colormap(colors);
 caxis([colorRange(1) colorRange(2)]);
+
+corrMat = zeros(size(group2,1));
+
+for xx = 1:size(group2,1)
+    for yy = xx:size(group2,1)
+        tempCorr = corrcoef(group2(xx,:),group2(yy,:));
+        corrMat(xx,yy) = tempCorr(1,2);
+    end
+end
+for xx = 1:size(group2,1)
+    for yy = 1:xx-1
+        corrMat(xx,yy) = corrMat(yy,xx);
+    end
+end
+subplot(2,2,2)
+image(corrMat,'CDataMapping','scaled')
+colormap(colors);
+xlim([1, size(group2,1)])
+caxis([-1 1]);
+set(gca,'dataAspectRatio',[1 1 1])
 
 subplot(2,2,4)
 %% NE,interaction
@@ -184,6 +225,26 @@ subplot(3,20,48);
 image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
 colormap(colors);
 caxis([colorRange(1) colorRange(2)]);
+
+corrMat = zeros(size(group3,1));
+
+for xx = 1:size(group3,1)
+    for yy = xx:size(group3,1)
+        tempCorr = corrcoef(group3(xx,:),group3(yy,:));
+        corrMat(xx,yy) = tempCorr(1,2);
+    end
+end
+for xx = 1:size(group3,1)
+    for yy = 1:xx-1
+        corrMat(xx,yy) = corrMat(yy,xx);
+    end
+end
+subplot(2,2,2)
+image(corrMat,'CDataMapping','scaled')
+colormap(colors);
+xlim([1, size(group1,1)])
+caxis([-1 1]);
+set(gca,'dataAspectRatio',[1 1 1])
 
 subplot(2,2,4)
 

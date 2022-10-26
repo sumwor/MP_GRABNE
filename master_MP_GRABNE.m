@@ -5,17 +5,8 @@ close all;
 setup_figprop;
 
 
-%root_path = 'Y:\HongliWang\GRAB_analysis';
-%root_path = 'Y:\HongliWang\Ach_analysis';
-%root_path = 'C:\Hongli\data\GRAB_analysis';
-
-%root_path = 'V:\HongliWang\NE_analysis';
-
-% root_path_NE = 'K:\NE_analysis_784';
-% root_path_ACh = 'K:\ACh_analysis_784';
-%root_path = 'Y:\HongliWang\Ach_784';
-root_path_NE = 'V:\HongliWang\NE_analysis_784';
-root_path_ACh = 'V:\HongliWang\ACh_analysis_784';
+root_path_NE = 'V:\HongliWang\GRAB\NE_analysis_784';
+root_path_ACh = 'V:\HongliWang\GRAB\ACh_analysis_784';
 %root_path = 'K:\Ach_784';
 
 
@@ -33,7 +24,7 @@ analysispath_NE = fullfile(root_path_NE,'analysis');
 dataIndex_NE = makeDataIndex(logfilepath_NE, analysispath_NE);
 
 % Parse and analyze each logfile, save as .mat files, as needed
-dataIndex_NE = MP_createBehMatFiles(dataIndex_NE,'NE');
+dataIndex_NE = MP_GRAB_createBehMatFiles(dataIndex_NE,'NE');
 
 % sort Index according to experiment data
 
@@ -48,7 +39,7 @@ analysispath_ACh = fullfile(root_path_ACh,'analysis');
 dataIndex_ACh = makeDataIndex(logfilepath_ACh, analysispath_ACh);
 
 % Parse and analyze each logfile, save as .mat files, as needed
-dataIndex_ACh = MP_createBehMatFiles(dataIndex_ACh,'ACh');
+dataIndex_ACh = MP_GRAB_createBehMatFiles(dataIndex_ACh,'ACh');
 
 % sort Index according to experiment data
 
