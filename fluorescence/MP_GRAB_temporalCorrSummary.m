@@ -630,8 +630,8 @@ temp2 = group2(g2sortOrd,:); group2 = temp2; o2SesInd=o2SesInd(g2sortOrd);
 % temp3 = group3(g3sortOrd,:); group3 = temp3; o3SesInd=o3SesInd(g3sortOrd);
 
 choice1 = choice1(g1sortOrd,:);choice2 = choice2(g2sortOrd,:);%choice3 = choice3(g3sortOrd,:);
-cSig1 = logical(cSig1(g1sortOrd));c1SesIndtemp=c1SesInd(g1sortOrd); c1SesInd = c1SesIndtemp(cSig1);
-cSig2 = logical(cSig2(g2sortOrd));c2SesIndtemp=c2SesInd(g2sortOrd); c2SesInd = c2SesIndtemp(cSig2);
+cSig1 = logical(cSig1(g1sortOrd));cSig2 = logical(cSig2(g2sortOrd)); %cSig3 = logical(cSig3(g3sortOrd));
+c1SesInd = o1SesInd(cSig1); c2SesInd = o2SesInd(cSig2);
 xn1 = xn1(g1sortOrd,:);xn2 = xn2(g2sortOrd,:);%xn3 = xn3(g3sortOrd,:);
 xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); %xSig3 = logical(xSig3(g3sortOrd));
 % posRPE1 = posRPE1(g1sortOrd,:);%posRPE2 = posRPE2(g2sortOrd,:);posRPE3 = posRPE3(g3sortOrd,:);
@@ -666,7 +666,7 @@ for rr = 1:size(group1,1)
     tempt = tIntp(tIntp>0);
     outcome_maxT_1(rr) = tempt(ind);
 
-   
+
 end
 % group2
 for rr = 1:size(group2,1)
@@ -677,7 +677,7 @@ for rr = 1:size(group2,1)
     outcome_maxV_2(rr) = maxV;
     tempt = tIntp(tIntp>0);
     outcome_maxT_2(rr) = tempt(ind);
-    
+
 end
 
 savematpath = fullfile(savematsumpath,'outcome_groupstat.mat');
@@ -706,21 +706,21 @@ plot_groupSummary(choice1(logical(cSig1),:),choice2(logical(cSig2),:), cCoeff_nR
 % for interactions, rerun cluster for each group
 choice_maxV_1 = zeros(1, size(choice1(logical(cSig1),:),1)); choice_maxT_1 = zeros(1, size(choice1(logical(cSig1),:),1));
 choice_maxV_2 = zeros(1, size(choice2(logical(cSig2),:),1)); choice_maxT_2 = zeros(1, size(choice2(logical(cSig2),:),1));
-choice_maxV_3 = zeros(1, size(choice3(logical(cSig3),:),1)); choice_maxT_3 = zeros(1, size(choice3(logical(cSig3),:),1));
+%choice_maxV_3 = zeros(1, size(choice3(logical(cSig3),:),1)); choice_maxT_3 = zeros(1, size(choice3(logical(cSig3),:),1));
 
 group1 = choice1(logical(cSig1),:);
 group2 = choice2(logical(cSig2),:);
-group3 = choice3(logical(cSig3),:);
+%group3 = choice3(logical(cSig3),:);
 
 for rr = 1:size(group1,1)
-    sCurve = smooth(group1(rr,:));
+    sCurve = -smooth(group1(rr,:));
     sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
     tIntp = rt(1):0.01:rt(end);
     [maxV,ind] = max(sIntp(tIntp>0));
     choice_maxV_1(rr) = maxV;
     tempt = tIntp(tIntp>0);
     choice_maxT_1(rr) = tempt(ind);
-   
+
 end
 % group2, -group2 for NE since the coefficient is negative
 for rr = 1:size(group2,1)
@@ -731,7 +731,7 @@ for rr = 1:size(group2,1)
     choice_maxV_2(rr) = maxV;
     tempt = tIntp(tIntp>0);
     choice_maxT_2(rr) = tempt(ind);
-   
+
 end
 % group 3, -group3 for NE since the coefficient is negative
 for rr = 1:size(group3,1)
@@ -742,7 +742,7 @@ for rr = 1:size(group3,1)
     choice_maxV_3(rr) = maxV;
     tempt = tIntp(tIntp>0);
     choice_maxT_3(rr) = tempt(ind);
-  
+
 end
 savematpath = fullfile(savematsumpath,'choice_groupstat.mat');
 save(savematpath, 'choice_maxT_1','choice_maxT_2','choice_maxT_3','choice_maxV_1','choice_maxV_2','choice_maxV_3','c1SesInd','c2SesInd');

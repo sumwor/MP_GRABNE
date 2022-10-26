@@ -40,7 +40,11 @@ dataIndex_NE = MP_createBehMatFiles(dataIndex_NE,'NE');
 dataIndex_NE = sortdataIndex(dataIndex_NE);
 
 % Determine if each session fulfill performance criteria (Matching Pennies)
+<<<<<<< Updated upstream
 MP_determineBehCriteria(dataIndex_NE);
+=======
+MP_determineBehCriteria(dataIndex_NE([1:13],:));
+>>>>>>> Stashed changes
 
 % ACh
 logfilepath_ACh = fullfile(root_path_ACh,'data');
@@ -60,7 +64,11 @@ MP_determineBehCriteria(dataIndex_ACh);
 %% behavior
 
 % NE
+<<<<<<< Updated upstream
 nFiles_NE = size(dataIndex_NE,1);
+=======
+nFiles_NE = size(dataIndex_NE([1:13],:),1);
+>>>>>>> Stashed changes
 
 for ii = 1:nFiles_NE
     savematpath_NE = dataIndex_NE.BehPath{ii};
@@ -113,7 +121,12 @@ MP_GRAB_saveLatent(dataIndex_ACh, model_path_ACh);
 %% fluorescent signal preprocessing
 
 % NE
+<<<<<<< Updated upstream
 MP_GRAB_preprocess(dataIndex_NE);
+=======
+
+
+>>>>>>> Stashed changes
 
 %ACh
 MP_GRAB_preprocess(dataIndex_ACh);
@@ -167,7 +180,11 @@ save_path_fluo_ACh = fullfile(root_path_ACh,'summary','figs_summary_fluo');
 
 % NE
 
+<<<<<<< Updated upstream
 MP_GRAB_MLR(dataIndex_NE);
+=======
+MP_GRAB_MLR(dataIndex_NE([1:9],:));
+>>>>>>> Stashed changes
 % regression results seems unstable, try amount of variance explained?
 MP_GRAB_MLR_analysis(dataIndex_NE);
 MP_GRAB_MLR_acrossAnimals(dataIndex_NE,save_path_fluo_NE);
@@ -191,20 +208,35 @@ MP_GRAB_MLR_separateSummary(dataIndex_ACh, save_path_fluo_ACh);
 
 
 % compare ACh and NE outcome curves
+<<<<<<< Updated upstream
 MP_GRAB_MLR_comp(dataIndex_ACh,dataIndex_NE([1:9,18:end],:));
+=======
+MP_GRAB_MLR_comp(dataIndex_ACh,dataIndex_NE([1:19,28:end],:));
+>>>>>>> Stashed changes
 
 %% latent variable
 
 %NE
+<<<<<<< Updated upstream
 MP_GRABRL_MLR(dataIndex_NE([10:17],:))
 MP_GRABRL_MLR_acrossSessions(dataIndex_NE([1:9,19:end],:), save_path_fluo_NE)
+=======
+MP_GRABRL_MLR(dataIndex_NE([10],:))
+MP_GRABRL_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
+>>>>>>> Stashed changes
 
 MP_GRABRL_sumQ_MLR(dataIndex_NE([10:17],:))
 MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
+<<<<<<< Updated upstream
 MP_GRABRL_RPE_MLR(dataIndex_NE);
 MP_GRAB_RPE_MLR_acrossAnimals(dataIndex_NE, save_path_fluo_NE)
 MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_NE([1:9,19:end],:), save_path_fluo_NE)
+=======
+MP_GRABRL_RPE_MLR(dataIndex_NE([10],:));
+MP_GRAB_RPE_MLR_acrossAnimals(dataIndex_NE, save_path_fluo_NE)
+MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
+>>>>>>> Stashed changes
 
 % ACh
 MP_GRABRL_MLR(dataIndex_ACh)
@@ -220,8 +252,13 @@ MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh)
 %% spatial & temporal patterns
 
 % NE
+<<<<<<< Updated upstream
 MP_GRAB_selectivitySpatial(dataIndex_NE);
 MP_GRAB_selectivityCorr(dataIndex_NE);
+=======
+MP_GRAB_selectivitySpatial(dataIndex_NE([1:9],:));
+MP_GRAB_selectivityCorr(dataIndex_NE([1:9],:));
+>>>>>>> Stashed changes
 MP_GRAB_selectivitySummary(dataIndex_NE, save_path_fluo_NE);
 
 MP_GRAB_clusterEval(dataIndex_NE([1:9,18:end],:), save_path_fluo_NE, save_path_mat_NE)
@@ -240,7 +277,12 @@ MP_GRAB_clusterEval(dataIndex_ACh, save_path_fluo_ACh, save_path_mat_ACh)
 
 MP_GRAB_temporalCorr(dataIndex_ACh);
 save_path_mat_ACh = fullfile(root_path_ACh,'summary','data_summary');
+<<<<<<< Updated upstream
    %MP_GRAB_temporalCorrSummary_old(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
+=======
+%MP_GRAB_temporalCorrSummary_old(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
+MP_GRAB_temporalCorrSummary(dataIndex_ACh,save_path_fluo_ACh,save_path_mat_ACh)
+>>>>>>> Stashed changes
 
 
 % compare NE and ACh result

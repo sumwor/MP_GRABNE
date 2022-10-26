@@ -40,7 +40,7 @@ for aa = 1:nFileACh
     pRPEList_ACh = [pRPEList_ACh,pRPE];
     nRPE = sigACh.SigList.nRPE(sigACh.SigList.session==aa);
     nRPEList_ACh = [nRPEList_ACh,nRPE];
-    
+
     pRPE_ACh(aa) = sum(pRPE);
     nRPE_ACh(aa) = sum(nRPE);
 
@@ -100,7 +100,7 @@ for nn = 1:nFileNE
     pRPEList_NE = [pRPEList_NE,pRPE];
     nRPE = sigNE.SigList.nRPE(sigNE.SigList.session==nn);
     nRPEList_NE = [nRPEList_NE,nRPE];
-    
+
      pRPE_NE(nn) = sum(pRPE);
     nRPE_NE(nn) = sum(nRPE);
 
@@ -138,19 +138,19 @@ end
 %% chi-square test for independence
 %% NE
 % choice-outcome
-pco = x2testOverlap(cList_NE,oList_NE,length(cList_NE)) 
+pco = x2testOverlap(cList_NE,oList_NE,length(cList_NE))
 % choice-interaction
-pcx = x2testOverlap(cList_NE,xList_NE,length(cList_NE)) 
+pcx = x2testOverlap(cList_NE,xList_NE,length(cList_NE))
 % outcome-interaction
-pox = x2testOverlap(oList_NE,xList_NE,length(cList_NE)) 
+pox = x2testOverlap(oList_NE,xList_NE,length(cList_NE))
 
    %% ACh
 % choice-outcome
-pco = x2testOverlap(cList_ACh,oList_ACh,length(cList_ACh)) 
+pco = x2testOverlap(cList_ACh,oList_ACh,length(cList_ACh))
 % choice-interaction
-pcx = x2testOverlap(cList_ACh,xList_ACh,length(cList_ACh)) 
+pcx = x2testOverlap(cList_ACh,xList_ACh,length(cList_ACh))
 % outcome-interaction
-pox = x2testOverlap(oList_ACh,xList_ACh,length(cList_ACh)) 
+pox = x2testOverlap(oList_ACh,xList_ACh,length(cList_ACh))
 
 
 pOC = mediantest(ocOverlap_ACh(~isnan(ocOverlap_ACh)), ocOverlap_NE(~isnan(ocOverlap_NE)))
@@ -162,13 +162,13 @@ pCX = mediantest(cxOverlap_ACh(~isnan(cxOverlap_ACh)), cxOverlap_NE(~isnan(cxOve
 
 Group = [ones(1,length(coOverlap_NE)),2*ones(1,length(coOverlap_ACh))];
 figure;
-subplot(1,6,1); 
+subplot(1,6,1);
 boxplot([ocOverlap_NE,ocOverlap_ACh]',Group,'PlotStyle','compact');
 set(gca,'box','off')
 ylabel('Fraction of grids');
 title('P(r|c)')
 ylim([0 1])
-subplot(1,6,2); 
+subplot(1,6,2);
 boxplot([coOverlap_NE,coOverlap_ACh]',Group,'PlotStyle','compact');
 set(gca,'box','off')
 ylabel('Fraction of grids');
@@ -253,10 +253,10 @@ AChTemp_o = load(tempACh);
 
 
 colors = [63,167,150;255, 189, 53]/255;
-data1.NE_medmaxT = []; data1.NE_varmaxT = []; data1.NE_medmaxV = []; 
-data2.NE_medmaxT = []; data2.NE_varmaxT = []; data2.NE_medmaxV = []; 
-data1.ACh_medmaxT = []; data1.ACh_varmaxT = []; data1.ACh_medmaxV = []; 
-data2.ACh_medmaxT = []; data2.ACh_varmaxT = []; data2.ACh_medmaxV = []; 
+data1.NE_medmaxT = []; data1.NE_varmaxT = []; data1.NE_medmaxV = [];
+data2.NE_medmaxT = []; data2.NE_varmaxT = []; data2.NE_medmaxV = [];
+data1.ACh_medmaxT = []; data1.ACh_varmaxT = []; data1.ACh_medmaxV = [];
+data2.ACh_medmaxT = []; data2.ACh_varmaxT = []; data2.ACh_medmaxV = [];
 
 % get median and variance max time
 for ss = 1:max(NETemp_o.o1SesInd)
@@ -339,10 +339,10 @@ tempNE = fullfile( save_path_mat_NE,'choice_groupstat.mat');
 tempACh = fullfile( save_path_mat_ACh,'choice_groupstat.mat');
 NETemp_c = load(tempNE);
 AChTemp_c = load(tempACh);
-data1.NE_medmaxT = []; data1.NE_varmaxT = []; data1.NE_medmaxV = []; 
-data2.NE_medmaxT = []; data2.NE_varmaxT = []; data2.NE_medmaxV = []; 
-data1.ACh_medmaxT = []; data1.ACh_varmaxT = []; data1.ACh_medmaxV = []; 
-data2.ACh_medmaxT = []; data2.ACh_varmaxT = []; data2.ACh_medmaxV = []; 
+data1.NE_medmaxT = []; data1.NE_varmaxT = []; data1.NE_medmaxV = [];
+data2.NE_medmaxT = []; data2.NE_varmaxT = []; data2.NE_medmaxV = [];
+data1.ACh_medmaxT = []; data1.ACh_varmaxT = []; data1.ACh_medmaxV = [];
+data2.ACh_medmaxT = []; data2.ACh_varmaxT = []; data2.ACh_medmaxV = [];
 
 % get median and variance max time
 for ss = 1:max(NETemp_c.c1SesInd)
@@ -397,7 +397,9 @@ saveas(gcf, fullfile(savesumfigpath,'choice group 1 var-comp'), 'svg');
 
 boxGroup = [ones(1,size(data2.NE_medmaxT,2)),2*ones(1,size(data2.ACh_medmaxT,2))];
 
-figure;
+
+% group 2
+figure
 subplot(1,3,1)
 boxplot([data2.NE_medmaxT,data2.ACh_medmaxT],boxGroup,'PlotStyle','compact');
 ylabel('med max time (s)');

@@ -28,7 +28,7 @@ n_plot = ceil(length(stats.c)/10)*10;
 subplot(4,1,1); hold on;
 bar(-1*(stats.c(:,1)==-1),1,'FaceColor','r','EdgeColor','none');
 bar((stats.c(:,1)==1),1,'FaceColor','b','EdgeColor','none');
-aveReward = nanmean(stats.r);
+aveReward = mean(stats.r);
 hold on;
 for ii = 1:length(stats.r)
     if stats.r(ii,1) == 1
@@ -39,7 +39,7 @@ for ii = 1:length(stats.r)
         end
     end
 end
-title(num2str(aveReward));
+text(0.1,1,num2str(aveReward));
 ylabel({stats.playerlabel{1},'Choice'},'interpreter','none');
 %Lgd = legend(['Prob(L) = ' num2str(nanmean(stats.c(:,1)==-1))],'location',[0.8,0.95,0.05,0.05]);
 %legend boxoff

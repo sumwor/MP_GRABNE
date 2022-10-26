@@ -88,7 +88,7 @@ end
     iti_dur = [trialData.cueTimes(2:end)-trialData.outcomeTimes(1:end-1); NaN];  %ill-defined ITI for last trial
     iti_trType=get_val_byTrialType(iti_dur,trials,trialType,edges,valLabel);
     plot_val_byTrialType(iti_trType);
-    
+    title(num2str(nanmean(iti_dur)))
     print(gcf,'-dpng','iti_byTrialType');    %png format
     saveas(gcf, 'iti_byTrialType', 'fig');
 

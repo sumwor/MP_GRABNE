@@ -128,6 +128,24 @@ CKESigInd = allInd(logical(SigList.CKE));
 
 %% test for overlapping significance
 
+<<<<<<< Updated upstream
+=======
+% figure;
+% h = vennEulerDiagram({dQSigInd;dKSigInd;pRPESigInd;nRPESigInd}, 'drawProportional', true, 'SetLabels', ["dQ"; "dK"; "posRPE"; "negRPE"]);
+%
+% figure;
+% h = vennEulerDiagram({rSigInd;dQSigInd;pRPESigInd;nRPESigInd}, 'drawProportional', true, 'SetLabels', ["Outcome"; "dQ";"posRPE"; "negRPE"]);
+%
+% figure;
+% h = vennEulerDiagram({dQSigInd;pRPESigInd;nRPESigInd}, 'drawProportional', true, 'SetLabels', ["dQ"; "posRPE"; "negRPE"]);
+%
+% figure;
+% h = vennEulerDiagram({cSigInd;xSigInd;dKSigInd}, 'drawProportional', true, 'SetLabels', ["choice"; "interaction"; "dK"]);
+%
+% figure;
+% h = vennEulerDiagram({cSigInd;xSigInd;dQSigInd;dKSigInd}, 'drawProportional', true, 'SetLabels', ["choice"; "interaction"; 'dQ'; 'dK']);
+
+>>>>>>> Stashed changes
 % chi-square test for independence
 
 % choice and outcome
@@ -165,7 +183,11 @@ CKECoeff_new = cell(0);
 
 % sig ROIs that not sig for outcome
 cCoeff_nR = [];
+<<<<<<< Updated upstream
 xCoeff_nR = [];xnR_sub=[];
+=======
+xCoeff_nR = [];
+>>>>>>> Stashed changes
 posRPECoeff_nR = [];
 negRPECoeff_nR = [];
 dQCoeff_nR = [];
@@ -174,7 +196,10 @@ CKECoeff_nR = [];
 
 rOriID_new = cell(0);
 newInd = 1;
+<<<<<<< Updated upstream
 animalList = unique(dataIndex.Animal);
+=======
+>>>>>>> Stashed changes
 % rHPeakT = [];
 % rLPeakT = [];
 % rDecayTau = [];
@@ -290,7 +315,10 @@ for gg = 1:nFiles
 
     cCoeff_nR = [cCoeff_nR; choiceCoeff{gg}(~RisSig'&choiceisSig{gg},:)];numSigVarg4(1,gg) = sum(~RisSig'&choiceisSig{gg});
     xCoeff_nR = [xCoeff_nR; xnCoeff{gg}(~RisSig'&xnisSig{gg},:)];numSigVarg4(3,gg) = sum(~RisSig'&xnisSig{gg});
+<<<<<<< Updated upstream
     xnR_sub = [xnR_sub; ones(sum(~RisSig'&xnisSig{gg}),1)*find(strcmp(animalList,dataIndex.Animal{gg}))];
+=======
+>>>>>>> Stashed changes
     posRPECoeff_nR = [posRPECoeff_nR; posRPECoeff{gg}(~RisSig'&posRPEisSig{gg},:)];numSigVarg4(6,gg) = sum(~RisSig'&posRPEisSig{gg});
     negRPECoeff_nR = [negRPECoeff_nR; negRPECoeff{gg}(~RisSig'&negRPEisSig{gg},:)];numSigVarg4(7,gg) = sum(~RisSig'&negRPEisSig{gg});
     dQCoeff_nR = [dQCoeff_nR; dQCoeff{gg}(~RisSig'&dQisSig{gg},:)];numSigVarg4(4,gg) = sum(~RisSig'&dQisSig{gg});
@@ -317,8 +345,13 @@ for gg = 1:nFiles
     %         rDecayTau = [rDecayTau,NaN];
     %     end
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==2,:);
+<<<<<<< Updated upstream
     rSes = [rSes,gg];
     cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
+=======
+     rSes = [rSes,gg];
+     cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
+>>>>>>> Stashed changes
     xCoeff_new{newInd} = xnCoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
     posRPECoeff_new{newInd} = posRPECoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
     negRPECoeff_new{newInd} = negRPECoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
@@ -505,7 +538,10 @@ for ggg = 1:length(rCoeff_new)
             o1SesInd = [o1SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg1(2,animalInd) = numSigVarg1(2,animalInd) + size(rCoeff_new{ggg},1);
             choice1 = [choice1; cCoeff_new{ggg}]; cSig1 = [cSig1,cisSig{ggg}];%choice1Sig = [choice1Sig; cCoeff_Sig{ggg}];
+<<<<<<< Updated upstream
              c1SesInd = [c1SesInd, ones(1,size(cCoeff_new{ggg},1))*rSes(ggg)];
+=======
+>>>>>>> Stashed changes
             numSigVarg1(1,animalInd) = numSigVarg1(1,animalInd) + sum(cisSig{ggg});
             xn1 = [xn1; xCoeff_new{ggg}]; xSig1 = [xSig1,xisSig{ggg}];%xn1Sig = [xn1Sig; xCoeff_Sig{ggg}];
             numSigVarg1(3,animalInd) = numSigVarg1(3,animalInd) + sum(xisSig{ggg});
@@ -525,7 +561,10 @@ for ggg = 1:length(rCoeff_new)
             o2SesInd = [o2SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg2(2,animalInd) = numSigVarg2(2,animalInd) + size(rCoeff_new{ggg},1);
             choice2 = [choice2; cCoeff_new{ggg}]; cSig2 = [cSig2,cisSig{ggg}];%choice2Sig = [choice2Sig; cCoeff_Sig{ggg}];
+<<<<<<< Updated upstream
              c2SesInd = [c2SesInd, ones(1,size(cCoeff_new{ggg},1))*rSes(ggg)];
+=======
+>>>>>>> Stashed changes
             numSigVarg2(1,animalInd) = numSigVarg2(1,animalInd) + sum(cisSig{ggg});
             xn2 = [xn2; xCoeff_new{ggg}]; xSig2 = [xSig2,xisSig{ggg}];%xn2Sig = [xn2Sig; xCoeff_Sig{ggg}];
             numSigVarg2(3,animalInd) = numSigVarg2(3,animalInd) + sum(xisSig{ggg});
@@ -551,7 +590,10 @@ for ggg = 1:length(rCoeff_new)
 %         elseif areaUnder2 < 0
 %             group4 = [group4;rCoeff_new{ggg}];
             choice1 = [choice1; cCoeff_new{ggg}]; cSig1 = [cSig1,cisSig{ggg}];%choice1Sig = [choice1Sig; cCoeff_Sig{ggg}];
+<<<<<<< Updated upstream
              c1SesInd = [c1SesInd, ones(1,size(cCoeff_new{ggg},1))*rSes(ggg)];
+=======
+>>>>>>> Stashed changes
             numSigVarg1(1,animalInd) = numSigVarg1(1,animalInd) + sum(cisSig{ggg});
             xn1 = [xn1; xCoeff_new{ggg}]; xSig1 = [xSig1,xisSig{ggg}];%xn1Sig = [xn1Sig; xCoeff_Sig{ggg}];
             numSigVarg1(3,animalInd) = numSigVarg1(3,animalInd) + sum(xisSig{ggg});
@@ -571,7 +613,10 @@ for ggg = 1:length(rCoeff_new)
             o2SesInd = [o2SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg2(2,animalInd) = numSigVarg2(2,animalInd) + size(rCoeff_new{ggg},1);
             choice2 = [choice2; cCoeff_new{ggg}]; cSig2 = [cSig2,cisSig{ggg}];%choice2Sig = [choice2Sig; cCoeff_Sig{ggg}];
+<<<<<<< Updated upstream
              c2SesInd = [c2SesInd, ones(1,size(cCoeff_new{ggg},1))*rSes(ggg)];
+=======
+>>>>>>> Stashed changes
             numSigVarg2(1,animalInd) = numSigVarg2(1,animalInd) + sum(cisSig{ggg});
             xn2 = [xn2; xCoeff_new{ggg}]; xSig2 = [xSig2,xisSig{ggg}];%xn2Sig = [xn2Sig; xCoeff_Sig{ggg}];
             numSigVarg2(3,animalInd) = numSigVarg2(3,animalInd) + sum(xisSig{ggg});
@@ -595,7 +640,10 @@ for ggg = 1:length(rCoeff_new)
             o3SesInd = [o3SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
             numSigVarg3(2,animalInd) = numSigVarg3(2,animalInd) + size(rCoeff_new{ggg},1);
             choice3 = [choice3; cCoeff_new{ggg}]; cSig3 = [cSig3,cisSig{ggg}];
+<<<<<<< Updated upstream
              c3SesInd = [c3SesInd, ones(1,size(cCoeff_new{ggg},1))*rSes(ggg)];
+=======
+>>>>>>> Stashed changes
             numSigVarg3(1,animalInd) = numSigVarg3(1,animalInd) + sum(cisSig{ggg});%choice3Sig = [choice3Sig; cCoeff_Sig{ggg}];
             xn3 = [xn3; xCoeff_new{ggg}]; xSig3 = [xSig3,xisSig{ggg}];%xn3Sig = [xn3Sig; xCoeff_Sig{ggg}];
             numSigVarg3(3,animalInd) = numSigVarg3(3,animalInd) + sum(xisSig{ggg});
@@ -617,7 +665,11 @@ end
 
 
 
+<<<<<<< Updated upstream
 % sort group1 and group2
+=======
+% sort group2 and group3
+>>>>>>> Stashed changes
 g1.coeff=group1;g1.t = rt;
 g1sortOrd = coeff_sort(g1,[0,3]);
 g2.coeff =group2; g2.t = rt;
@@ -630,8 +682,13 @@ temp2 = group2(g2sortOrd,:); group2 = temp2; o2SesInd=o2SesInd(g2sortOrd);
 % temp3 = group3(g3sortOrd,:); group3 = temp3; o3SesInd=o3SesInd(g3sortOrd);
 
 choice1 = choice1(g1sortOrd,:);choice2 = choice2(g2sortOrd,:);%choice3 = choice3(g3sortOrd,:);
+<<<<<<< Updated upstream
 cSig1 = logical(cSig1(g1sortOrd));c1SesIndtemp=c1SesInd(g1sortOrd); c1SesInd = c1SesIndtemp(cSig1);
 cSig2 = logical(cSig2(g2sortOrd));c2SesIndtemp=c2SesInd(g2sortOrd); c2SesInd = c2SesIndtemp(cSig2);
+=======
+cSig1 = logical(cSig1(g1sortOrd));cSig2 = logical(cSig2(g2sortOrd)); %cSig3 = logical(cSig3(g3sortOrd));
+c1SesInd = o1SesInd(cSig1); c2SesInd = o2SesInd(cSig2);
+>>>>>>> Stashed changes
 xn1 = xn1(g1sortOrd,:);xn2 = xn2(g2sortOrd,:);%xn3 = xn3(g3sortOrd,:);
 xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); %xSig3 = logical(xSig3(g3sortOrd));
 % posRPE1 = posRPE1(g1sortOrd,:);%posRPE2 = posRPE2(g2sortOrd,:);posRPE3 = posRPE3(g3sortOrd,:);
@@ -645,8 +702,206 @@ xSig1 = logical(xSig1(g1sortOrd));xSig2 = logical(xSig2(g2sortOrd)); %xSig3 = lo
 % CKE1 = CKE1(g1sortOrd,:);%CKE2 = CKE2(g2sortOrd,:);CKE3 = CKE3(g3sortOrd,:);
 % CKESig1 = CKESig1(g1sortOrd);%CKESig2 = CKESig2(g2sortOrd); CKESig3 = CKESig3(g3sortOrd);
 
+<<<<<<< Updated upstream
 
 
+=======
+% add one more plot to show the percentage of signficant grids for each
+% variables
+% venn plot for different groups
+% g1Ind = 1:length(cSig1);
+% g1cSig = g1Ind(logical(cSig1));g1oSig = g1Ind;g1xSig = g1Ind(logical(xSig1));
+% g1dQSig = g1Ind(logical(dQSig1)); g1dKSig = g1Ind(logical(dKSig1));
+% g1pRPESig = g1Ind(logical(pRPESig1)); g1nRPESig = g1Ind(logical(nRPESig1));
+% g1CKESig = g1Ind(logical(CKESig1));
+%
+% g2Ind = 1:length(cSig2);
+% g2cSig = g2Ind(logical(cSig2));g2oSig = g2Ind;g2xSig = g2Ind(logical(xSig2));
+% g2dQSig = g2Ind(logical(dQSig2)); g2dKSig = g2Ind(logical(dKSig2));
+% g2pRPESig = g2Ind(logical(pRPESig2)); g2nRPESig = g2Ind(logical(nRPESig2));
+% g2CKESig = g2Ind(logical(CKESig2));
+%
+% g3Ind = 1:length(cSig3);
+% g3cSig = g3Ind(logical(cSig3));g3oSig = g3Ind;g3xSig = g3Ind(logical(xSig3));
+% g3dQSig = g3Ind(logical(dQSig3)); g3dKSig = g3Ind(logical(dKSig3));
+% g3pRPESig = g3Ind(logical(pRPESig3)); g3nRPESig = g3Ind(logical(nRPESig3));
+% g3CKESig = g3Ind(logical(CKESig3));
+
+% venn plot for all grids
+
+% % c,r,x
+% label = {'choice','outcome','interaction'};
+% vennPlot(cSigInd,rSigInd,xSigInd,label,savesumfigpath);
+%
+% % r-pRPE-nRPE
+% label = {'outcome','pRPE','nRPE'};
+% vennPlot(rSigInd,pRPESigInd,nRPESigInd,label,savesumfigpath);
+%
+% % dQ-pRPE-nRPE
+% label = {'dQ','pRPE','nRPE'};
+% vennPlot(dQSigInd,pRPESigInd,nRPESigInd,label,savesumfigpath);
+%
+% % interaction-pRPE-nRPE
+% label = {'interaction','pRPE','nRPE'};
+% vennPlot(xSigInd,pRPESigInd,nRPESigInd,label,savesumfigpath);
+%
+% % choice-dQ-dK
+% label = {'choice','dQ','dK'};
+% vennPlot(cSigInd,dQSigInd,dKSigInd,label,savesumfigpath);
+%
+% % choice-dK-CKE
+% label = {'choice','dK','CKE'};
+% vennPlot(cSigInd,dKSigInd,CKESigInd,label,savesumfigpath);
+
+% group1 venn plot
+
+% venn plot for all grids
+
+% % c,r,x
+% figure;
+% h = vennEulerDiagram({g1cSig;g1oSig;g1xSig}, 'drawProportional', true, 'SetLabels', ["choice"; "outcome"; "interaction"]);
+% h.ShowIntersectionCounts = true;
+% title('NE group1 c-r-x-dQ-dK significant ROIs');
+% print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group1'));
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group1'), 'fig');
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group1'), 'svg');
+%
+%
+% % r-pRPE-nRPE
+% figure;
+% h = vennEulerDiagram({g1oSig;g1pRPESig;g1nRPESig}, 'drawProportional', true, 'SetLabels', ["outcome"; "pRPE"; "nRPE"]);
+% h.ShowIntersectionCounts = true;
+% title('NE group1 r-RPE significant ROIs');
+% print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids r-RPE group1'));
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids r-RPE group1'), 'fig');
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids r-RPE group1'), 'svg');
+%
+% % dQ-pRPE-nRPE
+% figure;
+% h = vennEulerDiagram({g1dQSig;g1pRPESig;g1nRPESig}, 'drawProportional', true, 'SetLabels', ["dQ"; "pRPE"; "nRPE"]);
+% h.ShowIntersectionCounts = true;
+% title('NE group1 dQ-RPE significant ROIs');
+% print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids dQ-RPE group1'));
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids dQ-RPE group1'), 'fig');
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids dQ-RPE group1'), 'svg');
+%
+%
+% % interaction-pRPE-nRPE
+% figure;
+% h = vennEulerDiagram({g1xSig;g1pRPESig;g1nRPESig}, 'drawProportional', true, 'SetLabels', ["interaction"; "pRPE"; "nRPE"]);
+% h.ShowIntersectionCounts = true;
+% title('NE group1 x-RPE significant ROIs');
+% print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids x-RPE group1'));
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids x-RPE group1'), 'fig');
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids x-RPE group1'), 'svg');
+%
+% % choice-dQ-dK
+% label = {'g1choice','dQ','dK'};
+% vennPlot(g1cSig,g1dQSig,g1dKSig,label,savesumfigpath);
+%
+% % choice-dK-CKE
+% label = {'g1choice','dK','CKE'};
+% vennPlot(g1cSig,g1dKSig,g1CKESig,label,savesumfigpath);
+%
+% % group2 venn plot
+% figure;
+% h = vennEulerDiagram({g2cSig;g2oSig;g2xSig}, 'drawProportional', true, 'SetLabels', ["choice"; "outcome"; "interaction"]);
+% h.ShowIntersectionCounts = true;
+% title('NE group2 c-r-x significant ROIs');
+% print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group2'));
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group2'), 'fig');
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids c-r-x-dq-dk group2'), 'svg');
+%
+%
+% % r-pRPE-nRPE
+% figure;
+% h = vennEulerDiagram({g2oSig;g2pRPESig;g2nRPESig}, 'drawProportional', true, 'SetLabels', ["outcome"; "pRPE"; "nRPE"]);
+% h.ShowIntersectionCounts = true;
+% title('NE group2 r-RPE significant ROIs');
+% print(gcf,'-dpng',fullfile(savesumfigpath,'Ratio of significant grids r-RPE group2'));
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids r-RPE group2'), 'fig');
+% saveas(gcf, fullfile(savesumfigpath,'Ratio of significant grids r-RPE group2'), 'svg');
+%
+% % dQ-pRPE-nRPE
+% label = {'g2dQ','pRPE','nRPE'};
+% vennPlot(g2dQSig,g2pRPESig,g2nRPESig,label,savesumfigpath);
+%
+% % interaction-pRPE-nRPE
+% label = {'g2interaction','pRPE','nRPE'};
+% vennPlot(g2xSig,g2pRPESig,g2nRPESig,label,savesumfigpath);
+%
+% % choice-dQ-dK
+% label = {'g2choice','dQ','dK'};
+% vennPlot(g2cSig,g2dQSig,g2dKSig,label,savesumfigpath);
+%
+% % choice-dK-CKE
+% label = {'g2choice','dK','CKE'};
+% vennPlot(g2cSig,g2dKSig,g2CKESig,label,savesumfigpath);
+%
+% % group3 venn plot
+% % dQ-pRPE-nRPE
+% label = {'g3dQ','pRPE','nRPE'};
+% vennPlot(g3dQSig,g3pRPESig,g3nRPESig,label,savesumfigpath);
+%
+% % interaction-pRPE-nRPE
+% label = {'g3interaction','pRPE','nRPE'};
+% vennPlot(g3xSig,g3pRPESig,g3nRPESig,label,savesumfigpath);
+%
+% % choice-dQ-dK
+% label = {'g3choice','dQ','dK'};
+% vennPlot(g3cSig,g3dQSig,g3dKSig,label,savesumfigpath);
+%
+% % choice-dK-CKE
+% label = {'g3choice','dK','CKE'};
+% vennPlot(g3cSig,g3dKSig,g3CKESig,label,savesumfigpath);
+% close all;
+
+%% a schematic for correlation
+% figure;
+% t = -2.95:0.1:4.95;
+% example_group1 = group1([448,451,454],:);
+% example_group2 = group2([1301,1302,1303],:);
+% example_group3 = group3([54,57,73],:);
+% figure;
+% plot(t,smooth(example_group1(1,:))+1,'Color',[241, 84, 18]/255);
+% hold on;plot(t,smooth(example_group1(2,:))+0.95,'Color',[241, 84, 18]/255);
+% hold on;plot(t,smooth(example_group1(3,:))+0.9,'Color',[241, 84, 18]/255);
+% hold on;plot(t,smooth(example_group2(1,:))+0.8,'Color',[0 0 0]/255);
+% hold on;plot(t,smooth(example_group2(2,:))+0.75,'Color',[0 0 0]/255);
+% hold on;plot(t,smooth(example_group2(3,:))+0.7,'Color',[0 0 0]/255);
+% hold on;plot(t,smooth(example_group3(1,:))+0.6,'Color',[52, 179, 241]/255);
+% hold on;plot(t,smooth(example_group3(2,:))+0.55,'Color',[52, 179, 241]/255);
+% hold on;plot(t,smooth(example_group3(3,:))+0.5,'Color',[52, 179, 241]/255);
+% set(gca,'box','off')
+% h=gca;
+% h.YAxis.Visible = 'off';
+% print(gcf,'-dpng',fullfile(savesumfigpath,'cluster-example'));
+% savefig(gcf,fullfile(savesumfigpath,'cluster-example.fig'));
+% %saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+% saveas(gcf, fullfile(savesumfigpath,'cluster-example'), 'svg');
+% % calcualte correlation
+% corrExample = zeros(9);
+% exampleMat = [example_group1;example_group2;example_group3];
+% for ii=1:9
+%     for jj=1:9
+%         tempcorr = corrcoef(exampleMat(ii,:),exampleMat(jj,:));
+%     corrExample(ii,jj) =tempcorr(1,2);
+%     end
+% end
+% figure;
+% image(corrExample,'CDataMapping','scaled')
+% %hold on;dendrogram(z)
+% axis square;
+% colors=cbrewer('div','RdBu',256);
+% colors=flipud(colors);
+% colorRange = [-1 1];
+% colormap(colors);
+% caxis([-1 1]);
+% print(gcf,'-dpng',fullfile(savesumfigpath,'clusterCorr-example'));
+% savefig(gcf,fullfile(savesumfigpath,'clusterCorr-example.fig'));
+% %saveas(gcf, fullfile(savesumfigpath,[tlabel,'-cluster-summary']), 'fig','-v7.3');
+% saveas(gcf, fullfile(savesumfigpath,'clusterCorr-example'), 'svg');
+>>>>>>> Stashed changes
 
 % outcome
 tlabel = 'Outcome';
@@ -655,7 +910,13 @@ plot_groupSummary(group1,group2, [], rt, tlabel,savesumfigpath)
 %% stats for outcome groups
 outcome_maxT_1 = zeros(1, size(group1,1)); outcome_maxV_1 = zeros(1,size(group1,1));
 outcome_maxT_2 = zeros(1, size(group2,1)); outcome_maxV_2 = zeros(1,size(group2,1));
+<<<<<<< Updated upstream
 
+=======
+%outcome_riseT_3 = zeros(1, size(group3,1)); outcome_maxT_3 = zeros(1, size(group3,1));
+
+% outcome baseline: -3-0 s?
+>>>>>>> Stashed changes
 % group1
 for rr = 1:size(group1,1)
     sCurve = smooth(-group1(rr,:));
@@ -666,7 +927,23 @@ for rr = 1:size(group1,1)
     tempt = tIntp(tIntp>0);
     outcome_maxT_1(rr) = tempt(ind);
 
+<<<<<<< Updated upstream
    
+=======
+    % rise time
+    % baseline outcome
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,(maxV-baseline)*0.1,0);
+%     t2 = findIntersect(sCurve,rt,(maxV-baseline)*0.9,0);
+%     if t1>t2
+%         outcome_riseT_1(rr) = NaN;
+%     elseif isempty(t1)|isempty(t2)
+%         outcome_riseT_1(rr) = NaN;
+%     else
+%         outcome_riseT_1(rr) = t2-t1;
+%     end
+>>>>>>> Stashed changes
 end
 % group2
 for rr = 1:size(group2,1)
@@ -677,15 +954,56 @@ for rr = 1:size(group2,1)
     outcome_maxV_2(rr) = maxV;
     tempt = tIntp(tIntp>0);
     outcome_maxT_2(rr) = tempt(ind);
+<<<<<<< Updated upstream
     
 end
 
+=======
+    % baseline outcome
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,maxV*0.1,0);
+%     t2 = findIntersect(sCurve,rt,maxV*0.9,0);
+%      if t1>t2
+%         outcome_riseT_2(rr) = NaN;
+%          elseif isempty(t1)|isempty(t2)
+%         outcome_riseT_2(rr) = NaN;
+%     else
+%         outcome_riseT_2(rr) = t2-t1;
+%     end
+end
+% group 3
+% for rr = 1:size(group3,1)
+%     sCurve = smooth(group3(rr,:));
+%     sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
+%     tIntp = rt(1):0.01:rt(end);
+%     [maxV,ind] = max(sIntp(tIntp>0));
+%     tempt = tIntp(tIntp>0);
+%     outcome_maxT_3(rr) = tempt(ind);
+%     % baseline outcome
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,maxV*0.1,0);
+%     t2 = findIntersect(sCurve,rt,maxV*0.9,0);
+%      if t1>t2
+%         outcome_riseT_3(rr) = NaN;
+%          elseif isempty(t1)|isempty(t2)
+%         outcome_riseT_3(rr) = NaN;
+%     else
+%         outcome_riseT_3(rr) = t2-t1;
+%     end
+% end
+>>>>>>> Stashed changes
 savematpath = fullfile(savematsumpath,'outcome_groupstat.mat');
 save(savematpath, 'outcome_maxT_1','outcome_maxT_2','outcome_maxV_1','outcome_maxV_2','o1SesInd','o2SesInd');
 
 
 tlabel = 'Choice';
+<<<<<<< Updated upstream
 plot_groupSummary(choice1,choice2, [], rt, tlabel,savesumfigpath)
+=======
+plot_groupSummary(choice1,choice2,  [], rt, tlabel,savesumfigpath)
+>>>>>>> Stashed changes
 tlabel = 'Interaction';
 plot_groupSummary(xn1,xn2, xn3, [], rt, tlabel,savesumfigpath)
 tlabel = 'posRPE';
@@ -706,11 +1024,19 @@ plot_groupSummary(choice1(logical(cSig1),:),choice2(logical(cSig2),:), cCoeff_nR
 % for interactions, rerun cluster for each group
 choice_maxV_1 = zeros(1, size(choice1(logical(cSig1),:),1)); choice_maxT_1 = zeros(1, size(choice1(logical(cSig1),:),1));
 choice_maxV_2 = zeros(1, size(choice2(logical(cSig2),:),1)); choice_maxT_2 = zeros(1, size(choice2(logical(cSig2),:),1));
+<<<<<<< Updated upstream
 choice_maxV_3 = zeros(1, size(choice3(logical(cSig3),:),1)); choice_maxT_3 = zeros(1, size(choice3(logical(cSig3),:),1));
 
 group1 = choice1(logical(cSig1),:);
 group2 = choice2(logical(cSig2),:);
 group3 = choice3(logical(cSig3),:);
+=======
+%choice_maxV_3 = zeros(1, size(choice3(logical(cSig3),:),1)); choice_maxT_3 = zeros(1, size(choice3(logical(cSig3),:),1));
+
+group1 = choice1(logical(cSig1),:);
+group2 = choice2(logical(cSig2),:);
+%group3 = choice3(logical(cSig3),:);
+>>>>>>> Stashed changes
 
 for rr = 1:size(group1,1)
     sCurve = smooth(group1(rr,:));
@@ -720,18 +1046,53 @@ for rr = 1:size(group1,1)
     choice_maxV_1(rr) = maxV;
     tempt = tIntp(tIntp>0);
     choice_maxT_1(rr) = tempt(ind);
+<<<<<<< Updated upstream
    
 end
 % group2, -group2 for NE since the coefficient is negative
 for rr = 1:size(group2,1)
     sCurve = smooth(-group2(rr,:));
+=======
+    % baseline choice % since choice signal started earlier
+%     baseline = mean(sCurve(rt<-1.5));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,(maxV-baseline)*0.1,-1.5);
+%     t2 = findIntersect(sCurve,rt,(maxV-baseline)*0.9,-1.5);
+%     if t1>t2
+%         choice_riseT_1(rr) = NaN;
+%     elseif isempty(t1)|isempty(t2)
+%         choice_riseT_1(rr) = NaN;
+%     else
+%         choice_riseT_1(rr) = t2-t1;
+%     end
+end
+% group2, -group2 for NE since the coefficient is negative
+for rr = 1:size(group2,1)
+    sCurve = smooth(group2(rr,:));
+>>>>>>> Stashed changes
    sIntp = interp1(rt,sCurve,rt(1):0.01:rt(end));
     tIntp = rt(1):0.01:rt(end);
     [maxV,ind] = max(sIntp(tIntp>0));
     choice_maxV_2(rr) = maxV;
     tempt = tIntp(tIntp>0);
+<<<<<<< Updated upstream
     choice_maxT_2(rr) = tempt(ind);
    
+=======
+%     choice_maxT_2(rr) = tempt(ind);
+%     % baseline outcome
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,maxV*0.1,-1.5);
+%     t2 = findIntersect(sCurve,rt,maxV*0.9,-1.5);
+%     if t1>t2
+%         choice_riseT_2(rr) = NaN;
+%     elseif isempty(t1)|isempty(t2)
+%         choice_riseT_2(rr) = NaN;
+%     else
+%         choice_riseT_2(rr) = t2-t1;
+%     end
+>>>>>>> Stashed changes
 end
 % group 3, -group3 for NE since the coefficient is negative
 for rr = 1:size(group3,1)
@@ -742,6 +1103,7 @@ for rr = 1:size(group3,1)
     choice_maxV_3(rr) = maxV;
     tempt = tIntp(tIntp>0);
     choice_maxT_3(rr) = tempt(ind);
+<<<<<<< Updated upstream
   
 end
 savematpath = fullfile(savematsumpath,'choice_groupstat.mat');
@@ -755,6 +1117,30 @@ plot_RPESummary(posRPE1(logical(pRPESig1),:),posRPE2(logical(pRPESig2),:),  posR
 tlabel = 'negRPE-Sig';
 plot_groupSummary(negRPE1(logical(nRPESig1),:),negRPE2(logical(nRPESig2),:),  negRPECoeff_nR, rt, tlabel,savesumfigpath)
 
+=======
+    % baseline outcome
+%     baseline = mean(sCurve(rt<0));
+%     % find time between 10-90% value
+%     t1 = findIntersect(sCurve,rt,maxV*0.1,-1.5);
+%     t2 = findIntersect(sCurve,rt,maxV*0.9,-1.5);
+%      if t1>t2
+%         choice_riseT_3(rr) = NaN;
+%          elseif isempty(t1)|isempty(t2)
+%         choice_riseT_3(rr) = NaN;
+%     else
+%         choice_riseT_3(rr) = t2-t1;
+%     end
+end
+savematpath = fullfile(savematsumpath,'choice_groupstat.mat');
+save(savematpath, 'choice_maxT_1','choice_maxT_2','choice_maxV_1','choice_maxV_2','c1SesInd','c2SesInd');
+
+tlabel = 'Interaction-Sig';
+plot_groupSummary(xn1(logical(xSig1),:),xn2(logical(xSig2),:), xn3(logical(xSig3),:), xCoeff_nR, rt, tlabel,savesumfigpath)
+tlabel = 'posRPE-Sig';
+plot_groupSummary(posRPE1(logical(pRPESig1),:),posRPE2(logical(pRPESig2),:), posRPE3(logical(pRPESig3),:), posRPECoeff_nR, rt, tlabel,savesumfigpath)
+tlabel = 'negRPE-Sig';
+plot_groupSummary(negRPE1(logical(nRPESig1),:),negRPE2(logical(nRPESig2),:), negRPE3(logical(nRPESig3),:), negRPECoeff_nR, rt, tlabel,savesumfigpath)
+>>>>>>> Stashed changes
 tlabel = 'dQ-sig';
 plot_groupSummary(dQ1(logical(dQSig1),:),dQ2(logical(dQSig2),:), dQ3(logical(dQSig3),:), dQCoeff_nR, rt, tlabel,savesumfigpath)
 tlabel = 'dK-sig';
@@ -766,3 +1152,196 @@ plot_groupSummary(CKE1(logical(CKESig1),:),CKE2(logical(CKESig2),:), CKE3(logica
 plot_RPE(posRPECoeff,negRPECoeff,pRPESigInd,nRPESigInd,rt,savesumfigpath)
 % check only significant grids (add another group that is not significant
 % for outcome but significant for the variable
+<<<<<<< Updated upstream
+=======
+%% using the average to regroup?
+% newGroup = oriGroup;
+%
+% ref1 = nanmean(group1,1);
+% ref2 = nanmean(group2,1);
+% ref3 = nanmean(group3,1);
+% outInd  =1;
+% outlierGroups = cell(0);
+%
+% for nn = 1:length(rCoeff_new)
+%     % ACh, first session as ref group
+%
+%
+%     g1Num = sum(rClust{nn}==1); g2Num = sum(rClust{nn}==2); g3Num = sum(rClust{nn}==3);
+%     % calculate the average coefficient with in 1-2.5s for each group
+%     g1Mean =nanmean(rCoeff{nn}(rClust{nn}==1,:),1);  g2Mean = nanmean(rCoeff{nn}(rClust{nn}==2,:),1); g3Mean =nanmean(rCoeff{nn}(rClust{nn}==3,:),1);
+%
+%
+%     figure;plot(rt,ref1);hold on;
+%     plot(rt,ref2);plot(rt,ref3);
+%     plot(rt,g1Mean)
+%
+%     figure;plot(rt,ref1);hold on;
+%     plot(rt,ref2);plot(rt,ref3);
+%     plot(rt,g2Mean)
+%
+%     figure;plot(rt,ref1);hold on;
+%     plot(rt,ref2);plot(rt,ref3);
+%     plot(rt,g3Mean)
+%     corr11 = corrcoef(g1Mean(rt>t0 & rt<t1),ref1(rt>t0 & rt<t1)); corr12 = corrcoef(g1Mean(rt>t0 & rt<t1),ref2(rt>t0 & rt<t1)); corr13 = corrcoef(g1Mean(rt>t0 & rt<t1),ref3(rt>t0 & rt<t1));
+%     corr21 = corrcoef(g2Mean(rt>t0 & rt<t1),ref1(rt>t0 & rt<t1)); corr22 = corrcoef(g2Mean(rt>t0 & rt<t1),ref2(rt>t0 & rt<t1)); corr23 = corrcoef(g2Mean(rt>t0 & rt<t1),ref3(rt>t0 & rt<t1));
+%     corr31 = corrcoef(g3Mean(rt>t0 & rt<t1),ref1(rt>t0 & rt<t1)); corr32 = corrcoef(g3Mean(rt>t0 & rt<t1),ref2(rt>t0 & rt<t1)); corr33 = corrcoef(g3Mean(rt>t0 & rt<t1),ref3(rt>t0 & rt<t1));
+%
+%     corr1 = [corr11(1,2),corr12(1,2),corr13(1,2)];
+%     corr2 = [corr21(1,2),corr22(1,2),corr23(1,2)];
+%     corr3 = [corr31(1,2),corr32(1,2),corr33(1,2)];
+%
+%     [maxCorr,ind] = max(corr1);
+%     if maxCorr>0.5 & g1Num > 25
+%         newGroup(nn) = ind;
+%     else
+%         newGroup(nn) =4; % 4 means outlier
+%         outlierGroups{outInd} = rCoeff{nn}(rClust{nn}==1,:);
+%         outInd = outInd+1;
+%     end
+%     [maxCorr,ind] = max(corr2);
+%     if maxCorr>0.5 & g2Num > 25
+%         newGroup(nn) = ind
+%     else
+%         newGroup(nn) =4; % 4 means outlier
+%         outlierGroups{outInd} = rCoeff{nn}(rClust{nn}==2,:);
+%         outInd = outInd+1;
+%     end
+%     [maxCorr,ind] = max(corr3);
+%     if maxCorr>0.5 & g3Num > 25
+%         newGroup(nn) = ind;
+%
+%     else
+%         newGroup(nn) =4; % 4 means outlier
+%         outlierGroups{outInd} = rCoeff{nn}(rClust{nn}==3,:);
+%         outInd = outInd+1;
+%     end
+% end
+
+
+
+% clust.t = rt;
+% clust.coeff = clustCoeff;
+% tRange = [-3,5]; numClust=6;
+% regCoef_cluster(clust,tRange,numClust,tlabel1,'Time from cue(s)',savefluofigpath);
+
+
+%% get lag
+% cnLagCorr = zeros(1,nFiles); cnLagP =  zeros(1,nFiles); cnDis = []; cnCorr = []; cnLag = [];
+% rnLagCorr = zeros(1,nFiles); rnLagP = zeros(1,nFiles); rnDis = []; rnCorr = []; rnLag = [];
+% xnLagCorr = zeros(1,nFiles); xnLagP = zeros(1,nFiles); xnDis = []; xnCorr = []; xnLag = [];
+%
+%
+% for ii = 1:nFiles
+%
+%     % load behavior files
+%     fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
+%     %load(fullfile(fn_beh.folder,fn_beh.name));
+%
+%
+%     % load fluorescent files
+%     fn_fluo = dir(fullfile(dataIndex.BehPath{ii},'dff.mat'));
+%     if length(fn_fluo) == 1
+%
+%         savefluofigpath = fullfile(dataIndex.BehPath{ii},'figs-fluo');
+%         if ~exist(savefluofigpath,'dir')
+%             mkdir(savefluofigpath);
+%         end
+%
+%         cd(savefluofigpath);
+%
+%
+%         %load(fullfile(fn_fluo.folder,fn_fluo.name));
+%
+%         % make folders to save analysis and plots
+%         savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');
+%         if ~exist(savematpath,'dir')
+%             mkdir(savematpath);
+%         end
+%
+%         saveregpath = fullfile(savematpath,'regressionVarTempCorr.mat');  % file path to save the results
+%         if exist(saveregpath)
+%             load(saveregpath)
+%         end
+%
+%         % get the data
+%         % scatter plot of distance from reference grid and lag
+%
+%         % get distance
+%         cnDistance = []; cnlag = []; cnCoeff = [];
+%         for tt = 1:size(choicetempData.tempCorrLag,1)
+%            for uu = 1:size(choicetempData.tempCorrLag,2)
+%                if ~isnan(choicetempData.tempCorrLag(tt,uu))
+%                    cnDistance = [cnDistance,sqrt((tt-choicetempData.maxX)^2+(uu-choicetempData.maxY)^2)];
+%                    cnlag = [cnlag, choicetempData.tempCorrLag(tt,uu)];
+%                    cnCoeff = [cnCoeff, choicetempData.tempCorrCoeff(tt,uu)];
+%                end
+%            end
+%         end
+%
+%         [R,P] = corrcoef(cnDistance,abs(cnlag));
+%         if ~isnan(R)
+%             cnLagCorr(ii) = R(1,2); cnLagP(ii) = P(1,2); cnDis = [cnDis,cnDistance]; cnCorr = [cnCorr, cnCoeff]; cnLag = [cnLag, cnlag];
+%         end
+%             %figure;scatter(cnDistance,cnLag);
+%
+%         rnDistance = []; rnlag = []; rnCoeff = [];
+%         for tt = 1:size(outcometempData.tempCorrLag,1)
+%            for uu = 1:size(outcometempData.tempCorrLag,2)
+%                if ~isnan(outcometempData.tempCorrLag(tt,uu))
+%                    rnDistance = [rnDistance,sqrt((tt-outcometempData.maxX)^2+(uu-outcometempData.maxY)^2)];
+%                    rnlag = [rnlag, outcometempData.tempCorrLag(tt,uu)];
+%                    rnCoeff = [rnCoeff, outcometempData.tempCorrCoeff(tt,uu)];
+%                end
+%            end
+%         end
+%            [R,P] = corrcoef(rnDistance,abs(rnlag));
+%             if ~isnan(R)
+%         rnLagCorr(ii) = R(1,2); rnLagP(ii) = P(1,2); rnDis = [rnDis,rnDistance]; rnCorr = [rnCorr, rnCoeff]; rnLag = [rnLag, rnlag];
+%             end
+%
+%         xnDistance = []; xnlag = []; xnCoeff = [];
+%         for tt = 1:size(xntempData.tempCorrLag,1)
+%            for uu = 1:size(xntempData.tempCorrLag,2)
+%                if ~isnan(xntempData.tempCorrLag(tt,uu))
+%                    xnDistance = [xnDistance,sqrt((tt-xntempData.maxX)^2+(uu-xntempData.maxY)^2)];
+%                    xnlag = [xnlag, xntempData.tempCorrLag(tt,uu)];
+%                    xnCoeff = [xnCoeff, xntempData.tempCorrCoeff(tt,uu)];
+%                end
+%            end
+%         end
+%            [R,P] = corrcoef(xnDistance,abs(xnlag));
+%
+%             if ~isnan(R)
+%         xnLagCorr(ii) = R(1,2); xnLagP(ii) = P(1,2); xnDis = [xnDis,xnDistance]; xnCorr = [xnCorr, xnCoeff]; xnLag = [xnLag, xnlag];
+%             end
+%     end
+% end
+%
+% % save the results
+% savematdir = fullfile(savematsumpath, 'tempCorr');
+% if ~exist(savematdir)
+%     mkdir(savematdir)
+% end
+% cnTemp.dis = cnDis; cnTemp.corr = cnCorr; cnTemp.lag = cnLag; cnTemp.corrp = cnLagP; cnTemp.corrCoef = cnLagCorr;
+% rnTemp.dis = rnDis; rnTemp.corr = rnCorr; rnTemp.lag = rnLag; rnTemp.corrp = rnLagP; rnTemp.corrCoef = rnLagCorr;
+% xnTemp.dis = xnDis; xnTemp.corr = xnCorr; xnTemp.lag = xnLag; xnTemp.corrp = xnLagP; xnTemp.corrCoef = xnLagCorr;
+% save(fullfile(savematdir,'tempCorrLag.mat'),'cnTemp','rnTemp','xnTemp');
+%
+% cnLagCorrSig = cnLagCorr(cnLagP<0.05);
+% rnLagCorrSig = rnLagCorr(rnLagP<0.05);
+% xnLagCorrSig = xnLagCorr(xnLagP<0.05);
+%
+%  [p,h,stats] = signrank(cnLagCorrSig,0,'tail','right')
+%   [p,h,stats] = signrank(rnLagCorrSig,0,'tail','right')
+%    [p,h,stats] = signrank(xnLagCorrSig,0,'tail','right')
+%
+% figure;scatter(cnDis, abs(cnLag),'.');
+% [R,P] = corrcoef(cnDis,abs(cnLag))
+%
+% figure;scatter(rnDis, abs(rnLag),'.');
+% [R,P] = corrcoef(rnDis,abs(rnLag))
+%
+% figure;scatter(xnDis, abs(xnLag),'.');
+% [R,P] = corrcoef(xnDis,abs(xnLag))
+>>>>>>> Stashed changes
