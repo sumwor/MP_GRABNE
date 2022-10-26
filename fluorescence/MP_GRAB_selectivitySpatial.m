@@ -40,7 +40,6 @@ for ii = 1:nFiles
         sigThresh.value = 0.05; sigThresh.alpha = 0.01;  % threshold to find area with significant modulation
 
         tic
-        
 
         %% check other variables using regression results (should focus on significance rather than coefficient)
 
@@ -69,21 +68,7 @@ for ii = 1:nFiles
             reg3 = load(saveRPEName);
           end
 
-          % get the boundary of coefficient
-%           maxCoeff = 0;minCoeff = 0;
-%           for rr = 1:length(reg1.reg_cr)
-%               tempMax = max([max(reg1.reg_cr{rr}.coeff(:)),max(reg2.reg_cr{rr}.coeff(:)),max(reg3.reg_cr{rr}.coeff(:))]);
-%               tempMin = min([min(reg1.reg_cr{rr}.coeff(:)),min(reg2.reg_cr{rr}.coeff(:)),min(reg3.reg_cr{rr}.coeff(:))]);
-%               if tempMax > maxCoeff
-%                   maxCoeff = tempMax;
-%               end
-%               if tempMin < minCoeff
-%                   minCoeff = tempMin;
-%               end
-%           end
-%                       coeffBound.min = floor(minCoeff*10)/10;
-%                       coeffBound.max = ceil(maxCoeff*20)/10;
-
+         
         %% regression 1 -------------------------------------------------------------------------
              % get the choice from linear regression
         %if ~exist('choiceRegData','var') % if choice regression mask not computed

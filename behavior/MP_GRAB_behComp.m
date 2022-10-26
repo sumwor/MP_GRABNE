@@ -31,23 +31,6 @@ for ii = 1:nFiles_NE
         trueRespTime_NE{ii} = trialData.rt;
         choiceBySession_NE{ii} = stats;
         
-    
-%         if exist('nlike_array','var')
-%             fname = fieldnames(nlike);
-%             for j=1:numel(fname)  %append for each field
-%                 nlike_array.(fname{j})=[nlike_array.(fname{j}); nlike.(fname{j})];
-%                 bic_array.(fname{j})=[bic_array.(fname{j}); bic.(fname{j})];
-%             end
-%             fname = fieldnames(fitpar);
-%             for j=1:numel(fname)  %append for each field
-%                 fitpar_array.(fname{j})=[fitpar_array.(fname{j}); fitpar.(fname{j})];
-%             end
-%         else
-%             nlike_array = nlike;
-%             bic_array = bic;
-%             fitpar_array = fitpar;
-%         end
-%         
         nTrial_array_NE(ii)=sum(stats.c(:,1)==-1)+sum(stats.c(:,1)==1);
         entro_array_NE(ii)=entro;
         rrate_array_NE(ii)=sum(stats.r==1)/(sum(stats.r==1)+sum(stats.r==0));
@@ -55,13 +38,7 @@ for ii = 1:nFiles_NE
       
     end
 
-    close all;
-%     clearvars -except i dirs dataIndex ...
-%         lick_trType_array lregRCUC_array lregCRInt_array iti_array respTime_array trueRespTime choiceBySession...
-%         nlike_array bic_array fitpar_array iti_trueTime...
-%         nTrial_array entro_array rrate_array subMask...
-%         stats_all, animalList;
-
+    close all
 
 
 for ii = 1:nFiles_ACh
@@ -89,24 +66,7 @@ for ii = 1:nFiles_ACh
         respTime_array_ACh{ii}=respTime_trType;
         trueRespTime_ACh{ii} = trialData.rt;
         choiceBySession_ACh{ii} = stats;
-        
-    
-%         if exist('nlike_array','var')
-%             fname = fieldnames(nlike);
-%             for j=1:numel(fname)  %append for each field
-%                 nlike_array.(fname{j})=[nlike_array.(fname{j}); nlike.(fname{j})];
-%                 bic_array.(fname{j})=[bic_array.(fname{j}); bic.(fname{j})];
-%             end
-%             fname = fieldnames(fitpar);
-%             for j=1:numel(fname)  %append for each field
-%                 fitpar_array.(fname{j})=[fitpar_array.(fname{j}); fitpar.(fname{j})];
-%             end
-%         else
-%             nlike_array = nlike;
-%             bic_array = bic;
-%             fitpar_array = fitpar;
-%         end
-%         
+       
         nTrial_array_ACh(ii)=sum(stats.c(:,1)==-1)+sum(stats.c(:,1)==1);
         entro_array_ACh(ii)=entro;
         rrate_array_ACh(ii)=sum(stats.r==1)/(sum(stats.r==1)+sum(stats.r==0));
@@ -114,17 +74,13 @@ for ii = 1:nFiles_ACh
       
     end
 
-%     clearvars -except i dirs dataIndex ...
-%         lick_trType_array lregRCUC_array lregCRInt_array iti_array respTime_array trueRespTime choiceBySession...
-%         nlike_array bic_array fitpar_array iti_trueTime...
-%         nTrial_array entro_array rrate_array subMask...
-%         stats_all, animalList;
 
+%% plot the behavior summary of ACh and NE group
 Group = [ones(1,nFiles_NE),2*ones(1,nFiles_ACh)];
 figure;
+
+% average trials 
 subplot(2,3,1); hold on;
-%plot(rand(1,numel(nTrial_array)),nTrial_array,'k^','MarkerSize',15);
-%boxplot(nTrial_array,'Colors','k','Notch','off','Labels',[char(956),'=',num2str(round(mean(nTrial_array)))]);
 boxplot([nTrial_array_NE,nTrial_array_ACh]',Group,'PlotStyle','compact');
 %boxplot(nTrial_array,'Colors','k','Notch','off');
 ylim([0 1000]); 
@@ -132,9 +88,8 @@ ylabel(['Trials performed']);
 set(gca,'box','off') 
 [h,p] = ttest2(nTrial_array_NE,nTrial_array_ACh)
 
+% entropy
 subplot(2,3,2); hold on;
-%plot(rand(1,numel(entro_array)),entro_array,'k^','MarkerSize',15);
-%boxplot(entro_array,'Colors','k','Symbol','k+','Notch','off','Labels',{[char(956),'=',num2str((mean(entro_array)))]});
 boxplot([entro_array_NE,entro_array_ACh]',Group','PlotStyle','compact');
 
 plot([-1 3],[3 3],'k--','LineWidth',2);
@@ -143,6 +98,7 @@ ylabel('Entropy (bits)');
 set(gca,'box','off') 
 [h,p] = ttest2(entro_array_NE,entro_array_ACh)
 
+% reward rate
 subplot(2,3,3); hold on;
 %plot(rand(1,numel(rrate_array)),100*rrate_array,'k^','MarkerSize',15);
 %boxplot(rrate_array*100,'Colors','k','Symbol','k+','Notch','off','Labels',{[char(956),'=',num2str((mean(rrate_array))*100),'%']});

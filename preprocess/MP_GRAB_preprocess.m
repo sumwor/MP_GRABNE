@@ -41,8 +41,6 @@ for ii = 1:nFiles
         save(fullfile(savematpath,'dff.mat'),...
             'cells', '-v7.3');
         
-        
-        
         close all;
     else
         display('dFF already computed');

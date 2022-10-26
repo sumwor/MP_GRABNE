@@ -31,7 +31,7 @@ dataIndex_NE = MP_GRAB_createBehMatFiles(dataIndex_NE,'NE');
 dataIndex_NE = sortdataIndex(dataIndex_NE);
 
 % Determine if each session fulfill performance criteria (Matching Pennies)
-MP_determineBehCriteria(dataIndex_NE([1:13],:));
+MP_determineBehCriteria(dataIndex_NE);
 
 % ACh
 logfilepath_ACh = fullfile(root_path_ACh,'data');
@@ -104,9 +104,7 @@ MP_GRAB_saveLatent(dataIndex_ACh, model_path_ACh);
 %% fluorescent signal preprocessing
 
 % NE
-
-
-
+MP_GRAB_preprocess(dataIndex_NE);
 %ACh
 MP_GRAB_preprocess(dataIndex_ACh);
 % in 910-MP-1213, one img trigger was missing at trial 450 (two trials 450
@@ -117,16 +115,13 @@ MP_GRAB_preprocess(dataIndex_ACh);
 MP_GRAB_simpleplots(dataIndex_NE);
 MP_GRAB_simpleplots(dataIndex_ACh);
 
-%% try to make the two baseline equal?
-MP_GRAB_checkbaseline(dataIndex_NE);
-MP_GRAB_checkbaseline(dataIndex_ACh);
-%% check correlation
-audi_GRAB_correlation(dataIndex);
-%% fluorescent raw single trial plots
-MP_GRAB_rawplots(dataIndex);
+
+% MP_GRAB_checkbaseline(dataIndex_NE);
+% MP_GRAB_checkbaseline(dataIndex_ACh);
+
+
 
 %% regression: observable variable, choice, outcome, average reward, cumulative reward
-%% save path
 
 % NE
 model_path_NE = fullfile(root_path_NE,'mat_models');
@@ -139,71 +134,42 @@ model_path_ACh = fullfile(root_path_ACh,'mat_models');
 save_path_fluo_ACh = fullfile(root_path_ACh,'summary','figs_summary_fluo');
 %
 
-%
-% % choice/reward selevitivty
-%
-% MP_GRAB_selectivity(dataIndex(11,:));
-% MP_GRAB_prev_selectivity(dataIndex);
-%
-% % calculate px selectivity
-% MP_GRAB_selectivity_px(dataIndex);
-% % make videos of choice/outcome selectivity
-% MP_GRAB_selectivityVideo(dataIndex);
-% % spatial pattern
-% % MP_GRAB_selectivitySpatial(dataIndex);
-% % MP_GRAB_selectivitySpatial_summary(dataIndex, save_path_fluo);
-
 %% Linear regression with choice and reward
 %% for linear regression - load averagve grid intensity, and its corresponding linear regression R2
-% running regression (choice and reward) on individual sessions
 
-% NE
 
-MP_GRAB_MLR(dataIndex_NE([1:9],:));
-% regression results seems unstable, try amount of variance explained?
-MP_GRAB_MLR_analysis(dataIndex_NE);
+MP_GRAB_MLR(dataIndex_NE);
+
+
 MP_GRAB_MLR_acrossAnimals(dataIndex_NE,save_path_fluo_NE);
 MP_GRAB_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
-MP_GRAB_MLR_separateSession(dataIndex_NE);
-MP_GRAB_MLR_separateSummary(dataIndex_NE, save_path_fluo_NE);
+
+% MP_GRAB_MLR_separateSession(dataIndex_NE);
+% MP_GRAB_MLR_separateSummary(dataIndex_NE, save_path_fluo_NE);
 
 % ACh
 MP_GRAB_MLR(dataIndex_ACh);
 
-% bootstrap not useful, estimation still unsmooth
-% MP_GRAB_MLR_bootstrap(dataIndex_ACh);
-% regression results seems unstable, try amount of variance explained?
-MP_GRAB_MLR_analysis(dataIndex_ACh);
+
 MP_GRAB_MLR_acrossAnimals(dataIndex_ACh,save_path_fluo_ACh);
 MP_GRAB_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh);
 
-MP_GRAB_MLR_separateSession(dataIndex_ACh);
-MP_GRAB_MLR_separateSummary(dataIndex_ACh, save_path_fluo_ACh);
 
-
-% compare ACh and NE outcome curves
-MP_GRAB_MLR_comp(dataIndex_ACh,dataIndex_NE([1:19,28:end],:));
-
-%% latent variable
+%% latent variable, ROIs sparsely modulated by latent variables
+%% no clear conclusions drawn
 
 %NE
-MP_GRABRL_MLR(dataIndex_NE([1:9],:))
+MP_GRABRL_MLR(dataIndex_NE)
 MP_GRABRL_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
-MP_GRABRL_sumQ_MLR(dataIndex_NE([10:17],:))
-MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
-
-MP_GRABRL_RPE_MLR(dataIndex_NE([1:9],:));
+MP_GRABRL_RPE_MLR(dataIndex_NE);
 MP_GRAB_RPE_MLR_acrossAnimals(dataIndex_NE, save_path_fluo_NE)
 MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
 % ACh
 MP_GRABRL_MLR(dataIndex_ACh)
 MP_GRABRL_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh)
-
-MP_GRABRL_sumQ_MLR(dataIndex_ACh)
-MP_GRABRL_sumQ_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh)
 
 MP_GRABRL_RPE_MLR(dataIndex_ACh);
 MP_GRAB_RPE_MLR_acrossAnimals(dataIndex_ACh, save_path_fluo_ACh)
@@ -216,9 +182,9 @@ MP_GRAB_selectivitySpatial(dataIndex_NE);
 MP_GRAB_selectivityCorr(dataIndex_NE);
 MP_GRAB_selectivitySummary(dataIndex_NE, save_path_fluo_NE);
 
-MP_GRAB_clusterEval(dataIndex_NE([1:9,18:end],:), save_path_fluo_NE, save_path_mat_NE)
+MP_GRAB_clusterEval(dataIndex_NE, save_path_fluo_NE, save_path_mat_NE)
 
-MP_GRAB_temporalCorr(dataIndex_NE([1:9],:));
+MP_GRAB_temporalCorr(dataIndex_NE);
 save_path_mat_NE = fullfile(root_path_NE,'summary','data_summary');
 MP_GRAB_temporalCorrSummary(dataIndex_NE,save_path_fluo_NE,save_path_mat_NE)
 % temporal correlation (same grid, correlation of different variables)

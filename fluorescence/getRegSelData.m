@@ -75,39 +75,6 @@ if ~exist(unsigsavepath)
     mkdir(unsigsavepath)
 end
 plotMaskBoundary(Mat.coeff,[],[],label,unsigsavepath,isSig)
-%% get the number of time points with pos/neg correlation coefficient
-
-% RegData.coeffSignSig = NaN(size(Mat.coeff,1),size(Mat.coeff,2),2);
-% t=-2.95:0.1:4.95;
-% for ss = 1:size(Mat.coeff,1)
-%     for uu = 1:size(Mat.coeff,2)
-%         if sigMat(ss,uu) == 1
-% %             figure;
-% %             plot(t,squeeze(sigCoeff(ss,uu,:)));
-%             
-% % only count significant time point?
-%             RegData.coeffSignSig(ss,uu,1) = sum(squeeze(sigCoeff(ss,uu,:)>0 & Mat.pval(ss,uu,:)<sigThresh.alpha))/sum(squeeze(Mat.pval(ss,uu,:)<sigThresh.alpha));
-%             RegData.coeffSignSig(ss,uu,2) = -sum(squeeze(sigCoeff(ss,uu,:)<0& Mat.pval(ss,uu,:)<sigThresh.alpha))/sum(squeeze(Mat.pval(ss,uu,:)<sigThresh.alpha));
-%         end
-%     end
-% end
-% RegData.signRel = RegData.coeffSignSig(:,:,1)./(-RegData.coeffSignSig(:,:,2));
-% figure;histogram(RegData.signRel)
-
-% significance mask
-% tlabel1 = [label,' significance'];
-% xtitle = 'Time from cue{s}';
-% colorRange=[0 0.01];
-% % t=-2.95:0.1:4.95;
-% % plot_signficance(Mat.pval,t, tlabel1,xtitle,colorRange,savefluofigpath)
-% %         
-% %         
-% % % plot average significance 
-% RegData.sigMask = getSigSelMask(Mat.pval, sigThresh.alpha, label,savefluofigpath);
-% 
-% [RegData.notSigMask] = getSigMask(RegData.sigMask,sigThresh.value);
-% isSig=1;
-% plotMaskBoundary(RegData.sigMask,RegData.notSigMask,[],label,savefluofigpath,isSig);
 
 % make a video
 colorRange = [-0.05,0.05];
