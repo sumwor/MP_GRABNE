@@ -10,7 +10,7 @@ for ii = 1:nFiles
     % load behavior files
    fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
 
-    savefigpath = fullfile(fn_beh.folder,'figs-fluo');
+    savefigpath = fullfile(fn_beh.folder,'figs-fluo','PSTH');
     if ~exist(savefigpath,'dir')
         mkdir(savefigpath);
     end
@@ -24,20 +24,20 @@ for ii = 1:nFiles
     
     
         %% Plot dF/F of all the cells
-        MP_plot_allCells( cells, trialData ,savefigpath);
+%         MP_plot_allCells( cells, trialData ,savefigpath);
         
         close all;
         %% check correaltion between different cells
-        autoCorr = zeros(length(cells.dFF));
-        for uu = 1:length(cells.dFF)
-            for vv = 1:length(cells.dFF)
-                autoCorr(uu,vv) = corr(cells.dFF{uu}, cells.dFF{vv});
-            end
-        end
-        figure;
-        heatmap(autoCorr);
-        print(gcf,'-dpng',fullfile(savefigpath,'corr-cells'));    %png format
-        saveas(gcf, fullfile(savefigpath,'corr-cells'), 'fig');
+%         autoCorr = zeros(length(cells.dFF));
+%         for uu = 1:length(cells.dFF)
+%             for vv = 1:length(cells.dFF)
+%                 autoCorr(uu,vv) = corr(cells.dFF{uu}, cells.dFF{vv});
+%             end
+%         end
+%         figure;
+%         heatmap(autoCorr);
+%         print(gcf,'-dpng',fullfile(savefigpath,'corr-cells'));    %png format
+%         saveas(gcf, fullfile(savefigpath,'corr-cells'), 'fig');
         
         %% Plot cue-aligned dF/F for each cell
         % Fig. 3d in paper came from 140605 data set, cell 8 10 37 74
@@ -48,20 +48,27 @@ for ii = 1:nFiles
         params.numBootstrapRepeat = 1000;   %number of repeats for bootstrap (for estimating CI)
         params.CI = 0.95;  %confidence interval
         params.minNumTrial = 50;
-        for j=1:numel(cells.dFF)
+        %for r=1:numel(cells.dFF)
+            % for NE: j = 710
+            % for ACh: j = 33
+            %j=710;  % NE
+             j = 33;
             psth_output=[];
             for k=1:2
                 fieldname=[];
                 if k==1 %panel 1
-                    fieldname{1}={'left','reward'};
-                    fieldname{2}={'left','noreward'};
-                elseif k==2 %panel 2
-                    fieldname{1}={'right','reward'};
-                    fieldname{2}={'right','noreward'};
+                    fieldname{1}={'reward','contra'};
+                    fieldname{2}={'noreward','contra'};
+                else
+                    fieldname{1}={'reward','ipsi'};
+                    fieldname{2}={'noreward','ipsi'};
+                   
                 end
                 for kk=1:numel(fieldname)
-                    trialMask = getMask(trials,fieldname{kk});
-                    psth_panel(k).sig{kk} = get_psth( cells.dFF{j}, cells.t, params.trigTime(trialMask), strjoin(fieldname{kk}), params );
+                    trialMask = getMask_GRAB(trials,fieldname{kk},dataIndex.RecordingSite{ii});
+                 
+                    psth_panel{k}.sig{kk} = get_psth( cells.dFF{j}, cells.t, params.trigTime(trialMask), strjoin(fieldname{kk}), params );
+               
                 end
             end
             
@@ -72,6 +79,8 @@ for ii = 1:nFiles
             end
             plot_psth(psth_panel,tlabel,params.xtitle);
             print(gcf,'-dpng',fullfile(savefigpath,['cell' int2str(j)]));
+            saveas(gcf, fullfile(savefigpath,['cell' int2str(j)]), 'fig');
+            saveas(gcf, fullfile(savefigpath,['cell' int2str(j)]),'svg');
             close;
         end
         

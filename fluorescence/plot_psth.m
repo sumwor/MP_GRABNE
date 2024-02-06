@@ -9,25 +9,25 @@ function plot_psth(input,tlabel,xtitle)
 %   xtitle:       Text to put as the label for x-axis.
 
 %% Plotting parameters
-colors={'k','r','b','g'};
+colors={'r-','k-','r--','k--'};
 gray=[0.7 0.7 0.7];
 
 %% Setup
-t=input(1).sig{1}.t;
+t=input{1}.sig{1}.t;
 nPanel=numel(input);  %how many panel?
 
 nSig=[];    %how many signals/psth in each panel?
 for j=1:nPanel
-    nSig(j)=numel(input(j).sig);
+    nSig(j)=numel(input{j}.sig);
 end
 
 %set up the y-axis range 
-if isfield(input(1).sig{1},'bootlow') %if CIs are available, use those to set the range
+if isfield(input{1}.sig{1},'bootlow') %if CIs are available, use those to set the range
     templow=[]; temphigh=[];
     for j=1:nPanel
         for k=1:nSig(j)
-            templow=[templow; input(j).sig{k}.bootlow];
-            temphigh=[temphigh; input(j).sig{k}.boothigh];
+            templow=[templow; input{j}.sig{k}.bootlow];
+            temphigh=[temphigh; input{j}.sig{k}.boothigh];
         end
     end
     minY=nanmin(templow)-0.5;
@@ -36,11 +36,11 @@ else
     tempsig=[];
     for j=1:nPanel
         for k=1:nSig(j)
-            tempsig=[tempsig; input(j).sig{k}.signal];
+            tempsig=[tempsig; input{j}.sig{k}.signal];
         end
     end
-    minY=nanmin(tempsig)-0.2;
-    maxY=nanmax(tempsig)+0.2;
+    minY=nanmin(tempsig)-0.05;
+    maxY=nanmax(tempsig)+0.05;
 end
 
 %% 
@@ -52,27 +52,27 @@ for j=1:nPanel
     % plot the mean signals
     legstring=[];
     for k=1:nSig(j)
-        plot(t,input(j).sig{k}.signal,colors{k});
-        legstring{k}=input(j).sig{k}.psth_label;
+        plot(t,input{j}.sig{k}.signal,colors{k});
+        legstring{k}=input{j}.sig{k}.psth_label;
     end
     
     % plot the shaded errors
-    if isfield(input(j).sig{k},'bootlow') %if CIs are available, plot them
+    if isfield(input{j}.sig{k},'bootlow') %if CIs are available, plot them
         for k=1:nSig(j)
-            errorshade(t,input(j).sig{k}.bootlow,input(j).sig{k}.boothigh,gray);
+            errorshade(t,input{j}.sig{k}.bootlow,input{j}.sig{k}.boothigh,gray);
         end
     end
     
     % plot the mean signals again so they lie on top of shaded errors
     for k=1:nSig(j)
-        plot(t,input(j).sig{k}.signal,colors{k});
+        plot(t,input{j}.sig{k}.signal,colors{k});
     end
     
     legend(legstring);
     
     plot([0 0],[minY maxY],'k','LineWidth',2);
     xlabel(xtitle); ylabel('dF/F');
-    ylim([minY maxY]);
+    ylim([0.1 0.5]);
     xlim([t(1) t(end)]);
     title(tlabel);
     

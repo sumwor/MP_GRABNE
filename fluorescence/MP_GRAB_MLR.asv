@@ -168,9 +168,9 @@ for ii = 1:nFiles
             
             % reg_cr_future=linear_regr( fluo.dia, fluo.t, future_event, params.trigTime, trialMask, params );
             reg_t = cells.t;
-            if isfield(cells,'normdFF')
-                 reg_dFF = cells.normdFF;
-            else
+%             if isfield(cells,'normdFF')
+%                 reg_dFF = cells.normdFF;
+%             else
                 reg_dFF = cells.dFF;
             end
             tic

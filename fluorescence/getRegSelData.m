@@ -77,7 +77,7 @@ end
 plotMaskBoundary(Mat.coeff,[],[],label,unsigsavepath,isSig)
 
 % make a video
-% colorRange = [-0.05,0.05];
-% video_coeff(sigCoeff,label,colorRange,savepath);
-% 
-% video_coeff(Mat.coeff,label,colorRange,unsigsavepath)
+colorRange = [-0.05,0.05];
+video_coeff(sigCoeff,label,colorRange,savepath);
+
+video_coeff(Mat.coeff,label,colorRange,unsigsavepath)

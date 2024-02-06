@@ -3,7 +3,7 @@ function MP_GRAB_selectivitySummary(dataIndex, save_path_fluo)
 %% summarize selectivity results, as well as cross correlation results
 nFiles = size(dataIndex,1);
 
-%% selectivity area
+%% selectivity area 
 % RPE/R
 RPE_R_sig = zeros(1, nFiles);RPE_sig = zeros(1, nFiles);R_sig = zeros(1,nFiles);
 sigVar = zeros(28,28,80,nFiles,15);  % load significant grids for 15 variables
@@ -15,8 +15,8 @@ sigVar = zeros(28,28,80,nFiles,15);  % load significant grids for 15 variables
 cnSigList = [];
 rnSigList = [];
 xnSigList = [];
-posRPESigList = [];
-negRPESigList = [];
+posRPEList = [];
+negRPEList = [];
 % get the pos/neg coefficient percentage data
 choicePN = [];outcomePN = [];RPEPN=[];xnPN=[];cn__1PN=[];rn__1PN=[];xn__1PN = [];
 dQPN = [];chosenQPN = []; dKPN = [];chosenKPN = [];CKEPN = [];
@@ -27,25 +27,25 @@ for ii = 1:nFiles
     % load behavior files
     fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     load(fullfile(fn_beh.folder,fn_beh.name));
-
-
+    
+    
     % load fluorescent files
     fn_fluo = dir(fullfile(dataIndex.BehPath{ii},'dff.mat'));
     if length(fn_fluo) == 1
-
+        
         % make folders to save analysis and plots
         warning('off','all')
         savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');
         %% linear regression selection
-        saveregmaskpath = fullfile(savematpath,'regressionMask.mat');
+        saveregmaskpath = fullfile(savematpath,'regressionMask.mat'); 
         fn_regSel = dir(saveregmaskpath);
         if length(fn_regSel) == 1
             load(saveregmaskpath);
         else
             display('Selectivity not computed');
         end
-
-
+        
+        
         % RPE/reward compare
         % check how many grids are both signficant/RPE sig only/reward sig
         % only
@@ -65,14 +65,14 @@ for ii = 1:nFiles
 %                 sigVar(:,:,:,ii,13) = chosenKRegData.sigMask;
 %        sigVar(:,:,:,ii,14) = RPERegData.sigMask;
 %        sigVar(:,:,:,ii,15) = CKERegData.sigMask;
-
+        
 %         RPE_R_sig(ii) = sum(sum((~RPEnotSig) & (~RnotSig)));
 %         RPE_sig(ii) = sum(sum((~RPEnotSig)&(RnotSig)));
 %         R_sig(ii) = sum(sum((RPEnotSig)&(~RnotSig)));
         % get significant numbers of interaction and choice
         % cn/rn/xn
 %         sumGrid = sum(choiceRegData.sigGrid(:)|xnRegData.sigGrid(:)|outcomeRegData.sigGrid(:));
-%         cn_xn_sig(ii) = sum(choiceRegData.sigGrid(:)&xnRegData.sigGrid(:))/sumGrid;
+%         cn_xn_sig(ii) = sum(choiceRegData.sigGrid(:)&xnRegData.sigGrid(:))/sumGrid; 
 %         ncn_xn_sig(ii) = sum(~choiceRegData.sigGrid(:)&xnRegData.sigGrid(:))/sumGrid;
 %         rn_xn_sig(ii) = sum(xnRegData.sigGrid(:)&outcomeRegData.sigGrid(:))/sumGrid;
 %         nrn_xn_sig(ii) = sum(xnRegData.sigGrid(:)&~outcomeRegData.sigGrid(:))/sumGrid;
@@ -81,9 +81,8 @@ for ii = 1:nFiles
         cnSigList = [cnSigList,choiceRegData.sigGrid(:)'];
         rnSigList = [rnSigList,outcomeRegData.sigGrid(:)'];
         xnSigList = [xnSigList,xnRegData.sigGrid(:)'];
-        posRPESigList = [posRPESigList, posRPERegData.sigGrid(:)'];
-        negRPESigList = [negRPESigList, negRPERegData.sigGrid(:)'];
-
+        posRPEList = [posRPEList, posRPERegData.sigGrid(:)'];
+        neg
         % get pos/neg coefficient
 %         choicePN = cat(4,choicePN,choiceRegData.coeffSignSig);
 %          outcomePN = cat(4,outcomePN,outcomeRegData.coeffSignSig);
@@ -112,7 +111,7 @@ end
 % rn__1PN=reshape(rn__1PN,s1,s2,s3);
 % xn__1PN = reshape(xn__1PN,s1,s2,s3);
 % dQPN = reshape(dQPN,s1,s2,s3);
-% chosenQPN =reshape(chosenQPN,s1,s2,s3);
+% chosenQPN =reshape(chosenQPN,s1,s2,s3); 
 % dKPN = reshape(dKPN,s1,s2,s3);
 % chosenKPN = reshape(chosenKPN,s1,s2,s3);
 % CKEPN = reshape(CKEPN,s1,s2,s3);
@@ -122,15 +121,15 @@ end
 % s1 = size(choicePN,1)*size(choicePN,3);
 % posVar1 = [reshape(choicePN(:,1,:),1,s1);reshape(outcomePN(:,1,:),1,s1);reshape(xnPN(:,1,:),1,s1);reshape(RPEPN(:,1,:),1,s1)];
 % negVar1 = [reshape(choicePN(:,2,:),1,s1);reshape(outcomePN(:,2,:),1,s1);reshape(xnPN(:,2,:),1,s1);reshape(RPEPN(:,2,:),1,s1)];
-% violin plot
-%figure
-%v=violinplot(posVar1',animalIndex,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0],'ShowData',false);
+% % violin plot
+% %figure
+% %v=violinplot(posVar1',animalIndex,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0],'ShowData',false);
 %  colors = [235, 83, 83;249, 217, 35;54, 174, 124;24, 116, 152]/255;
 % figure;violinplot(posVar1',{'choice','outcome','interaction','RPE'},'ViolinColor',colors,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
 % ylabel('Fraction of positive time');
 % print(gcf,'-dpng',fullfile(save_path_fluo,'Fraction of positive time -choice'));
 % saveas(gcf, fullfile(save_path_fluo,'Fraction of positive time -choice'), 'fig');
-% %
+% % 
 % posVar2 = [reshape(dQPN(:,1,:),1,s1);reshape(chosenQPN(:,1,:),1,s1);reshape(dKPN(:,1,:),1,s1);reshape(chosenKPN(:,1,:),1,s1)];
 % negVar2 = [reshape(dQPN(:,2,:),1,s1);reshape(chosenQPN(:,2,:),1,s1);reshape(dKPN(:,2,:),1,s1);reshape(chosenKPN(:,2,:),1,s1)];
 % figure;violinplot(posVar2',{'dQ','chosenQ','dK','chosenK'},'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
@@ -150,7 +149,7 @@ end
 %     s1 = size(choicePN,1)*length(sessionInclude);
 %     posVar1 = [reshape(choicePN(:,1,sessionInclude),1,s1);reshape(outcomePN(:,1,sessionInclude),1,s1);reshape(xnPN(:,1,sessionInclude),1,s1);reshape(RPEPN(:,1,sessionInclude),1,s1)];
 %     negVar1 = [reshape(choicePN(:,2,sessionInclude),1,s1);reshape(outcomePN(:,2,sessionInclude),1,s1);reshape(xnPN(:,2,sessionInclude),1,s1);reshape(RPEPN(:,2,sessionInclude),1,s1)];
-%
+% 
 %     figure;violinplot(posVar1',{'choice','outcome','interaction','RPE'},'ViolinColor',colors,'ViolinAlpha',0.8,'EdgeColor',[0.5 0.5 0.5],'BoxColor',[0.5 0.5 0.5],'MedianColor',[1 0 0]);
 % ylabel('Fraction of positive time');
 % title(animalList{aa});
@@ -179,15 +178,13 @@ RInd = 1:length(cnSigList);
 cnInd = RInd(cnSigList==1);
 rnInd = RInd(rnSigList==1);
 xnInd = RInd(xnSigList==1);
-posRPEInd = RInd(posRPESigList==1);
-negRPEInd = RInd(negRPESigList==1);
 
 
 label = {'choice','outcome','interaction'};
 vennPlot(cnInd,rnInd,xnInd,label,save_path_fluo);
 
 label = {'Outcome','posRPE','negRPE'};
-vennPlot(rnInd,posRPEInd,negRPEInd,label,save_path_fluo);
+vennPlot(rnInd,posRPEInd,label,save_path_fluo);
 
 h = vennEulerDiagram({cnInd;rnInd;xnInd}, 'drawProportional', true, 'SetLabels', ["choice"; "reward"; "interaction"]);
 title('Ach c/r/x significant ROIs');
@@ -207,7 +204,7 @@ saveas(gcf, fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)'), 'fig'
 % figure;
 % violinplot([RPE_R_sig;RPE_sig;R_sig]',cats);
 % ylabel('Number of significant grids');
-%
+% 
 % print(gcf,'-dpng',fullfile(save_path_fluo,'Sig_RPE_R'));    %png format
 % saveas(gcf, fullfile(save_path_fluo,'Sig_RPE_R'), 'fig');
 % % paired t test?
@@ -243,17 +240,17 @@ for ii = 1:nFiles
     % load behavior files
     fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     load(fullfile(fn_beh.folder,fn_beh.name));
-
-
+    
+    
     % load fluorescent files
     fn_fluo = dir(fullfile(dataIndex.BehPath{ii},'dff.mat'));
     if length(fn_fluo) == 1
-
+        
         % make folders to save analysis and plots
         warning('off','all')
         savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');
         %% linear regression selection
-        saveregXcorrpath = fullfile(savematpath,'regressionXcorr.mat');
+        saveregXcorrpath = fullfile(savematpath,'regressionXcorr.mat'); 
         if exist(saveregXcorrpath)
             load(saveregXcorrpath);
         end
@@ -270,7 +267,7 @@ for ii = 1:nFiles
         %choice_sigmax_ind =  cat(3,choice_sigmax_ind,choiceRegData.sigMaxInd);
         %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
         outcome_regPval = cat(3,outcome_regPval,outcomeRegData.regPval);
-
+        
          % rn+1
         rn_1_center_coeff=[rn_1_center_coeff;squeeze(rn_1RegData.sigCorr(28,28,:))'];
         rn_1_sig_dis = [rn_1_sig_dis;rn_1RegData.sigMaxDis];
@@ -284,21 +281,21 @@ for ii = 1:nFiles
         %choice_sigmax_ind =  cat(3,choice_sigmax_ind,choiceRegData.sigMaxInd);
         %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
         ave_r_regPval = cat(3,ave_r_regPval,ave_rRegData.regPval);
-
+        
         % cumulative reward
         cum_r_center_coeff=[cum_r_center_coeff;squeeze(cum_rRegData.sigCorr(28,28,:))'];
         cum_r_sig_dis = [cum_r_sig_dis;cum_rRegData.sigMaxDis];
         %choice_sigmax_ind =  cat(3,choice_sigmax_ind,choiceRegData.sigMaxInd);
         %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
         cum_r_regPval = cat(3,cum_r_regPval,cum_rRegData.regPval);
-
+        
         % dQ
         dQ_center_coeff=[dQ_center_coeff;squeeze(dQRegData.sigCorr(28,28,:))'];
         dQ_sig_dis = [dQ_sig_dis;dQRegData.sigMaxDis];
         %choice_sigmax_ind =  cat(3,choice_sigmax_ind,choiceRegData.sigMaxInd);
         %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
         dQ_regPval = cat(3,dQ_regPval,dQRegData.regPval);
-
+        
         % dK
         dK_center_coeff=[dK_center_coeff;squeeze(dKRegData.sigCorr(28,28,:))'];
         dK_sig_dis = [dK_sig_dis;dKRegData.sigMaxDis];
@@ -306,28 +303,28 @@ for ii = 1:nFiles
         %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
         dK_regPval = cat(3,dK_regPval,dKRegData.regPval);
         dK_sigCorr = cat(4,dK_sigCorr,dKRegData.sigCorr);
-
+        
         % chosenQ
         chosenQ_center_coeff=[chosenQ_center_coeff;squeeze(chosenQRegData.sigCorr(28,28,:))'];
         chosenQ_sig_dis = [chosenQ_sig_dis;chosenQRegData.sigMaxDis];
         %choice_sigmax_ind =  cat(3,choice_sigmax_ind,choiceRegData.sigMaxInd);
         %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
         chosenQ_regPval = cat(3,chosenQ_regPval,chosenQRegData.regPval);
-
+        
         % chosenK
         chosenK_center_coeff=[chosenK_center_coeff;squeeze(chosenKRegData.sigCorr(28,28,:))'];
         chosenK_sig_dis = [chosenK_sig_dis;chosenKRegData.sigMaxDis];
         %choice_sigmax_ind =  cat(3,choice_sigmax_ind,choiceRegData.sigMaxInd);
         %choice_sigmax_val = [choice_sigmax_val;choiceRegData.sigMaxValue];
         chosenK_regPval = cat(3,chosenK_regPval,chosenKRegData.regPval);
-
+        
         % RPE
         RPE_center_coeff=[RPE_center_coeff;squeeze(RPERegData.sigCorr(28,28,:))'];
         RPE_sig_dis = [RPE_sig_dis;RPERegData.sigMaxDis];
 %         RPE_sigmax_ind =  cat(3,RPE_sigmax_ind,RPERegData.sigMaxInd);
 %         RPE_sigmax_val = [RPE_sigmax_val;RPERegData.sigMaxValue];
         RPE_regPval = cat(3,RPE_regPval,RPERegData.regPval);
-
+        
         % pos/neg coefficient ratio
         %% cross correlation results
          saveregVarcorrpath = fullfile(savematpath,'regressionVarcorr.mat');
@@ -442,7 +439,7 @@ plot_xcorrCoeff(pValue,maxValue,offset,thresh,save_path_fluo,label);
 
 % plot the coordinate where xcorr reaches maximum
 % figure;
-%
+% 
 % scatter(RPE_sigmax_ind(1,:,1),RPE_sigmax_ind(2,:,1),40,1:size(RPE_sigmax_ind,2),'filled');
 % colormap('jet')
 % colorbar
@@ -471,7 +468,7 @@ for tt = 1:size(xCorrMat,1)
             xSigBootAve(tt,rr,:) = xSigBoot{tt,rr}.coeff_bootave;
             % calculate two-tail p value
             for mm = 1:size(xCorrMat,3)
-
+                
                 if xCorrBoot{tt,rr}.coeff_bootave(mm) > 0
                     xCorrBootPval(tt,rr,mm) = sum(xCorrBoot{tt,rr}.bootSig(1,mm,:)<0)*2/size(xCorrBoot{tt,rr}.bootSig,3);
                 else
@@ -485,7 +482,7 @@ for tt = 1:size(xCorrMat,1)
                  end
 
             end
-
+            
         end
     end
 end
@@ -496,24 +493,24 @@ colors=cbrewer('div','RdBu',256);
     colors=flipud(colors);
     colorRange = [-0.1 0.1];
     t= -2.95:0.1:4.95;
- savefluofigpath = fullfile(save_path_fluo,'xcorrTime');
+ savefluofigpath = fullfile(save_path_fluo,'xcorrTime'); 
  if ~exist(savefluofigpath)
      mkdir(savefluofigpath);
  end
-
+ 
  varName = {'cn+1','cn','cn-1','rn','rn-1','xn','xn-1','ave_r','Cum_r','dQ','chosenQ','dK','chosenK','RPE','CKE'};
-
-
+ 
+ 
 for pp = 1:size(xCorrMat,3)
      h=figure;
-
+    
      subplot(1,2,1)
      image(xCorrBootAve(:,:,pp),'CDataMapping','scaled');
      axis square;
     colormap(colors);
     caxis([colorRange(1) colorRange(2)]);
     xticks(1:15)
-    xticklabels(varName);
+    xticklabels(varName);  
     xtickangle(45)
     yticks(1:15)
     yticklabels(varName)
@@ -523,20 +520,20 @@ for pp = 1:size(xCorrMat,3)
     ifSig = xCorrBootPval(:,:,pp)<0.05;
      [r c]=find(ifSig==1);
     hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
-    ax = gca(h);
-    ax.FontSize = 20;
+    ax = gca(h); 
+    ax.FontSize = 20; 
     %s.Marker = '*';
     subplot(3,30,90);
     image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
     colormap(colors);
     caxis([colorRange(1) colorRange(2)]);
-
+    
     print(gcf,'-dpng',fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]));
     saveas(gcf, fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]), 'fig');
     saveas(gcf, fullfile(savefluofigpath,['Cross-correlation_t=',num2str(pp)]), 'svg');
     close;
 end
-
+ 
 
 
 % plot time curve as well
@@ -561,12 +558,12 @@ for tt = 1:size(xCorrMat,1)
             xSigBoot_time{tt,rr} = getBootstrp(bootSigData,0,0.05);
             xSigBootAve_time(tt,rr) = xSigBoot_time{tt,rr}.coeff_bootave;
             % calculate two-tail p value
-
-
+            
+            
               bootSigData.coeff = squeeze(nanmean(xSigMat(tt,rr,:,:),3));
             xSigBoot_time{tt,rr} = getBootstrp(bootSigData,0,0.05);
             xSigBootAve_time(tt,rr) = xSigBoot_time{tt,rr}.coeff_bootave;
-
+            
             if xCorrBoot_time{tt,rr}.coeff_bootave > 0
                 xCorrBootPval_time(tt,rr) = sum(xCorrBoot_time{tt,rr}.bootSig(1,1,:)<0)*2/size(xCorrBoot_time{tt,rr}.bootSig,3);
             else
@@ -580,7 +577,7 @@ for tt = 1:size(xCorrMat,1)
              end
 
         end
-
+        
     end
 end
 
@@ -588,7 +585,7 @@ end
 
 % use bootstrap to check the significancy
 varName = {'cn+1','cn','cn-1','rn','rn-1','xn','xn-1','ave_r','Cum_r','dQ','chosenQ','dK','chosenK','RPE','CKE'};
-
+ 
 
 colors=cbrewer('div','RdBu',256);
     colors=flipud(colors);
@@ -609,15 +606,15 @@ yticklabels(varName)
 ifSig = xCorrBootPval_time<0.05;
      [r c]=find(ifSig==1);
     hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
-  ax = gca(h);
-    ax.FontSize = 20;
+  ax = gca(h); 
+    ax.FontSize = 20; 
     title('Average coeff cross-correlation');
     %s.Marker = '*';
     subplot(3,30,90);
     image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
     colormap(colors);
     caxis([colorRange(1) colorRange(2)]);
-
+    
 
    print(gcf,'-dpng',fullfile(save_path_fluo,'Average coeff cross-correlation'));
     saveas(gcf, fullfile(save_path_fluo,'Average coeff cross-correlation'), 'fig');
@@ -638,21 +635,21 @@ yticklabels(varName)
 ifSig = xSigBootPval_time<0.05;
      [r c]=find(ifSig==1);
     hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
-  ax = gca(h);
-    ax.FontSize = 20;
+  ax = gca(h); 
+    ax.FontSize = 20; 
     title('Average sig cross-correlation');
     %s.Marker = '*';
     subplot(3,30,90);
     image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
     colormap(colors);
     caxis([colorRange(1) colorRange(2)]);
-
+    
 
 
    print(gcf,'-dpng',fullfile(save_path_fluo,'Average cross-correlation'));
     saveas(gcf, fullfile(save_path_fluo,'Average cross-correlation'), 'fig');
     saveas(gcf, fullfile(save_path_fluo,'Average cross-correlation'), 'svg');
-
+    
          % significancy xcorr
    h= figure;
     subplot(1,2,1)
@@ -668,15 +665,15 @@ yticklabels(varName)
 ifSig = xSigBootPval_time<0.05;
      [r c]=find(ifSig==1);
     hold on;scatter(c,r,60,'MarkerEdgeColor',[254 177 57]/255,'marker','*');
-  ax = gca(h);
-    ax.FontSize = 20;
+  ax = gca(h); 
+    ax.FontSize = 20; 
     title('Average sig cross-correlation');
     %s.Marker = '*';
     subplot(3,30,90);
     image(0,linspace(colorRange(1),colorRange(2),100),linspace(colorRange(1),colorRange(2),100)','CDataMapping','scaled');
     colormap(colors);
     caxis([colorRange(1) colorRange(2)]);
-
+    
 
    print(gcf,'-dpng',fullfile(save_path_fluo,'Average sig cross-correlation'));
     saveas(gcf, fullfile(save_path_fluo,'Average sig cross-correlation'), 'fig');
@@ -686,9 +683,9 @@ ifSig = xSigBootPval_time<0.05;
 % possibility 1: different region, same modulation direction;
 % possibility 2: same region, different direction; % check overlapping area
 
-% negative pairs of interst:
+% negative pairs of interst: 
 % (dK/chosenK - dQ/chosenQ); cum_r;
-% rn/RPE - ave_r;
+% rn/RPE - ave_r; 
 % xn - cn/rn
 
 
@@ -759,9 +756,9 @@ RegCoeff{15}=coeff;
 % RPE & CumR
 t=-2.95:0.1:4.95;
 plot_pairedXcorr(xCorrBoot,RegCoeff,sigVar,t,9,14,varName,save_path_fluo);
-
+    
 % rn & dQ
-plot_pairedXcorr(xCorrBoot,RegCoeff,sigVar,t,4,10,varName,save_path_fluo);
+plot_pairedXcorr(xCorrBoot,RegCoeff,sigVar,t,4,10,varName,save_path_fluo);    
 % rn & chosenK
 plot_pairedXcorr(xCorrBoot,RegCoeff,sigVar,t,4,13,varName,save_path_fluo);
 % dK & cn-1

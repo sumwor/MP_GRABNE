@@ -1,6 +1,6 @@
 function MP_GRAB_clusterEval(dataIndex, savesumfigpath,savematsumpath)
 
-% find the optimal number of clusters using averate silhouette methods
+% find the optimal number of clusters using average silhouette methods
 % for each number of clusters, calculate the average sulhouette of
 % observation
 

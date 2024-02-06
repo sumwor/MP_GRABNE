@@ -3,7 +3,7 @@ clearvars;
 close all;
 setup_figprop;
 
-root_path = 'V:\HongliWang\GRAB_ctrl';
+root_path = 'V:\HongliWang\GRAB\GRAB_ctrl';
 
 audi_logfilepath = fullfile(root_path,'data','audi');
 spon_logfilepath = fullfile(root_path,'data','spon');

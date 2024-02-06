@@ -89,30 +89,30 @@ for ii = 1:nFiles
 
          % c(n+1) regression mask
         %if ~exist('cn_1RegData','var') % if choice regression mask not computed
-%             label = 'upcoming choice';
-%             cn_1Ind = 2;
-%             cn_1RegData = getRegSelData(reg1.reg_cr,label,cn_1Ind,Thresh, sigThresh,savefluofigpath);
+            label = 'upcoming choice';
+            cn_1Ind = 2;
+            cn_1RegData = getRegSelData(reg1.reg_cr,label,cn_1Ind,Thresh, sigThresh,savefluofigpath);
         %end
 
         % r(n+1) regression mask
         %if ~exist('rn_1RegData','var') % if choice regression mask not computed
-%             label = 'upcoming reward';
-%             rn_1Ind = 6;
-%             rn_1RegData = getRegSelData(reg1.reg_cr,label,rn_1Ind,Thresh, sigThresh,savefluofigpath);
+            label = 'upcoming reward';
+            rn_1Ind = 6;
+            rn_1RegData = getRegSelData(reg1.reg_cr,label,rn_1Ind,Thresh, sigThresh,savefluofigpath);
         %end
 
         % c(n-1) regression mask
         %if ~exist('cn__1RegData','var') % if choice regression mask not computed
-%             label = 'previous choice';
-%             cn__1Ind = 4;
-%             cn__1RegData = getRegSelData(reg1.reg_cr,label,cn__1Ind,Thresh, sigThresh,savefluofigpath);
+            label = 'previous choice';
+            cn__1Ind = 4;
+            cn__1RegData = getRegSelData(reg1.reg_cr,label,cn__1Ind,Thresh, sigThresh,savefluofigpath);
         %end
 
         % r(n-1) regression mask
         %if ~exist('rn__1RegData','var') % if choice regression mask not computed
-%             label = 'previous reward';
-%             rn__1Ind = 8;
-%             rn__1RegData = getRegSelData(reg1.reg_cr,label,rn__1Ind,Thresh, sigThresh,savefluofigpath);
+            label = 'previous reward';
+            rn__1Ind = 8;
+            rn__1RegData = getRegSelData(reg1.reg_cr,label,rn__1Ind,Thresh, sigThresh,savefluofigpath);
         %end
 
         % x(n) regression mask
@@ -123,78 +123,75 @@ for ii = 1:nFiles
         %end
 
          %if ~exist('xn__1RegData','var')
-%          label = 'previous interaction';
-%             xnInd = 12;
-%             xn__1RegData = getRegSelData(reg1.reg_cr,label,xnInd,Thresh, sigThresh,savefluofigpath);
-%          %end
-% 
-%         % average reward regression mask
-%         %if ~exist('ave_rRegData','var') % if choice regression mask not computed
-%             label = 'average reward';
-%             ave_rInd = 14;
-%             ave_rRegData = getRegSelData(reg1.reg_cr,label,ave_rInd,Thresh, sigThresh,savefluofigpath) ;
-%         %end
-% 
-%         % cumulative reward regression mask
-%         %if ~exist('cum_rRegData','var') % if choice regression mask not computed
-%             label = 'cumulative reward';
-%             cum_rInd = 15;
-%             cum_rRegData = getRegSelData(reg1.reg_cr,label,cum_rInd,Thresh, sigThresh,savefluofigpath) ;
-%         %end
+         label = 'previous interaction';
+            xnInd = 12;
+            xn__1RegData = getRegSelData(reg1.reg_cr,label,xnInd,Thresh, sigThresh,savefluofigpath);
+         %end
+
+        % average reward regression mask
+        %if ~exist('ave_rRegData','var') % if choice regression mask not computed
+            label = 'average reward';
+            ave_rInd = 14;
+            ave_rRegData = getRegSelData(reg1.reg_cr,label,ave_rInd,Thresh, sigThresh,savefluofigpath) ;
+        %end
+
+        % cumulative reward regression mask
+        %if ~exist('cum_rRegData','var') % if choice regression mask not computed
+            label = 'cumulative reward';
+            cum_rInd = 15;
+            cum_rRegData = getRegSelData(reg1.reg_cr,label,cum_rInd,Thresh, sigThresh,savefluofigpath) ;
+        %end
 
         %% regression 2-----------------------------------------------------------------------
-%         if exist('dQRegData','var') % if choice regression mask not computed
-%             label = 'delta Q';
-%             dQInd = 8;
-%             dQRegData = getRegSelData(reg2.reg_cr,label,dQInd,Thresh, sigThresh,savefluofigpath) ;
-%         end
-% 
-%         if exist('chosenQRegData','var') % if choice regression mask not computed
-%             label = 'chosen Q';
-%             chosenQInd = 9;
-%             chosenQRegData = getRegSelData(reg2.reg_cr,label,chosenQInd,Thresh, sigThresh,savefluofigpath) ;
-%         end
-% 
-%         if exist('dKRegData','var') % if choice regression mask not computed
-%             label = 'delta K';
-%             dKInd = 10;
-%             dKRegData = getRegSelData(reg2.reg_cr,label,dKInd,Thresh, sigThresh,savefluofigpath) ;
-%         end
-% 
-%         if exist('chosenKRegData','var') % if choice regression mask not computed
-%             label = 'chosen K';
-%             chosenKInd = 11;
-%             chosenKRegData = getRegSelData(reg2.reg_cr,label,chosenKInd,Thresh, sigThresh,savefluofigpath) ;
-%         end
-% 
-%         %% regression 3-----------------------------------------------------------------------
-% 
-%         if exist('RPERegData','var') % if choice regression mask not computed
-%             label = 'RPE';
-%             RPEInd = 6;
-%             RPERegData = getRegSelData(reg3.reg_cr,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
-% 
-%             label = 'posRPE';
-%             RPEInd = 6;
-%             posRPERegData = getRegSelData(reg3.reg_cr_pos,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
-% 
-%             label = 'negRPE';
-%             RPEInd = 6;
-%             negRPERegData = getRegSelData(reg3.reg_cr_neg,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
-%         %if ~exist('CKERegData','var') % if choice regression mask not computed
-%             label = 'CKE';
-%             CKEInd = 8;
-%             CKERegData = getRegSelData(reg3.reg_cr,label,CKEInd,Thresh, sigThresh,savefluofigpath) ;
-%         %end
+        %if ~exist('dQRegData','var') % if choice regression mask not computed
+            label = 'delta Q';
+            dQInd = 8;
+            dQRegData = getRegSelData(reg2.reg_cr,label,dQInd,Thresh, sigThresh,savefluofigpath) ;
+        %end
+
+        %if ~exist('chosenQRegData','var') % if choice regression mask not computed
+            label = 'chosen Q';
+            chosenQInd = 9;
+            chosenQRegData = getRegSelData(reg2.reg_cr,label,chosenQInd,Thresh, sigThresh,savefluofigpath) ;
+        %end
+
+        %if ~exist('dKRegData','var') % if choice regression mask not computed
+            label = 'delta K';
+            dKInd = 10;
+            dKRegData = getRegSelData(reg2.reg_cr,label,dKInd,Thresh, sigThresh,savefluofigpath) ;
+        %end
+
+        %if ~exist('chosenKRegData','var') % if choice regression mask not computed
+            label = 'chosen K';
+            chosenKInd = 11;
+            chosenKRegData = getRegSelData(reg2.reg_cr,label,chosenKInd,Thresh, sigThresh,savefluofigpath) ;
+        %end
+
+        %% regression 3-----------------------------------------------------------------------
+
+        %if ~exist('RPERegData','var') % if choice regression mask not computed
+            label = 'RPE';
+            RPEInd = 6;
+            RPERegData = getRegSelData(reg3.reg_cr,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
+        %end
+            label = 'posRPE';
+            RPEInd = 6;
+            posRPERegData = getRegSelData(reg3.reg_cr_pos,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
+
+            label = 'negRPE';
+            RPEInd = 6;
+            negRPERegData = getRegSelData(reg3.reg_cr_neg,label,RPEInd,Thresh, sigThresh,savefluofigpath) ;
+        %if ~exist('CKERegData','var') % if choice regression mask not computed
+            label = 'CKE';
+            CKEInd = 8;
+            CKERegData = getRegSelData(reg3.reg_cr,label,CKEInd,Thresh, sigThresh,savefluofigpath) ;
+        %end
 
         %% save the results
-%         save(saveregmaskpath,'outcomeRegData','choiceRegData','cn_1RegData','cn__1RegData',...
-%                              'rn_1RegData','rn__1RegData', 'xnRegData', 'xn__1RegData', 'ave_rRegData', 'cum_rRegData',...
-%                              'dQRegData', 'chosenQRegData','dKRegData','chosenKRegData',...
-%                              'RPERegData','posRPERegData','negRPERegData', 'CKERegData')
-        save(saveregmaskpath,'outcomeRegData','choiceRegData',...
-                              'xnRegData')
-
+        save(saveregmaskpath,'outcomeRegData','choiceRegData','cn_1RegData','cn__1RegData',...
+                             'rn_1RegData','rn__1RegData', 'xnRegData', 'xn__1RegData', 'ave_rRegData', 'cum_rRegData',...
+                             'dQRegData', 'chosenQRegData','dKRegData','chosenKRegData',...
+                             'RPERegData','posRPERegData','negRPERegData', 'CKERegData')
     end
 
         close all

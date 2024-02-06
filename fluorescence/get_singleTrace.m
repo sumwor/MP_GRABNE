@@ -1,7 +1,7 @@
-function [ output ] = get_psth ( signal, t, eventTime, psth_label, params)
+function [ output ] = get_singleTrace ( signal, t, eventTime, psth_label, params)
 % % get_psth %
-%PURPOSE:   Given a time-series signal and event times, find peri-event signal
-%           by binning, and estimate CI using bootstrap
+%PURPOSE:   Given a time-series signal and event times, find average response signal
+%           by binning
 %AUTHORS:   AC Kwan 170515
 %
 %INPUT ARGUMENTS
@@ -19,13 +19,6 @@ function [ output ] = get_psth ( signal, t, eventTime, psth_label, params)
 % To plot the output, use plot_psth().
 
 %%
-if isfield(params,'numBootstrapRepeat')
-    numRep=params.numBootstrapRepeat;
-    CI=params.CI;
-else
-    numRep=0;
-    CI=NaN;
-end
 
 output.psth_label=psth_label;
 
@@ -57,34 +50,5 @@ for j=1:numel(window)-1 %for each bin of time, what is the average signal?
     output.signal(j)=nanmean(tempSig(tempTime>=window(j) & tempTime<(window(j)+window_dt)));    
 end
 
-%% find CI using the bootstrap method
-
-if ~isnan(CI)
-    bootSig=[];
-    parfor i=1:numRep
-        
-        %draw a subset for bootstrap
-        drawIndex=randsample(numel(eventTime),numel(eventTime),'true'); %each time draw a set of events with replacement
-        drawSig=[]; drawTime=[];
-        for k=1:numel(drawIndex)
-            drawSig=[drawSig; tempSig(tempEvent==drawIndex(k))];
-            drawTime=[drawTime; tempTime(tempEvent==drawIndex(k))];
-        end
-        
-        %go through each time bin, and average
-        tempBoot = [];
-        for j=1:numel(window)-1
-            tempBoot(j)=nanmean(drawSig(drawTime>=window(j) & drawTime<(window(j)+window_dt)));
-        end
-        bootSig(:,i) = tempBoot;
-    end
-    
-    %bootstrap mean and confidence interval
-    output.bootSig = bootSig;
-    output.bootavg=squeeze(nanmean(bootSig,2));
-    output.bootlow=prctile(bootSig,0.5*(1-CI)*100,2);
-    output.boothigh=prctile(bootSig,(1-0.5*(1-CI))*100,2);
-    output.nEvent = nEvent;
-end
 
 end

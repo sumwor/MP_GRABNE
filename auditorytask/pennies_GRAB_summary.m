@@ -52,7 +52,8 @@ for i = 1:length(animalList)
         trueRespTime{logInd} = trialData.rt;
         choiceBySession{logInd} = stats;
         
-    
+        missedTrial{logInd} = trials.miss;
+
         if exist('nlike_array','var')
             fname = fieldnames(nlike);
             for j=1:numel(fname)  %append for each field
@@ -101,6 +102,16 @@ end
 %save('stats_1.mat', 'choiceBySession','entro_array','respTime_array', 'rrate_array', 'subMask');
 % tlabel=strcat('Group summary, n=',int2str(numel(iti_array)), ', subject=',dataIndex.Animal{1});
 tlabel=strcat('Group summary, n=',int2str(numel(iti_array)), ', subject=', int2str(length(animalList)));
+
+%% plot the number of missed trials per session from backwards
+val=cellfun(@(x) numel(x),missedTrial);
+[len,~] = max(val);
+missMat = zeros(len,numel(missedTrial));
+for mm = 1:numel(missedTrial)
+    missMat(end-numel(missedTrial{mm})+1:end,mm) = missedTrial{mm};
+end
+trial = -len+1:0;
+figure;plot(trial,sum(missMat,2));
 %% plot the previous ITI and response time
 plot_rtITI(iti_trueTime, trueRespTime)
 print(gcf,'-dpng','rt_ITI_cut');    %png format

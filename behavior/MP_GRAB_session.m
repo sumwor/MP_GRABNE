@@ -71,6 +71,8 @@ end
     lick_trType=get_lickrate_byTrialType(trialData,trials,trialType,edges);
     plot_lickrate_byTrialType(lick_trType);
     
+    %% get miss rate
+    
     %% plot response times
     valLabel='Response time (s)';    
     trialType={'go','left','right'};

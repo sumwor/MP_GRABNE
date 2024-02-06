@@ -51,7 +51,7 @@ MP_determineBehCriteria(dataIndex_ACh);
 %% behavior
 
 % NE
-nFiles_NE = size(dataIndex_NE,1);
+nFiles_NE = size(dataIndex_NE);
 
 for ii = 1:nFiles_NE
     savematpath_NE = dataIndex_NE.BehPath{ii};
@@ -107,17 +107,22 @@ MP_GRAB_saveLatent(dataIndex_ACh, model_path_ACh);
 MP_GRAB_preprocess(dataIndex_NE);
 %ACh
 MP_GRAB_preprocess(dataIndex_ACh);
+
+
+MP_GRAB_checkbaseline(dataIndex_NE);
+MP_GRAB_checkbaseline(dataIndex_ACh);
+
 % in 910-MP-1213, one img trigger was missing at trial 450 (two trials 450
 % + 451) in one imaging file
 % solve later
 
 %% simple plots
 MP_GRAB_simpleplots(dataIndex_NE);
+MP_GRAB_simpleplots_average(dataIndex_NE);
+MP_GRAB_simpleplots_summary(dataIndex_NE,save_path_NE);
 MP_GRAB_simpleplots(dataIndex_ACh);
-
-
-MP_GRAB_checkbaseline(dataIndex_NE);
-MP_GRAB_checkbaseline(dataIndex_ACh);
+MP_GRAB_simpleplots_average(dataIndex_ACh);
+MP_GRAB_simpleplots_summary(dataIndex_ACh,save_path_ACh );
 
 
 
@@ -145,8 +150,6 @@ MP_GRAB_MLR_acrossAnimals(dataIndex_NE,save_path_fluo_NE);
 MP_GRAB_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
 
-% MP_GRAB_MLR_separateSession(dataIndex_NE);
-% MP_GRAB_MLR_separateSummary(dataIndex_NE, save_path_fluo_NE);
 
 % ACh
 MP_GRAB_MLR(dataIndex_ACh);
@@ -159,7 +162,7 @@ MP_GRAB_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh);
 %% latent variable, ROIs sparsely modulated by latent variables
 %% no clear conclusions drawn
 
-NE
+%NE
 MP_GRABRL_MLR(dataIndex_NE)
 MP_GRABRL_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
@@ -178,54 +181,28 @@ MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh)
 %% spatial & temporal patterns
 
 % NE
-MP_GRAB_selectivitySpatial(dataIndex_NE);
-%MP_GRAB_selectivityCorr(dataIndex_NE);  % not needed
-MP_GRAB_selectivitySummary(dataIndex_NE, save_path_fluo_NE);
-
+% MP_GRAB_selectivitySpatial(dataIndex_NE);
+% MP_GRAB_selectivityCorr(dataIndex_NE);
+% MP_GRAB_selectivitySummary(dataIndex_NE, save_path_fluo_NE);
 
 MP_GRAB_temporalCorr(dataIndex_NE);
 save_path_mat_NE = fullfile(root_path_NE,'summary','data_summary');
 MP_GRAB_temporalCorrSummary(dataIndex_NE,save_path_fluo_NE,save_path_mat_NE)
 MP_GRAB_clusterEval(dataIndex_NE, save_path_fluo_NE, save_path_mat_NE)
+
 % temporal correlation (same grid, correlation of different variables)
 
 % ACh
-MP_GRAB_selectivitySpatial(dataIndex_ACh);
-MP_GRAB_selectivityCorr(dataIndex_ACh);
-MP_GRAB_selectivitySummary(dataIndex_ACh, save_path_fluo_ACh);
+% MP_GRAB_selectivitySpatial(dataIndex_ACh);
+% MP_GRAB_selectivityCorr(dataIndex_ACh);
+% MP_GRAB_selectivitySummary(dataIndex_ACh, save_path_fluo_ACh);
 
-MP_GRAB_clusterEval(dataIndex_ACh, save_path_fluo_ACh, save_path_mat_ACh)
 
 MP_GRAB_temporalCorr(dataIndex_ACh);
 save_path_mat_ACh = fullfile(root_path_ACh,'summary','data_summary');
 MP_GRAB_temporalCorrSummary(dataIndex_ACh,save_path_fluo_ACh, save_path_mat_ACh)
-
+MP_GRAB_clusterEval(dataIndex_ACh, save_path_fluo_ACh, save_path_mat_ACh)
 
 % compare NE and ACh result
 MP_GRAB_tempComp(save_path_mat_NE, save_path_mat_ACh,save_path_fluo_ACh)
 
-%% random forest is better in estimating weak signals
-% MP_GRAB_RF(dataIndex);
-% MP_GRAB_RF_acrossSessions(dataIndex, save_path_fluo)
-%
-% MP_GRAB_RF_RL(dataIndex);
-% MP_GRAB_RF_RL_acrossSessions(dataIndex, save_path_fluo)
-%
-% % motion kernel?
-% % df/f - reward rate/latent variable (sum of Q etc. )
-% MP_GRAB_tonic(dataIndex)
-%
-% %% GLM
-% MP_GRAB_GLM_findlambda(dataIndex);
-%
-% lambda = 0.2;  % manually picking lambda = 0.2 for every session for now
-% MP_GRAB_GLM(dataIndex,lambda);
-% % bayesian linear regression
-% MP_GRAB_BLM(dataIndex);
-%% PCA
-%MP_GRAB_PCA(dataIndex);
-
-%% clustering
-%MP_GRAB_clustering(dataIndex);
-
-%% find the patchness?
