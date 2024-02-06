@@ -1,4 +1,4 @@
-% analysis the GRAB_NE signal
+% analysis the GRAB_NE and GRAB_ACh signal
 
 clearvars;
 close all;
@@ -7,7 +7,6 @@ setup_figprop;
 
 root_path_NE = 'K:\GRAB2024\2PData\NE';
 root_path_ACh = 'K:\GRAB2024\2PData\ACh';
-%root_path = 'K:\Ach_784';
 
 
 %% matching pennies behavior
