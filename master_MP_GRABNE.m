@@ -5,8 +5,8 @@ close all;
 setup_figprop;
 
 
-root_path_NE = 'V:\HongliWang\GRAB\NE_analysis_784';
-root_path_ACh = 'V:\HongliWang\GRAB\ACh_analysis_784';
+root_path_NE = 'K:\GRAB2024\2PData\NE';
+root_path_ACh = 'K:\GRAB2024\2PData\ACh';
 %root_path = 'K:\Ach_784';
 
 
@@ -51,7 +51,7 @@ MP_determineBehCriteria(dataIndex_ACh);
 %% behavior
 
 % NE
-nFiles_NE = size(dataIndex_NE([1:13],:),1);
+nFiles_NE = size(dataIndex_NE,1);
 
 for ii = 1:nFiles_NE
     savematpath_NE = dataIndex_NE.BehPath{ii};
@@ -116,8 +116,8 @@ MP_GRAB_simpleplots(dataIndex_NE);
 MP_GRAB_simpleplots(dataIndex_ACh);
 
 
-% MP_GRAB_checkbaseline(dataIndex_NE);
-% MP_GRAB_checkbaseline(dataIndex_ACh);
+MP_GRAB_checkbaseline(dataIndex_NE);
+MP_GRAB_checkbaseline(dataIndex_ACh);
 
 
 
@@ -159,7 +159,7 @@ MP_GRAB_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh);
 %% latent variable, ROIs sparsely modulated by latent variables
 %% no clear conclusions drawn
 
-%NE
+NE
 MP_GRABRL_MLR(dataIndex_NE)
 MP_GRABRL_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
@@ -179,14 +179,14 @@ MP_GRABRL_RPE_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh)
 
 % NE
 MP_GRAB_selectivitySpatial(dataIndex_NE);
-MP_GRAB_selectivityCorr(dataIndex_NE);
+%MP_GRAB_selectivityCorr(dataIndex_NE);  % not needed
 MP_GRAB_selectivitySummary(dataIndex_NE, save_path_fluo_NE);
 
-MP_GRAB_clusterEval(dataIndex_NE, save_path_fluo_NE, save_path_mat_NE)
 
 MP_GRAB_temporalCorr(dataIndex_NE);
 save_path_mat_NE = fullfile(root_path_NE,'summary','data_summary');
 MP_GRAB_temporalCorrSummary(dataIndex_NE,save_path_fluo_NE,save_path_mat_NE)
+MP_GRAB_clusterEval(dataIndex_NE, save_path_fluo_NE, save_path_mat_NE)
 % temporal correlation (same grid, correlation of different variables)
 
 % ACh
@@ -223,9 +223,9 @@ MP_GRAB_tempComp(save_path_mat_NE, save_path_mat_ACh,save_path_fluo_ACh)
 % % bayesian linear regression
 % MP_GRAB_BLM(dataIndex);
 %% PCA
-MP_GRAB_PCA(dataIndex);
+%MP_GRAB_PCA(dataIndex);
 
 %% clustering
-MP_GRAB_clustering(dataIndex);
+%MP_GRAB_clustering(dataIndex);
 
 %% find the patchness?

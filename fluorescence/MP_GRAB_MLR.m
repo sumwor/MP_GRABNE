@@ -184,6 +184,27 @@ for ii = 1:nFiles
                 end
             end
             toc
+            
+            all_coeff = [];
+            for rr = 1:length(reg_cr)
+                all_coeff = cat(3,all_coeff, reg_cr{rr}.coeff);
+            end
+            reg_cr_all.coeff= all_coeff;
+
+            % use bootstrp to get coefficient
+            reg_cr_all = getBootstrp(reg_cr_all, 0, 0.05);
+
+            reg_cr_all.regr_time = reg_cr{1}.regr_time;
+            reg_cr_all.numPredictor = reg_cr{1}.numPredictor;
+            reg_cr_all.nback = reg_cr{1}.nback;
+            reg_cr_all.interaction = reg_cr{1}.interaction;
+            reg_cr_all.pvalThresh= 0.01;
+
+            MP_plot_regrcoef_fluo(reg_cr_all,params.pvalThresh,tlabel,params.xtitle);
+            print(gcf,'-dpng','MLR-norm_choiceoutcome');    %png format
+            saveas(gcf, 'MLR-norm_choiceoutcome', 'fig');
+            saveas(gcf, 'MLR-norm_choiceoutcome','svg');
+            
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
             print(gcf,'-dpng','MLR-norm-choiceoutcome');    %png format
             saveas(gcf, 'MLR-norm-choiceoutcome', 'fig');

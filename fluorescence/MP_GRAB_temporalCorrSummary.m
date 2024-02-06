@@ -89,6 +89,7 @@ for ii = 1:nFiles
         SigList.CKE = [SigList.CKE, CKEtempData.isSig'];
 
         numSigTotal(ii) = sum(choicetempData.isSig|outcomeSig'|xntempData.isSig|dQtempData.isSig|dKtempData.isSig|posRPEtempData.isSig|negRPEtempData.isSig|CKEtempData.isSig);
+        %numSigTotal(ii) = sum(choicetempData.isSig|outcomeSig'|xntempData.isSig);
     end
 end
 
@@ -101,6 +102,7 @@ save(fullfile(savematsumpath,'sigNum.mat'),'numSigVar','numSigTotal');
 
 %% plot percentage of significant grids
 sigForAny = SigList.c|SigList.r|SigList.x|SigList.dQ|SigList.dK|SigList.pRPE|SigList.nRPE|SigList.CKE;
+%sigForAny = SigList.c|SigList.r|SigList.x;
 numSigAny = sum(sigForAny);
 figure;
 explode = [0 1];
@@ -383,7 +385,7 @@ for gg = 1:nFiles
 %     maxInd3 = searchInd(maxInd);
 %     rHPeakT = [rHPeakT, rt(maxInd3)];
 %     rLPeakT = [rLPeakT, rt(minInd3)];
-    oriGroup = [oriGroup,3];
+%     oriGroup = [oriGroup,3];
     % fit for tau
     %     if maxInd3<length(rt)
     %         f3 = fit(rt(maxInd3:end),smoothed3(maxInd3:end),'exp1');
@@ -392,65 +394,65 @@ for gg = 1:nFiles
     %         f3 = [];
     %         rDecayTau = [rDecayTau,NaN];
     %     end
-    rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==3,:);
-     rSes = [rSes,gg];
-     cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
-    xCoeff_new{newInd} = xnCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
-    posRPECoeff_new{newInd} = posRPECoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
-    negRPECoeff_new{newInd} = negRPECoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
-    dQCoeff_new{newInd} = dQCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
-    dKCoeff_new{newInd} = dKCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
-    CKECoeff_new{newInd} = CKECoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
-
-     group3Sig = zeros(size(choiceCoeff{1},1),1);
-    group3Sig(rOriID{gg}(rClust{gg}==3)) = 1;
-     group3SigId = rOriID{gg}(rClust{gg}==3);
-
-    choiceSig = zeros(1,length(group3SigId));
-    xnSig = zeros(1,length(group3SigId));
-    posRPESig = zeros(1,length(group3SigId));
-    negRPESig = zeros(1,length(group3SigId));
-    dQSig = zeros(1,length(group3SigId));
-    dKSig = zeros(1,length(group3SigId));
-    CKESig = zeros(1,length(group3SigId));
-
-    for rr = 1:length(group3SigId)
-        if ismember(group3SigId(rr),choiceSigId)
-            choiceSig(rr) = 1;
-        end
-        if ismember(group3SigId(rr),xnSigId)
-            xnSig(rr) = 1;
-        end
-        if ismember(group3SigId(rr),posRPESigId)
-            posRPESig(rr) = 1;
-        end
-        if ismember(group3SigId(rr),negRPESigId)
-            negRPESig(rr) = 1;
-        end
-        if ismember(group3SigId(rr),dQSigId)
-            dQSig(rr) = 1;
-        end
-        if ismember(group3SigId(rr),dKSigId)
-            dKSig(rr) = 1;
-        end
-        if ismember(group3SigId(rr),CKESigId)
-            CKESig(rr) = 1;
-        end
-    end
-    cisSig{newInd} = choiceSig;
-    xisSig{newInd} = xnSig;
-    pRPEisSig{newInd} = posRPESig;
-    nRPEisSig{newInd} = negRPESig;
-    dqisSig{newInd} = dQSig;
-    dkisSig{newInd} = dKSig;
-    ckeisSig{newInd} = CKESig;
+%     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==3,:);
+%      rSes = [rSes,gg];
+%      cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
+%     xCoeff_new{newInd} = xnCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
+%     posRPECoeff_new{newInd} = posRPECoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
+%     negRPECoeff_new{newInd} = negRPECoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
+%     dQCoeff_new{newInd} = dQCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
+%     dKCoeff_new{newInd} = dKCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
+%     CKECoeff_new{newInd} = CKECoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
+% 
+%      group3Sig = zeros(size(choiceCoeff{1},1),1);
+%     group3Sig(rOriID{gg}(rClust{gg}==3)) = 1;
+%      group3SigId = rOriID{gg}(rClust{gg}==3);
+% 
+%     choiceSig = zeros(1,length(group3SigId));
+%     xnSig = zeros(1,length(group3SigId));
+%     posRPESig = zeros(1,length(group3SigId));
+%     negRPESig = zeros(1,length(group3SigId));
+%     dQSig = zeros(1,length(group3SigId));
+%     dKSig = zeros(1,length(group3SigId));
+%     CKESig = zeros(1,length(group3SigId));
+% 
+%     for rr = 1:length(group3SigId)
+%         if ismember(group3SigId(rr),choiceSigId)
+%             choiceSig(rr) = 1;
+%         end
+%         if ismember(group3SigId(rr),xnSigId)
+%             xnSig(rr) = 1;
+%         end
+%         if ismember(group3SigId(rr),posRPESigId)
+%             posRPESig(rr) = 1;
+%         end
+%         if ismember(group3SigId(rr),negRPESigId)
+%             negRPESig(rr) = 1;
+%         end
+%         if ismember(group3SigId(rr),dQSigId)
+%             dQSig(rr) = 1;
+%         end
+%         if ismember(group3SigId(rr),dKSigId)
+%             dKSig(rr) = 1;
+%         end
+%         if ismember(group3SigId(rr),CKESigId)
+%             CKESig(rr) = 1;
+%         end
+%     end
+%     cisSig{newInd} = choiceSig;
+%     xisSig{newInd} = xnSig;
+%     pRPEisSig{newInd} = posRPESig;
+%     nRPEisSig{newInd} = negRPESig;
+%     dqisSig{newInd} = dQSig;
+%     dkisSig{newInd} = dKSig;
+%     ckeisSig{newInd} = CKESig;
 
 %      cCoeff_Sig{newInd} = choiceCoeff{gg}(group3Sig & choiceisSig{gg},:);
 %      xCoeff_Sig{newInd} = xnCoeff{gg}(group3Sig & xnisSig{gg},:);
 %      posRPECoeff_Sig{newInd} = posRPECoeff{gg}(group3Sig & posRPEisSig{gg},:);
 %      negRPECoeff_Sig{newInd} = negRPECoeff{gg}(group3Sig & negRPEisSig{gg},:);
-%
-    newInd = newInd+1;
+% %
+%     newInd = newInd+1;
 
     % plot the fit results
     savefigpath =  fullfile(dataIndex.BehPath{gg},'figs-fluo','clustProp');
@@ -495,7 +497,7 @@ numSigVarg2 = zeros(8,nFiles);
 numSigVarg3 = zeros(8,nFiles);
 
 for ggg = 1:length(rCoeff_new)
-    animalInd = floor((ggg-1)/3)+1;
+    animalInd = floor((ggg-1)/2)+1;
     if oriGroup(ggg) == 1
         line11 = nanmean(rCoeff_new{ggg},1);
         areaUnder1 = trapz(rt(rt>0&rt<2),line11(rt>0 & rt<2));
@@ -586,29 +588,29 @@ for ggg = 1:length(rCoeff_new)
             CKE2 = [CKE2; CKECoeff_new{ggg}]; CKESig2 = [CKESig2,ckeisSig{ggg}];
               numSigVarg2(8,animalInd) = numSigVarg2(8,animalInd) + sum(ckeisSig{ggg});
         end
-    else
+  %  else
 %         areaUnder2 = trapz(rt(rt>3&rt<4),line11(rt>3 & rt<4));
 %         if areaUnder2 < 0
 %             group4 = [group4;rCoeff_new{ggg}];
 %         else
-            group3 = [group3;rCoeff_new{ggg}];
-            o3SesInd = [o3SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
-            numSigVarg3(2,animalInd) = numSigVarg3(2,animalInd) + size(rCoeff_new{ggg},1);
-            choice3 = [choice3; cCoeff_new{ggg}]; cSig3 = [cSig3,cisSig{ggg}];
-             c3SesInd = [c3SesInd, ones(1,size(cCoeff_new{ggg},1))*rSes(ggg)];
-            numSigVarg3(1,animalInd) = numSigVarg3(1,animalInd) + sum(cisSig{ggg});%choice3Sig = [choice3Sig; cCoeff_Sig{ggg}];
-            xn3 = [xn3; xCoeff_new{ggg}]; xSig3 = [xSig3,xisSig{ggg}];%xn3Sig = [xn3Sig; xCoeff_Sig{ggg}];
-            numSigVarg3(3,animalInd) = numSigVarg3(3,animalInd) + sum(xisSig{ggg});
-            posRPE3 = [posRPE3; posRPECoeff_new{ggg}]; pRPESig3 = [pRPESig3,pRPEisSig{ggg}];%posRPE3Sig = [posRPE3Sig; posRPECoeff_Sig{ggg}];
-            numSigVarg3(6,animalInd) = numSigVarg3(6,animalInd) + sum(pRPEisSig{ggg});
-            negRPE3 = [negRPE3; negRPECoeff_new{ggg}]; nRPESig3 = [nRPESig3,nRPEisSig{ggg}];%negRPE3Sig = [negRPE3Sig; negRPECoeff_Sig{ggg}];
-            numSigVarg3(7,animalInd) = numSigVarg3(7,animalInd) + sum(nRPEisSig{ggg});
-            dQ3 = [dQ3; dQCoeff_new{ggg}]; dQSig3 = [dQSig3,dqisSig{ggg}];
-            numSigVarg3(4,animalInd) = numSigVarg3(4,animalInd) + sum(dqisSig{ggg});
-            dK3 = [dK3; dKCoeff_new{ggg}]; dKSig3 = [dKSig3,dkisSig{ggg}];
-            numSigVarg3(5,animalInd) = numSigVarg3(5,animalInd) + sum(dkisSig{ggg});
-            CKE3 = [CKE3; CKECoeff_new{ggg}]; CKESig3 = [CKESig3,ckeisSig{ggg}];
-            numSigVarg3(8,animalInd) = numSigVarg3(8,animalInd) + sum(ckeisSig{ggg});
+%             group3 = [group3;rCoeff_new{ggg}];
+%             o3SesInd = [o3SesInd, ones(1,size(rCoeff_new{ggg},1))*rSes(ggg)];
+%             numSigVarg3(2,animalInd) = numSigVarg3(2,animalInd) + size(rCoeff_new{ggg},1);
+%             choice3 = [choice3; cCoeff_new{ggg}]; cSig3 = [cSig3,cisSig{ggg}];
+%              c3SesInd = [c3SesInd, ones(1,size(cCoeff_new{ggg},1))*rSes(ggg)];
+%             numSigVarg3(1,animalInd) = numSigVarg3(1,animalInd) + sum(cisSig{ggg});%choice3Sig = [choice3Sig; cCoeff_Sig{ggg}];
+%             xn3 = [xn3; xCoeff_new{ggg}]; xSig3 = [xSig3,xisSig{ggg}];%xn3Sig = [xn3Sig; xCoeff_Sig{ggg}];
+%             numSigVarg3(3,animalInd) = numSigVarg3(3,animalInd) + sum(xisSig{ggg});
+%             posRPE3 = [posRPE3; posRPECoeff_new{ggg}]; pRPESig3 = [pRPESig3,pRPEisSig{ggg}];%posRPE3Sig = [posRPE3Sig; posRPECoeff_Sig{ggg}];
+%             numSigVarg3(6,animalInd) = numSigVarg3(6,animalInd) + sum(pRPEisSig{ggg});
+%             negRPE3 = [negRPE3; negRPECoeff_new{ggg}]; nRPESig3 = [nRPESig3,nRPEisSig{ggg}];%negRPE3Sig = [negRPE3Sig; negRPECoeff_Sig{ggg}];
+%             numSigVarg3(7,animalInd) = numSigVarg3(7,animalInd) + sum(nRPEisSig{ggg});
+%             dQ3 = [dQ3; dQCoeff_new{ggg}]; dQSig3 = [dQSig3,dqisSig{ggg}];
+%             numSigVarg3(4,animalInd) = numSigVarg3(4,animalInd) + sum(dqisSig{ggg});
+%             dK3 = [dK3; dKCoeff_new{ggg}]; dKSig3 = [dKSig3,dkisSig{ggg}];
+%             numSigVarg3(5,animalInd) = numSigVarg3(5,animalInd) + sum(dkisSig{ggg});
+%             CKE3 = [CKE3; CKECoeff_new{ggg}]; CKESig3 = [CKESig3,ckeisSig{ggg}];
+%             numSigVarg3(8,animalInd) = numSigVarg3(8,animalInd) + sum(ckeisSig{ggg});
 
             %end
 

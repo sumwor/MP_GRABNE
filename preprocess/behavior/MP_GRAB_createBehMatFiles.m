@@ -96,7 +96,7 @@ end
 
 
  if strcmp(Mol,'NE')
-    subList = {'920';'921';'923';'926'};
+    subList = {'921';'922';'923';'926'};
     recordSite = {'right','right','left','right'};
  elseif strcmp(Mol,'ACh')
      subList = {'910';'912';'913';'914';'915'};

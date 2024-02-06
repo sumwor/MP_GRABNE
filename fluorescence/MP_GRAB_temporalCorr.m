@@ -267,7 +267,7 @@ for ii = 1:nFiles
             label = 'delta Q';
             dQInd = 8;
             dQtempData = getRegautoCorrData(reg_cr{2}.reg_cr,label,dQInd,[0,3],sigThresh,savefluofigpath) ;
-%         end
+% %         end
 % 
 %         if ~exist('chosenQtempData','var') % if choice regression mask not computed
 %             label = 'chosen Q';
@@ -285,7 +285,7 @@ for ii = 1:nFiles
 %             label = 'chosen K';
 %             chosenKInd = 11;
 %             chosenKtempData = getRegautoCorrData(reg_cr{2}.reg_cr,label,chosenKInd, sigThresh,savefluofigpath) ;
-%         end
+% %         end
 % 
 %         %% regression 3-----------------------------------------------------------------------
 % 
@@ -318,13 +318,13 @@ for ii = 1:nFiles
             label = 'CKE';
             CKEInd = 8;
             CKEtempData = getRegautoCorrData(reg_cr{3}.reg_cr,label,CKEInd,[0,3],sigThresh,savefluofigpath) ;
-%         end
-% 
-%      pos/neg RPE use all grids with coefficient
+% %         end
+% % 
+% %      pos/neg RPE use all grids with coefficient
         label = 'posRPE';
         RPEInd = 6;
         posRPEtempData = getRegautoCorrData(reg_cr{3}.reg_cr_pos,label,RPEInd,[0 3],sigThresh,savefluofigpath) ;
-%             tlabel1='posRPE coefficient';
+% %             tlabel1='posRPE coefficient';
 %              xtitle='Time from cue(s)';
 %             posRPESel.t = reg_cr{1}.reg_cr{1}.regr_time;
 %             posRPESel.coeff= posRPEtempData.coeff;
@@ -339,11 +339,11 @@ for ii = 1:nFiles
 %         saveDataOutcome.clustInd = clustInd;
 %         saveDataOutcome.t = outcomeSel.t;
 %         saveDataOutcome.coeff = outcomeSel.coeff;
-%         saveDataOutcome.sigInd = outcomeSel.sigInd;
+% %         saveDataOutcome.sigInd = outcomeSel.sigInd;
           label = 'negRPE';
         RPEInd = 6;
         negRPEtempData = getRegautoCorrData(reg_cr{3}.reg_cr_neg,label,RPEInd,[0 3],sigThresh,savefluofigpath) ;
-%             tlabel1='negRPE coefficient';
+% %             tlabel1='negRPE coefficient';
 %             negRPESel.t = reg_cr{1}.reg_cr{1}.regr_time;
 %             negRPESel.coeff= negRPEtempData.coeff;
 %             %RPESel.lag = RPEtempData.tempCorrLag(sigGrid);
@@ -358,122 +358,121 @@ for ii = 1:nFiles
 %         saveDataRPE.t = RPESel.t;
 %         saveDataRPE.coeff = RPESel.coeff;
 %         saveDataRPE.sigInd = RPESel.sigInd;
-%         %% save the results
-%         save(saveregpath,'outcometempData','choicetempData','cn_1tempData','cn__1tempData',...
-%                              'rn_1tempData','rn__1tempData', 'xntempData', 'xn__1tempData', 'ave_rtempData', 'cum_rtempData',...
+% %         %% save the results
+%         save(saveregpath,'outcometempData','choicetempData',...
 %                              'dQtempData', 'chosenQtempData','dKtempData','chosenKtempData',...
 %                              'RPEtempData', 'CKEtempData')
 
 %% based on the outcome result, plot pos/neg RPE coefficient, choice/interaction of the corresponding results
 t =  reg_cr{1}.reg_cr{1}.regr_time;
 nCells = length(saveDataOutcome.oriInd);
-
-figure;
-subplot(2,3,1)
-tlabel = 'Outcome';
-image(t,1:nCells,outcometempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
-hold on; plot([0 0],[0 nCells+1],'w');
-hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
-hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
-   colors=cbrewer('div','RdBu',256);
-        colors=flipud(colors);
-        colorRange = [-1 1];
-colormap(colors);
-caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
-title(tlabel);
-
-subplot(2,3,4)
-
-line1 = outcometempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
-ste = nanstd(line1,0,1)/sqrt(size(line1,1));
-plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
-hold on;
-errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
-hold on;
-line2 = outcometempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
-ste = nanstd(line2,0,1)/sqrt(size(line2,1));
-plot(t,nanmean(line2,1),'k');
-errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
-hold on;
-line3 =  outcometempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
-ste = nanstd(line3,0,1)/sqrt(size(line3,1));
-plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
-errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
-set(gca,'box','off');
+% 
+% figure;
+% subplot(2,3,1)
+% tlabel = 'Outcome';
+% image(t,1:nCells,outcometempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+% hold on; plot([0 0],[0 nCells+1],'w');
+% hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+% hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+%    colors=cbrewer('div','RdBu',256);
+%         colors=flipud(colors);
+%         colorRange = [-1 1];
+% colormap(colors);
+% caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+% title(tlabel);
+% 
+% subplot(2,3,4)
+% 
+% line1 = outcometempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+% ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+% plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+% hold on;
+% errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+% hold on;
+% line2 = outcometempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+% ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+% plot(t,nanmean(line2,1),'k');
+% errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+% hold on;
+% line3 =  outcometempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+% ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+% plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+% errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+% set(gca,'box','off');
 
 % plot pos RPE
-subplot(2,3,2)
-tlabel = 'posRPE';
-image(t,1:nCells, posRPEtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
-hold on; plot([0 0],[0 nCells+1],'w');
-hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
-hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
-   colors=cbrewer('div','RdBu',256);
-        colors=flipud(colors);
-        colorRange = [-1 1];
-colormap(colors);
-caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
-title(tlabel);
-
-subplot(2,3,5)
-
-line1 = posRPEtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
-ste = nanstd(line1,0,1)/sqrt(size(line1,1));
-plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
-hold on;
-errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
-hold on;
-line2 = posRPEtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
-ste = nanstd(line2,0,1)/sqrt(size(line2,1));
-plot(t,nanmean(line2,1),'k');
-errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
-hold on;
-line3 =  posRPEtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
-ste = nanstd(line3,0,1)/sqrt(size(line3,1));
-plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
-errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
-set(gca,'box','off');
-
-% plot neg RPE
-subplot(2,3,3)
-tlabel = 'negRPE';
-image(t,1:nCells, negRPEtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
-hold on; plot([0 0],[0 nCells+1],'w');
-hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
-hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
-   colors=cbrewer('div','RdBu',256);
-        colors=flipud(colors);
-        colorRange = [-1 1];
-colormap(colors);
-caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
-title(tlabel)
-subplot(2,3,6)
-
-line1 = negRPEtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
-ste = nanstd(line1,0,1)/sqrt(size(line1,1));
-plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
-hold on;
-errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
-hold on;
-line2 = negRPEtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
-ste = nanstd(line2,0,1)/sqrt(size(line2,1));
-plot(t,nanmean(line2,1),'k');
-errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
-hold on;
-line3 =  negRPEtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
-ste = nanstd(line3,0,1)/sqrt(size(line3,1));
-plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
-errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
-set(gca,'box','off');
+% subplot(2,3,2)
+% tlabel = 'posRPE';
+% image(t,1:nCells, posRPEtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+% hold on; plot([0 0],[0 nCells+1],'w');
+% hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+% hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+%    colors=cbrewer('div','RdBu',256);
+%         colors=flipud(colors);
+%         colorRange = [-1 1];
+% colormap(colors);
+% caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+% title(tlabel);
+% 
+% subplot(2,3,5)
+% 
+% line1 = posRPEtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+% ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+% plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+% hold on;
+% errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+% hold on;
+% line2 = posRPEtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+% ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+% plot(t,nanmean(line2,1),'k');
+% errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+% hold on;
+% line3 =  posRPEtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+% ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+% plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+% errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+% set(gca,'box','off');
+% 
+% % plot neg RPE
+% subplot(2,3,3)
+% tlabel = 'negRPE';
+% image(t,1:nCells, negRPEtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+% hold on; plot([0 0],[0 nCells+1],'w');
+% hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+% hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+%    colors=cbrewer('div','RdBu',256);
+%         colors=flipud(colors);
+%         colorRange = [-1 1];
+% colormap(colors);
+% caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+% title(tlabel)
+% subplot(2,3,6)
+% 
+% line1 = negRPEtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+% ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+% plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+% hold on;
+% errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+% hold on;
+% line2 = negRPEtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+% ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+% plot(t,nanmean(line2,1),'k');
+% errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+% hold on;
+% line3 =  negRPEtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+% ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+% plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+% errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+% set(gca,'box','off');
 
 savepath = fullfile(savefluofigpath,'clustering');
 if ~exist(savepath)
     mkdir(savepath)
 end
 
-print(gcf,'-dpng',fullfile(savepath,[tlabel,' outcome-RPE-cluster']));
-saveas(gcf, fullfile(savepath,[tlabel,' outcome-RPE-cluster']), 'fig');
-saveas(gcf, fullfile(savepath,[tlabel,' outcome-RPE-cluster']), 'svg');
+% print(gcf,'-dpng',fullfile(savepath,[tlabel,' outcome-RPE-cluster']));
+% saveas(gcf, fullfile(savepath,[tlabel,' outcome-RPE-cluster']), 'fig');
+% saveas(gcf, fullfile(savepath,[tlabel,' outcome-RPE-cluster']), 'svg');
 
 %% outcome, choice, interaction
 figure;
@@ -580,109 +579,110 @@ saveas(gcf, fullfile(savepath,[tlabel,' outcome-choice-cluster']), 'svg');
 
 %% outcome, dQ, dK
 %% outcome, choice, interaction
-figure;
-subplot(2,3,1)
-tlabel = 'Outcome';
-image(t,1:nCells,outcometempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
-hold on; plot([0 0],[0 nCells+1],'w');
-hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
-hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
-   colors=cbrewer('div','RdBu',256);
-        colors=flipud(colors);
-        colorRange = [-1 1];
-colormap(colors);
-caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
-title(tlabel);
-
-subplot(2,3,4)
-
-line1 = outcometempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
-ste = nanstd(line1,0,1)/sqrt(size(line1,1));
-plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
-hold on;
-errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
-hold on;
-line2 = outcometempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
-ste = nanstd(line2,0,1)/sqrt(size(line2,1));
-plot(t,nanmean(line2,1),'k');
-errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
-hold on;
-line3 =  outcometempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
-ste = nanstd(line3,0,1)/sqrt(size(line3,1));
-plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
-errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
-set(gca,'box','off');
-% plot dQ
-subplot(2,3,2)
-tlabel = 'dQ';
-image(t,1:nCells, dQtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
-hold on; plot([0 0],[0 nCells+1],'w');
-hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
-hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
-   colors=cbrewer('div','RdBu',256);
-        colors=flipud(colors);
-        colorRange = [-1 1];
-colormap(colors);
-caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
-title(tlabel);
-subplot(2,3,5)
-
-line1 = dQtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
-ste = nanstd(line1,0,1)/sqrt(size(line1,1));
-plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
-hold on;
-errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
-hold on;
-line2 = dQtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
-ste = nanstd(line2,0,1)/sqrt(size(line2,1));
-plot(t,nanmean(line2,1),'k');
-errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
-hold on;
-line3 =  dQtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
-ste = nanstd(line3,0,1)/sqrt(size(line3,1));
-plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
-errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
-set(gca,'box','off');
-
-
-% plot dK
-subplot(2,3,3)
-tlabel = 'dK';
-image(t,1:nCells,dKtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
-hold on; plot([0 0],[0 nCells+1],'w');
-hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
-hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
-   colors=cbrewer('div','RdBu',256);
-        colors=flipud(colors);
-        colorRange = [-1 1];
-colormap(colors);
-caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
-title(tlabel);
-subplot(2,3,6)
-
-line1 = dKtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
-ste = nanstd(line1,0,1)/sqrt(size(line1,1));
-plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
-hold on;
-errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
-hold on;
-line2 = dKtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
-ste = nanstd(line2,0,1)/sqrt(size(line2,1));
-plot(t,nanmean(line2,1),'k');
-errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
-hold on;
-line3 =  dKtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
-ste = nanstd(line3,0,1)/sqrt(size(line3,1));
-plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
-errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
-set(gca,'box','off');
-
-print(gcf,'-dpng',fullfile(savepath,[tlabel,' outcome-dQ-cluster']));
-saveas(gcf, fullfile(savepath,[tlabel,' outcome-dQ-cluster']), 'fig');
-saveas(gcf, fullfile(savepath,[tlabel,' outcome-dQ-cluster']), 'svg');
-%         
+% figure;
+% subplot(2,3,1)
+% tlabel = 'Outcome';
+% image(t,1:nCells,outcometempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+% hold on; plot([0 0],[0 nCells+1],'w');
+% hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+% hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+%    colors=cbrewer('div','RdBu',256);
+%         colors=flipud(colors);
+%         colorRange = [-1 1];
+% colormap(colors);
+% caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+% title(tlabel);
+% 
+% subplot(2,3,4)
+% 
+% line1 = outcometempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+% ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+% plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+% hold on;
+% errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+% hold on;
+% line2 = outcometempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+% ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+% plot(t,nanmean(line2,1),'k');
+% errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+% hold on;
+% line3 =  outcometempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+% ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+% plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+% errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+% set(gca,'box','off');
+% % plot dQ
+% subplot(2,3,2)
+% tlabel = 'dQ';
+% image(t,1:nCells, dQtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+% hold on; plot([0 0],[0 nCells+1],'w');
+% hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+% hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+%    colors=cbrewer('div','RdBu',256);
+%         colors=flipud(colors);
+%         colorRange = [-1 1];
+% colormap(colors);
+% caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+% title(tlabel);
+% subplot(2,3,5)
+% 
+% line1 = dQtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+% ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+% plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+% hold on;
+% errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+% hold on;
+% line2 = dQtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+% ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+% plot(t,nanmean(line2,1),'k');
+% errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+% hold on;
+% line3 =  dQtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+% ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+% plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+% errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+% set(gca,'box','off');
+% 
+% 
+% % plot dK
+% subplot(2,3,3)
+% tlabel = 'dK';
+% image(t,1:nCells,dKtempData.coeff(saveDataOutcome.oriInd,:),'CDataMapping','scaled');
+% hold on; plot([0 0],[0 nCells+1],'w');
+% hold on; plot([t(1) t(end)],[clusterNum(1) clusterNum(1)],'Color',[241, 84, 18]/255)
+% hold on; plot([t(1) t(end)],[sum(clusterNum(1:2)) sum(clusterNum(1:2))],'k')
+%    colors=cbrewer('div','RdBu',256);
+%         colors=flipud(colors);
+%         colorRange = [-1 1];
+% colormap(colors);
+% caxis([-0.1 0.1]);      %normalize dF/F heatmap to max of all conditions
+% title(tlabel);
+% subplot(2,3,6)
+% 
+% line1 = dKtempData.coeff(saveDataOutcome.oriInd(1:clusterNum(1)),:);
+% ste = nanstd(line1,0,1)/sqrt(size(line1,1));
+% plot(t,nanmean(line1,1),'Color',[241, 84, 18]/255);
+% hold on;
+% errorshade(t,nanmean(line1,1)-ste,nanmean(line1,1)+ste,[241, 84, 18]/255,0.5);
+% hold on;
+% line2 = dKtempData.coeff(saveDataOutcome.oriInd(clusterNum(1)+1:sum(clusterNum(1:2))),:);
+% ste = nanstd(line2,0,1)/sqrt(size(line2,1));
+% plot(t,nanmean(line2,1),'k');
+% errorshade(t,nanmean(line2,1)-ste,nanmean(line2,1)+ste,[0 0 0]/255,0.5);
+% hold on;
+% line3 =  dKtempData.coeff(saveDataOutcome.oriInd(sum(clusterNum(1:2))+1:end),:);
+% ste = nanstd(line3,0,1)/sqrt(size(line3,1));
+% plot(t,nanmean(line3,1), 'Color',[52, 179, 241]/255);
+% errorshade(t,nanmean(line3,1)-ste,nanmean(line3,1)+ste,[52, 179, 241]/255,0.5);
+% set(gca,'box','off');
+% 
+% print(gcf,'-dpng',fullfile(savepath,[tlabel,' outcome-dQ-cluster']));
+% saveas(gcf, fullfile(savepath,[tlabel,' outcome-dQ-cluster']), 'fig');
+% saveas(gcf, fullfile(savepath,[tlabel,' outcome-dQ-cluster']), 'svg');
+% %         
 close all;
      save(fullfile(savematpath,'cluster.mat'), 'saveDataOutcome','choicetempData','xntempData','posRPEtempData','negRPEtempData','dQtempData','dKtempData','CKEtempData');
+%      save(fullfile(savematpath,'cluster.mat'), 'saveDataOutcome','choicetempData','xntempData');
     end
 
         close all
