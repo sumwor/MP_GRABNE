@@ -103,7 +103,7 @@ for ii = 1:nFiles_NE
     MP_GRAB_session(dataIndex_NE_Learning.BehPath{ii},dataIndex_NE_Learning.LogFileName{ii},savematpath_NE);
 end
 
-Learning_analysis(dataIndex_NE_Learning, save_path_NE)
+Learning_analysis(dataIndex_NE_Learning)
 %% ACh
 logfilepath_ACh_Learning = fullfile(root_path_ACh,'Learning');
 analysispath_ACh_Learning = fullfile(root_path_ACh,'analysis_learning');
@@ -118,15 +118,11 @@ dataIndex_AChE_Learning = sortdataIndex(dataIndex_ACh_Learning);
 nFiles_ACh = size(dataIndex_ACh_Learning);
 
 for ii = 1:nFiles_ACh
-    date=num2str(dataIndex_ACh_Learning.DateNumber(ii));
-    yy=date(1:2);
-    mm=date(3:4);
-    dd=date(5:6);
-    savematpath_ACh = fullfile(dataIndex_ACh_Learning.BehPath{ii},[yy mm dd]);
+    savematpath_ACh = dataIndex_ACh_Learning.BehPath{ii};
     MP_GRAB_session(dataIndex_ACh_Learning.BehPath{ii},dataIndex_ACh_Learning.LogFileName{ii},savematpath_ACh);
 end
 
-Learning_analysis(dataIndex_ACh_Learning, save_path_ACh)
+Learning_analysis(dataIndex_NE_Learning)
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%% Behavior - Model fitting
 
