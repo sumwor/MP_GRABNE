@@ -1,4 +1,4 @@
-function MP_GRAB_MLR(dataIndex)
+function MP_GRAB_MLR_switch(dataIndex)
 
 %% reference to Sul et al.2011
 % running multilinear regression
@@ -72,7 +72,7 @@ for ii = 1:nFiles
         cd(savefluofigpath);
         
         
-        load(fullfile(fn_fluo.folder,fn_fluo.name));
+        %load(fullfile(fn_fluo.folder,fn_fluo.name));
         
         % make folders to save analysis and plots
         savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');
@@ -82,7 +82,7 @@ for ii = 1:nFiles
         
         
         %saveRegName = fullfile(savematpath,[fn_beh.name(1:end-7),'regCR.mat']);
-        saveRegName = fullfile(savematpath,'regCR_norm.mat');  % regression for fluo change
+        saveRegName = fullfile(savematpath,'regCR_norm_switch.mat');  % regression for fluo change
         % saveRegName_ITI =  fullfile(savematpath,[fn_beh.name(1:end-7),'regCR_ITI.mat']);
         
         %% linear regression with C(n+1), observable variables
@@ -90,12 +90,13 @@ for ii = 1:nFiles
         %  C(n-2) - C(n+1)
         %  R(n-2) - R(n+1)
         %   interaction term
-        %if ~exist(saveRegName)
-            
+        if ~exist(saveRegName)
+             load(fullfile(fn_fluo.folder,fn_fluo.name));
             % convert left/right choices into ipsi/contra choices
             % dummy code: ipsi: 0; contra: 1;
             
             choice = NaN(size(trials.left));
+            switch_choice = NaN(size(trials.left)); 
             if strcmp(dataIndex.RecordingSite{ii},'left')
                 choice(trialData.response == 2) = 0;
                 choice(trialData.response == 3) = 1;
@@ -104,10 +105,22 @@ for ii = 1:nFiles
                 choice(trialData.response == 3) = 0;
             end
             
-            params_future.trigEvent1 = [choice(2:end);NaN];  % C(n+1)
-            params_future.trigEvent2 = choice; %C(n)
-            params_future.trigEvent3 = [NaN;choice(1:end-1)];   % C(n-1)
-            params_future.trigEvent4 = [NaN;NaN;choice(1:end-2);];  % C(n-2)
+            for ss = 1:length(choice)-1
+                if choice(ss+1) == choice(ss)
+                    switch_choice(ss+1) = 0;
+                elseif choice(ss+1) ~= choice(ss)
+                    if choice(ss) == 0 % ipsi to contra switch
+                        switch_choice(ss+1) = 1;
+                    elseif choice(ss) == 1 % contra to ipsi switch
+                        switch_choice(ss+1) = -1;
+                    end
+                end
+            end
+            
+            %params_future.trigEvent1 = [switch_choice(2:end);NaN];  % C(n+1)
+            params_future.trigEvent1 = switch_choice; %C(n)
+            %params_future.trigEvent3 = [NaN;switch_choice(1:end-1)];   % C(n-1)
+            %params_future.trigEvent4 = [NaN;NaN;switch_choice(1:end-2);];  % C(n-2)
             
             %second predictor is outcome; dummy-code: reward=1, error=0, miss=NaN
             %params_future.trigEvent4 = [NaN;NaN;params_future.trigEvent(1:end-2)]; % C(n-2)
@@ -116,36 +129,42 @@ for ii = 1:nFiles
             reward(trialData.response ~= 0 & trials.reward == 0) = 0;
             reward(trialData.response ~= 0 & trials.reward == 1) = 1;
             
-            params_future.trigEvent5 = [reward(2:end);NaN];  % R(n+1)
-            params_future.trigEvent6 = reward; % R(n)
-            params_future.trigEvent7 = [NaN;reward(1:end-1)]; % R(n-1)
-            params_future.trigEvent8 = [NaN;NaN;reward(1:end-2)]; % R(n-2)
+            %params_future.trigEvent5 = [reward(2:end);NaN];  % R(n+1)
+            params_future.trigEvent2= reward; % R(n)
+            %params_future.trigEvent7 = [NaN;reward(1:end-1)]; % R(n-1)
+            %params_future.trigEvent8 = [NaN;NaN;reward(1:end-2)]; % R(n-2)
             
             % interaction
-            params_future.trigEvent9 = params_future.trigEvent1 .* params_future.trigEvent5;
-            params_future.trigEvent10 = params_future.trigEvent2 .* params_future.trigEvent6;
-            params_future.trigEvent11 = params_future.trigEvent3 .* params_future.trigEvent7;
-            params_future.trigEvent12 = params_future.trigEvent4 .* params_future.trigEvent8;
+            
+            %params_future.trigEvent9 = params_future.trigEvent1 .* params_future.trigEvent5;
+            params_future.trigEvent3 = params_future.trigEvent1 .* params_future.trigEvent2;
+            %params_future.trigEvent11 = params_future.trigEvent3 .* params_future.trigEvent7;
+            %params_future.trigEvent12 = params_future.trigEvent4 .* params_future.trigEvent8;
             
             % average reward rate on 20 trials window
-            params_future.trigEvent13 = NaN(size(trials.go));
+            params_future.trigEvent4 = NaN(size(trials.go));
             for kk = 1:length(trials.left)
                 if kk <= 20
-                    params_future.trigEvent13(kk) = sum(trials.reward(1:kk))/kk;
+                    params_future.trigEvent4(kk) = sum(trials.reward(1:kk))/kk;
                 else
-                    params_future.trigEvent13(kk) = sum(trials.reward(kk-19:kk))/20;
+                    params_future.trigEvent4(kk) = sum(trials.reward(kk-19:kk))/20;
                 end
             end
             
             % cumulative reward
-            params_future.trigEvent14=NaN(size(trials.left));
+            params_future.trigEvent5=NaN(size(trials.left));
             for kk = 1:length(trials.left)
-                params_future.trigEvent14(kk) = sum(trials.reward(1:kk));
+                params_future.trigEvent5(kk) = sum(trials.reward(1:kk));
             end
-            params_future.trigEvent14 = (params_future.trigEvent14)/sum(trials.reward);
+            params_future.trigEvent5 = (params_future.trigEvent5)/sum(trials.reward);
             
             
-            
+                        % lick
+            choiceTime = trialData.rt+trialData.cueTimes;
+            % remove the first lick from lick times (choice lick)
+            leftlickTime = setdiff(sessionData.lickTimes{1,1}, choiceTime);
+            rightlickTime = setdiff(sessionData.lickTimes{1,2}, choiceTime);
+            totalLick = [leftlickTime; rightlickTime];
             
             future_event = concat_event(params_future);
             % params.trigEvent2(trials.doublereward) = 2;
@@ -161,29 +180,35 @@ for ii = 1:nFiles
             params.interaction = false;
             params.ifplot = 0;
             params.trigTime = trialData.cueTimes;
+            params.lick = totalLick;
             %only perform analysis on this subset of trials
             
-            tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
-                'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward'};
-            
+            %tlabel={'S(n+1)','S(n)','S(n-1)','S(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
+            %    'S(n+1)*R(n+1)','S(n)*R(n)','S(n-1)*R(n-1)','S(n-2)*R(n-2)','Reward Rate','Cumulative Reward', 'lick'};
+            tlabel={'S(n)','R(n)','S(n)*R(n)','Reward Rate','Cumulative Reward', 'lick'};
             % reg_cr_future=linear_regr( fluo.dia, fluo.t, future_event, params.trigTime, trialMask, params );
             reg_t = cells.t;
-%             if isfield(cells,'normdFF')
-%                 reg_dFF = cells.normdFF;
-%             else
+            if isfield(cells,'normdFF')
+                 reg_dFF = cells.normdFF;
+            else
                 reg_dFF = cells.dFF;
             end
+            hWaitbar = waitbar(0, 'Progress...');
             tic
-            parfor j=1:numel(reg_dFF)
+            for j=1:numel(reg_dFF)
                 if length(reg_t) > length(reg_dFF{1})
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t(1:length(cells.dFF{1})), future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
+                    reg_cr{j}=linear_regr_lick( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
                 else
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t, future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr(reg_dFF{j}(1:length(reg_t)), reg_t, future_event, params.trigTime, trialMask, params );
+                    reg_cr{j}=linear_regr_lick(reg_dFF{j}(1:length(reg_t)), reg_t, future_event, params.trigTime, trialMask, params );
                 end
+                
+                progressMessage = sprintf('Progress: %d%%', round(j/numel(reg_dFF)*100));
+                waitbar(j/numel(reg_dFF),hWaitbar, progressMessage);
             end
             toc
+            close(hWaitbar);
 
             all_coeff = [];
             for rr = 1:length(reg_cr)
@@ -200,14 +225,14 @@ for ii = 1:nFiles
             reg_cr_all.interaction = reg_cr{1}.interaction;
             reg_cr_all.pvalThresh= 0.01;
 
-            MP_plot_regrcoef_fluo(reg_cr_all,params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-norm_choiceoutcome');    %png format
-            saveas(gcf, 'MLR-norm_choiceoutcome', 'fig');
-            saveas(gcf, 'MLR-norm_choiceoutcome','svg');
+%             MP_plot_regrcoef_fluo(reg_cr_all,params.pvalThresh,tlabel,params.xtitle);
+%             print(gcf,'-dpng','MLR-norm_choiceoutcome');    %png format
+%             saveas(gcf, 'MLR-norm_choiceoutcome', 'fig');
+%             saveas(gcf, 'MLR-norm_choiceoutcome','svg');
 
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-norm-choiceoutcome');    %png format
-            saveas(gcf, 'MLR-norm-choiceoutcome', 'fig');
+            print(gcf,'-dpng','MLR-norm-choiceoutcome_switch');    %png format
+            saveas(gcf, 'MLR-norm-choiceoutcome_switch', 'fig');
             
             %%plot the field of view, with significance of choice/reward in every grid
             
@@ -320,9 +345,9 @@ for ii = 1:nFiles
             save(saveRegName,'reg_cr');
             %save(saveRegName_ITI,'reg_cr1_change_1','reg_cr2_change_1','reg_cr3_change_1');
             close all;
-%         else
+         else
 %             %
-%             display('Regression already done');
+             display('Regression already done');
 %             load(saveRegName);
 %              params.xtitle = {'Time from cue (s)'};
 %            tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
@@ -331,7 +356,7 @@ for ii = 1:nFiles
 %            MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
 %             print(gcf,'-dpng','MLR-norm-choiceoutcome');    %png format
 %             saveas(gcf, 'MLR-norm-choiceoutcome', 'fig');
-%         end
+         end
     end
 end
 end

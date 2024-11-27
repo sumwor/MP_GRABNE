@@ -1,4 +1,4 @@
-function MP_GRAB_MLR(dataIndex)
+function MP_GRAB_MLR_lick(dataIndex)
 
 %% reference to Sul et al.2011
 % running multilinear regression
@@ -82,7 +82,7 @@ for ii = 1:nFiles
         
         
         %saveRegName = fullfile(savematpath,[fn_beh.name(1:end-7),'regCR.mat']);
-        saveRegName = fullfile(savematpath,'regCR_norm.mat');  % regression for fluo change
+        saveRegName = fullfile(savematpath,'regCR_norm_lick.mat');  % regression for fluo change
         % saveRegName_ITI =  fullfile(savematpath,[fn_beh.name(1:end-7),'regCR_ITI.mat']);
         
         %% linear regression with C(n+1), observable variables
@@ -144,8 +144,13 @@ for ii = 1:nFiles
             end
             params_future.trigEvent14 = (params_future.trigEvent14)/sum(trials.reward);
             
-
             
+                        % lick
+            choiceTime = trialData.rt+trialData.cueTimes;
+            % remove the first lick from lick times (choice lick)
+            leftlickTime = setdiff(sessionData.lickTimes{1,1}, choiceTime);
+            rightlickTime = setdiff(sessionData.lickTimes{1,2}, choiceTime);
+            totalLick = [leftlickTime; rightlickTime];
             
             future_event = concat_event(params_future);
             % params.trigEvent2(trials.doublereward) = 2;
@@ -161,10 +166,20 @@ for ii = 1:nFiles
             params.interaction = false;
             params.ifplot = 0;
             params.trigTime = trialData.cueTimes;
+            params.lick = totalLick;
+            if strcmp(dataIndex.RecordingSite{ii},'left')
+                params.ipsilick = leftlickTime;
+                params.contralick = rightlickTime;
+            else
+                params.ipsilick = rightlickTime;
+                params.contralick = leftlickTime;
+            end
             %only perform analysis on this subset of trials
             
+            %tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
+            %    'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward', 'contralick', 'ipsilick'};
             tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
-                'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward'};
+                'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward', 'lick'};
             
             % reg_cr_future=linear_regr( fluo.dia, fluo.t, future_event, params.trigTime, trialMask, params );
             reg_t = cells.t;
@@ -173,17 +188,22 @@ for ii = 1:nFiles
             else
                 reg_dFF = cells.dFF;
             end
+            hWaitbar = waitbar(0, 'Progress...');
             tic
             for j=1:numel(reg_dFF)
                 if length(reg_t) > length(reg_dFF{1})
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t(1:length(cells.dFF{1})), future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
+                    reg_cr{j}=linear_regr_lick( reg_dFF{j}, reg_t(1:length(cells.normdFF{1})), future_event, params.trigTime, trialMask, params );
                 else
                     %reg_cr{j}=linear_regr( cells.dFF{j}, cells.t, future_event, params.trigTime, trialMask, params );
-                    reg_cr{j}=linear_regr(reg_dFF{j}(1:length(reg_t)), reg_t, future_event, params.trigTime, trialMask, params );
+                    reg_cr{j}=linear_regr_lick(reg_dFF{j}(1:length(reg_t)), reg_t, future_event, params.trigTime, trialMask, params );
                 end
+                
+                progressMessage = sprintf('Progress: %d%%', round(j/numel(reg_dFF)*100));
+                waitbar(j/numel(reg_dFF),hWaitbar, progressMessage);
             end
             toc
+            close(hWaitbar);
 
             all_coeff = [];
             for rr = 1:length(reg_cr)
@@ -200,14 +220,14 @@ for ii = 1:nFiles
             reg_cr_all.interaction = reg_cr{1}.interaction;
             reg_cr_all.pvalThresh= 0.01;
 
-            MP_plot_regrcoef_fluo(reg_cr_all,params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-norm_choiceoutcome');    %png format
-            saveas(gcf, 'MLR-norm_choiceoutcome', 'fig');
-            saveas(gcf, 'MLR-norm_choiceoutcome','svg');
+%             MP_plot_regrcoef_fluo(reg_cr_all,params.pvalThresh,tlabel,params.xtitle);
+%             print(gcf,'-dpng','MLR-norm_choiceoutcome');    %png format
+%             saveas(gcf, 'MLR-norm_choiceoutcome', 'fig');
+%             saveas(gcf, 'MLR-norm_choiceoutcome','svg');
 
             MP_plot_regr(reg_cr,[],params.pvalThresh,tlabel,params.xtitle);
-            print(gcf,'-dpng','MLR-norm-choiceoutcome');    %png format
-            saveas(gcf, 'MLR-norm-choiceoutcome', 'fig');
+            print(gcf,'-dpng','MLR-norm-choiceoutcome_lick');    %png format
+            saveas(gcf, 'MLR-norm-choiceoutcome_lick', 'fig');
             
             %%plot the field of view, with significance of choice/reward in every grid
             
@@ -255,7 +275,65 @@ for ii = 1:nFiles
             %             reg_cr3_change_1=linear_regr_PR( fluo.resp, fluo.respT, ITI_event_3,  params3_1.trigTime,trialMask, params3_1, trialData.cueTimes );
             %
             %
- 
+            %% running control multilinear regression
+            % shuffle every factor one by one, keeping other factors intact
+            
+            % check
+            
+            % construct every regression factor
+            %             params_ctrl.trigEvent1 = params.trigEvent;  % C(n)
+            %             params_ctrl.trigEvent2 = [NaN;params_ctrl.trigEvent1(1:end-1)];  %C(n-1)
+            %             params_ctrl.trigEvent3 = [NaN; NaN; params_ctrl.trigEvent1(1:end-2)];  %c(n-2);
+            %             params_ctrl.trigEvent4 = params.trigEvent2;  % R(n);
+            %             params_ctrl.trigEvent5 = [NaN; params_ctrl.trigEvent4(1:end-1)]; % R(n-1)
+            %             params_ctrl.trigEvent6 = [NaN; NaN; params_ctrl.trigEvent4(1:end-2)];  %R(n-2)
+            %             params_ctrl.trigEvent7 = params_ctrl.trigEvent1 .* params_ctrl.trigEvent4;  %X(n)
+            %             params_ctrl.trigEvent8 = params_ctrl.trigEvent2 .* params_ctrl.trigEvent5;  %X(n-1);
+            %             params_ctrl.trigEvent9 = params_ctrl.trigEvent3 .* params_ctrl.trigEvent6;  %X(n-1);
+            %
+            %             % concatenate it into a matrix
+            %             params_ctrlMat = [];
+            %             fields = fieldnames(params_ctrl);
+            %             for jj = 1:length(fields)
+            %                 params_ctrlMat = [params_ctrlMat params_ctrl.(fields{jj})];
+            %             end
+            %
+            %             % shul
+            %             fieldname={'go'};
+            %             trialMask = getMask(trials,fieldname);
+            %
+            %
+            %             params.xtitle = 'Time from cue (s)';
+            %             params.window = [-3:0.1:5];
+            %             params.nback = 0;       %how many trials back to regress against
+            %             params.pvalThresh = 0.01;   %p-value for coefficient be considered significant
+            %             params.interaction = false;
+            %             params.trigTime = trialData.cueTimes;
+            %             params.ifplot = 0;
+            %             %only perform analysis on this subset of trials
+            %
+            %             % iterate through all 9 factors, shuffle name one by one to get
+            %             % the control regression for every factor
+            %             tlabel={'C(n)','C(n-1)','C(n-2)','R(n)','R(n-1)','R(n-2)','C(n)xR(n)','C(n-1)xR(n-1)','C(n-2)xR(n-2)'};
+            %             reg_cr_ctrl = linear_regr_ctrl(fluo.dia, fluo.t, params_ctrlMat, params.trigTime, trialMask, params, tlabel);
+            %             reg_cr_change_ctrl = linear_regr_ctrl(fluo.resp, fluo.respT, params_ctrlMat, params.trigTime, trialMask, params, tlabel);
+            %
+            %             % MP_plot_regrcoef_fluo(reg_cr_shuffleR,params.pvalThresh,tlabel,params.xtitle);
+            %
+            %             % control for future choice
+            %             params_ctrlMat_future = [];
+            %             fields = fieldnames(params_future);
+            %             for jj = 1:length(fields)
+            %                 params_ctrlMat_future = [params_ctrlMat_future params_future.(fields{jj})];
+            %             end
+            %
+            %             tlabel={'C(n+1)','C(n)','C(n-1)','C(n-2)','R(n+1)','R(n)', 'R(n-1)','R(n-2)',...
+            %                     'C(n+1)*R(n+1)','C(n)*R(n)','C(n-1)*R(n-1)','C(n-2)*R(n-2)','Reward Rate','Cumulative Reward'};
+            %
+            %             reg_cr_future_ctrl = linear_regr_ctrl(fluo.dia, fluo.t, params_ctrlMat_future, params.trigTime, trialMask, params, tlabel);
+            %             reg_cr_future_change_ctrl = linear_regr_ctrl(fluo.resp, fluo.respT, params_ctrlMat_future,  params.trigTime, trialMask, params, tlabel );
+            %
+            
             %% save all regression into one mat file
             % save all these in a structure
             %save(saveRegName, 'reg_cr', 'reg_cr1','reg_cr2','reg_cr3','reg_cr_future','reg_cr_future_ctrl','reg_cr_ctrl');

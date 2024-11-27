@@ -43,6 +43,7 @@ for ii = 1:nFiles
         % Fig. 3d in paper came from 140605 data set, cell 8 10 37 74
         params=[];
         params.trigTime = trialData.cueTimes;
+        %params.trigTime = trialData.cueTimes + trialData.rt;
         params.xtitle = 'Time from cue (s)';
         params.window = [-3:0.1:5];
         params.numBootstrapRepeat = 1000;   %number of repeats for bootstrap (for estimating CI)
@@ -52,7 +53,7 @@ for ii = 1:nFiles
             % for NE: j = 710
             % for ACh: j = 33
             %j=710;  % NE
-             j = 33;
+             j = 710;
             psth_output=[];
             for k=1:2
                 fieldname=[];

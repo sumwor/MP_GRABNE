@@ -57,6 +57,9 @@ for l=1:nPredictor
         if nPredictor == 7  % C(n+1) regression
             subplot(2,4,currPredictor-1); hold on;
              [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
+        elseif nPredictor == 6  % switch
+            subplot(2,3,currPredictor-1); hold on;
+             [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         elseif nPredictor == 5
             subplot(2,3,currPredictor-1); hold on;
              [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
@@ -77,12 +80,12 @@ for l=1:nPredictor
         elseif nPredictor == 9  % for RL with choice autocorrelation
             subplot(3,3,currPredictor-1); hold on;
             [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
-                    elseif nPredictor == 15  % for RL with choice autocorrelation
+        elseif nPredictor == 15 || nPredictor == 16 % for RL with choice autocorrelation
             subplot(4,4,currPredictor-1); hold on;
             [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         else
             subplot(panelv,1+nback,currPredictor-1); hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback)
+            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         end
         %patch([t(1) t(end) t(end) t(1)],[0 0 100*pvalThresh 100*pvalThresh],[0.7 0.7 0.7],'EdgeColor','none');
         percentage = 100*sum(pval(:,currPredictor,:)<pvalThresh,3)/nCells;

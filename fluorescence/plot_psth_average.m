@@ -96,42 +96,42 @@ for gg = 1:nPanel
 
     legend(legstring);
 
-    plot([0 0],[minY maxY],'k','LineWidth',2);
+    plot([0 0],[0.1 0.4],'k','LineWidth',2);
     xlabel('Time from cue (s)'); ylabel('dF/F');
-    ylim([minY maxY]);
+    ylim([0.1 0.4]);
     xlim([t(1) t(end)]);
     %title(tlabel);
     set(gca,'box','off')
 end
 
 %% plot miss trials only
-figure; 
-legstring={};
-    for k=1:nSig
-        plot(t,output{3}{k}.bootavg,colors{k}); hold on;
-        legstring(k)=join(fieldname{3}{k});
-    end
-
-    % plot the shaded errors
-
-    for k=1:1
-        errorshade(t,output{3}{k}.bootlow,output{3}{k}.boothigh,gray);
-    end
-
-
-    % plot the mean signals again so they lie on top of shaded errors
-    for k=1:nSig
-        plot(t,output{3}{k}.bootavg,colors{k});
-    end
-
-    legend(legstring);
-
-    plot([0 0],[minY maxY],'k','LineWidth',2);
-    xlabel('Time from cue (s)'); ylabel('dF/F');
-    ylim([0.2 0.3]);
-    xlim([t(1) t(end)]);
-    %title(tlabel);
-    set(gca,'box','off')
+% figure; 
+% legstring={};
+%     for k=1:nSig
+%         plot(t,output{3}{k}.bootavg,colors{k}); hold on;
+%         legstring(k)=join(fieldname{3}{k});
+%     end
+% 
+%     % plot the shaded errors
+% 
+%     for k=1:1
+%         errorshade(t,output{3}{k}.bootlow,output{3}{k}.boothigh,gray);
+%     end
+% 
+% 
+%     % plot the mean signals again so they lie on top of shaded errors
+%     for k=1:nSig
+%         plot(t,output{3}{k}.bootavg,colors{k});
+%     end
+% 
+%     legend(legstring);
+% 
+%     plot([0 0],[minY maxY],'k','LineWidth',2);
+%     xlabel('Time from cue (s)'); ylabel('dF/F');
+%     ylim([0.2 0.3]);
+%     xlim([t(1) t(end)]);
+%     %title(tlabel);
+%     set(gca,'box','off')
 end
 
 

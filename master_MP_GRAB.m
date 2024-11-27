@@ -117,13 +117,17 @@ MP_GRAB_checkbaseline(dataIndex_ACh);
 
 %% simple plots
 MP_GRAB_simpleplots(dataIndex_NE);
-MP_GRAB_simpleplots_average(dataIndex_NE);
-MP_GRAB_simpleplots_summary(dataIndex_NE,save_path_NE);
+aligned_to = 'cue';
+MP_GRAB_simpleplots_average(dataIndex_NE, aligned_to);
+MP_GRAB_simpleplots_summary(dataIndex_NE, aligned_to,save_path_NE);
 MP_GRAB_simpleplots(dataIndex_ACh);
-MP_GRAB_simpleplots_average(dataIndex_ACh);
-MP_GRAB_simpleplots_summary(dataIndex_ACh,save_path_ACh );
+MP_GRAB_simpleplots_average(dataIndex_ACh, aligned_to);
+MP_GRAB_simpleplots_summary(dataIndex_ACh, aligned_to,save_path_ACh );
 
+aligned_to = 'response';
 
+MP_GRAB_simpleplots_average(dataIndex_ACh, aligned_to);
+MP_GRAB_simpleplots_average(dataIndex_NE, aligned_to);
 
 %% regression: observable variable, choice, outcome, average reward, cumulative reward
 
@@ -148,8 +152,15 @@ MP_GRAB_MLR(dataIndex_NE);
 MP_GRAB_MLR_acrossAnimals(dataIndex_NE,save_path_fluo_NE);
 MP_GRAB_MLR_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
+% GLM to examine the effect of lick
+MP_GRAB_GLM(dataIndex_NE);
+MP_GRAB_MLR_lick(dataIndex_NE);
+MP_GRAB_MLR_lick_acrossSessions(dataIndex_NE, save_path_fluo_NE)
 
-
+MP_GRAB_MLR_switch(dataIndex_NE);
+MP_GRAB_MLR_switch(dataIndex_ACh);
+MP_GRAB_MLR_switch_acrossSessions(dataIndex_ACh, save_path_fluo_ACh);
+MP_GRAB_MLR_switch_acrossSessions(dataIndex_NE, save_path_fluo_NE);
 % ACh
 MP_GRAB_MLR(dataIndex_ACh);
 
@@ -157,6 +168,8 @@ MP_GRAB_MLR(dataIndex_ACh);
 MP_GRAB_MLR_acrossAnimals(dataIndex_ACh,save_path_fluo_ACh);
 MP_GRAB_MLR_acrossSessions(dataIndex_ACh, save_path_fluo_ACh);
 
+MP_GRAB_MLR_lick(dataIndex_ACh);
+MP_GRAB_MLR_lick_acrossSessions(dataIndex_ACh, save_path_fluo_ACh)
 
 %% latent variable, ROIs sparsely modulated by latent variables
 %% no clear conclusions drawn

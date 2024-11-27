@@ -61,7 +61,7 @@ for l=1:nPredictor
         elseif nPredictor == 2 & nback == 0  % Pos/neg RPE
             subplot(1,2,currPredictor-1); hold on;
              [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
-        elseif nPredictor == 14 % for future choice and reward
+        elseif nPredictor == 14 || nPredictor == 15 % for future choice and reward
             subplot(4,4, currPredictor-1); hold on;
              [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         elseif nPredictor == 10  % for dQ and chosenQ plot
@@ -78,7 +78,7 @@ for l=1:nPredictor
             [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         else
             subplot(panelv,1+nback,currPredictor-1); hold on;
-            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback)
+            [if_xlabel,if_ylabel] = if_label(currPredictor, nPredictor, nback);
         end
         %patch([t(1) t(end) t(end) t(1)],[0 0 100*pvalThresh 100*pvalThresh],[0.7 0.7 0.7],'EdgeColor','none');
         percentage = 100*sum(pval(:,currPredictor,:)<pvalThresh,3)/nCells;

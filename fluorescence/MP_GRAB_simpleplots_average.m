@@ -1,4 +1,4 @@
-function MP_GRAB_simpleplots_average(dataIndex)
+function MP_GRAB_simpleplots_average(dataIndex, aligned_to)
 
 % load behavior and dff data
 % make some simple plots
@@ -41,7 +41,11 @@ for ii = 1:nFiles
     %% Plot cue-aligned dF/F for each cell
     % Fig. 3d in paper came from 140605 data set, cell 8 10 37 74
     params=[];
-    params.trigTime = trialData.cueTimes;
+    if strcmp(aligned_to ,'response')
+        params.trigTime = trialData.cueTimes + trialData.rt;
+    elseif strcmp(aligned_to,'cue')
+        params.trigTime = trialData.cueTimes;
+    end
     params.xtitle = 'Time from cue (s)';
     params.window = [-3:0.1:5];
     params.numBootstrapRepeat = 1000;   %number of repeats for bootstrap (for estimating CI)
@@ -89,11 +93,11 @@ for ii = 1:nFiles
     end
 
 
-save(fullfile(savefigpath,'PSTH.mat'),'psth_output');
+save(fullfile(savefigpath,['PSTH_',aligned_to,'.mat']),'psth_output');
 plot_psth_average(psth_output,fName,params);
-print(gcf,'-dpng',fullfile(savefigpath,'average PSTH'));
-saveas(gcf, fullfile(savefigpath,'average PSTH'), 'fig');
-saveas(gcf, fullfile(savefigpath,'average PSTH'),'svg');
+print(gcf,'-dpng',fullfile(savefigpath,['average PSTH ', aligned_to]));
+saveas(gcf, fullfile(savefigpath,['average PSTH ', aligned_to]), 'fig');
+saveas(gcf, fullfile(savefigpath,['average PSTH ', aligned_to]),'svg');
 close;
 
 end

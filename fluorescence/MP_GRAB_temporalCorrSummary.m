@@ -75,7 +75,8 @@ for ii = 1:nFiles
         rOriID{ii} = saveDataOutcome.oriInd;
         numSigVar(2,ii) = length(saveDataOutcome.oriInd);
         rt = saveDataOutcome.t;
-
+        
+        outcomeCoeff{ii} = saveDataOutcome.coeff;
         choiceCoeff{ii} = choicetempData.coeff;choiceisSig{ii} = choicetempData.isSig; numSigVar(1,ii) = sum(choicetempData.isSig);
         xnCoeff{ii} = xntempData.coeff;xnisSig{ii} = xntempData.isSig;numSigVar(3,ii) = sum(xntempData.isSig);
         posRPECoeff{ii} = posRPEtempData.coeff; posRPEisSig{ii} = posRPEtempData.isSig;numSigVar(6,ii) = sum(posRPEtempData.isSig);
@@ -117,6 +118,8 @@ save(fullfile(savematsumpath,'sigNum.mat'),'numSigVar','numSigTotal');
 
 %% plot percentage of significant grids
 sigForAny = SigList.c|SigList.r|SigList.x|SigList.c_1|SigList.c__1|SigList.c__2|SigList.r_1|SigList.r__1|SigList.r__2|SigList.x_1|SigList.x__1|SigList.x__2|SigList.aR|SigList.cR;
+%sigForAny = SigList.c|SigList.r|SigList.x;
+
 numSigAny = sum(sigForAny);
 figure;
 explode = [0 1];
@@ -138,9 +141,14 @@ saveas(gcf, fullfile(savesumfigpath,'Fraction of sig variables'), 'svg');
 
 allInd = 1:length(SigList.c);
 cSigInd = allInd(logical(SigList.c)); rSigInd = allInd(logical(SigList.r)); xSigInd = allInd(logical(SigList.x));
-dQSigInd = allInd(logical(SigList.dQ)); dKSigInd = allInd(logical(SigList.dK));
-pRPESigInd = allInd(logical(SigList.pRPE)); nRPESigInd = allInd(logical(SigList.nRPE));
-CKESigInd = allInd(logical(SigList.CKE));
+% dQSigInd = allInd(logical(SigList.dQ)); dKSigInd = allInd(logical(SigList.dK));
+% pRPESigInd = allInd(logical(SigList.pRPE)); nRPESigInd = allInd(logical(SigList.nRPE));
+% CKESigInd = allInd(logical(SigList.CKE));
+
+h = vennEulerDiagram({cSigInd;rSigInd;xSigInd}, 'drawProportional', true, 'SetLabels', ["choice"; "reward"; "interaction"]);
+title('Ach c/r/x significant ROIs');
+print(gcf,'-dpng',fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)-venn'));
+saveas(gcf, fullfile(save_path_fluo,'Ratio of significant grids (c-r-x)-venn'), 'fig');
 
 %% test for overlapping significance
 
@@ -179,6 +187,8 @@ CKECoeff_new = cell(0);
 % posRPECoeff_Sig = cell(0);
 % negRPECoeff_Sig = cell(0);
 
+
+rCoeff_C = [];% ROIs sig for choice & outcome
 % sig ROIs that not sig for outcome
 cCoeff_nR = [];
 xCoeff_nR = [];xnR_sub=[];
@@ -209,34 +219,16 @@ for gg = 1:nFiles
     % calculate the average coefficient with in 1-2.5s for each group
     g1Mean =nanmean(rCoeff{gg}(rClust{gg}==1,:),1);  g2Mean = nanmean(rCoeff{gg}(rClust{gg}==2,:),1); g3Mean =nanmean(rCoeff{gg}(rClust{gg}==3,:),1);
 
-    %clustMean = [clustMean;g1Mean;g2Mean;g3Mean];
     %% smooth the mean and find peak and decay tau
     % find 1): highest peak and time;
     % 2): lowest peak and time;
     % 3) exponential decay tau after high peak
 
-
-
     % (islocalmin & islocalmax)
     tInd = 1:length(rt);
     searchInd = tInd(rt>0);
-    % group 1
-%     smoothed1 = smooth(g1Mean);
-%     [minValue1,minInd] = nanmin(smoothed1(rt>0));
-%     minInd1 = searchInd(minInd);
-%     [maxValue1,maxInd] = nanmax(smoothed1(rt>0));
-%     maxInd1 = searchInd(maxInd);
-%     rHPeakT = [rHPeakT, rt(maxInd1)];
-%     rLPeakT = [rLPeakT, rt(minInd1)];
     oriGroup = [oriGroup,1];
-    % fit for tau
-    %     if maxInd1<length(rt)
-    %         f1 = fit(rt(maxInd1:end),smoothed1(maxInd1:end),'exp1');
-    %         rDecayTau = [rDecayTau, f1.b];
-    %     else
-    %         f1 = [];
-    %         rDecayTau = [rDecayTau,NaN];
-    %     end
+
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==1,:);
     rSes = [rSes,gg];
     cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==1),:);
@@ -296,14 +288,10 @@ for gg = 1:nFiles
     dkisSig{newInd} = dKSig;
     ckeisSig{newInd} = CKESig;
 
-%     cCoeff_Sig{newInd} = choiceCoeff{gg}(group1Sig & choiceisSig{gg},:);
-%     xCoeff_Sig{newInd} = xnCoeff{gg}(group1Sig & xnisSig{gg},:);
-%     posRPECoeff_Sig{newInd} = posRPECoeff{gg}(group1Sig & posRPEisSig{gg},:);
-%     negRPECoeff_Sig{newInd} = negRPECoeff{gg}(group1Sig & negRPEisSig{gg},:);
-%
     RisSig = zeros(1,size(choiceCoeff{1},1));
     RisSig(rOriID{gg}) = 1;
-
+    
+    rCoeff_C = [rCoeff_C; outcomeCoeff{gg}(RisSig'&choiceisSig{gg},:)];
     cCoeff_nR = [cCoeff_nR; choiceCoeff{gg}(~RisSig'&choiceisSig{gg},:)];numSigVarg4(1,gg) = sum(~RisSig'&choiceisSig{gg});
     xCoeff_nR = [xCoeff_nR; xnCoeff{gg}(~RisSig'&xnisSig{gg},:)];numSigVarg4(3,gg) = sum(~RisSig'&xnisSig{gg});
     xnR_sub = [xnR_sub; ones(sum(~RisSig'&xnisSig{gg}),1)*find(strcmp(animalList,dataIndex.Animal{gg}))];
@@ -316,22 +304,9 @@ for gg = 1:nFiles
     newInd = newInd+1;
 
     % group 2
-%     smoothed2 = smooth(g2Mean);
-%     [minValue2,minInd] = nanmin(smoothed2(rt>0));
-%     minInd2 = searchInd(minInd);
-%     [maxValue2,maxInd] = nanmax(smoothed2(rt>0));
-%     maxInd2 = searchInd(maxInd);
-%     rHPeakT = [rHPeakT, rt(maxInd2)];
-%     rLPeakT = [rLPeakT, rt(minInd2)];
+
     oriGroup = [oriGroup,2];
-    % fit for tau
-    %     if maxInd2<length(rt)
-    %         f2 = fit(rt(maxInd2:end),smoothed2(maxInd2:end),'exp1');
-    %         rDecayTau = [rDecayTau, f2.b];
-    %     else
-    %         f2 = [];
-    %         rDecayTau = [rDecayTau,NaN];
-    %     end
+
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==2,:);
     rSes = [rSes,gg];
     cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==2),:);
@@ -391,23 +366,9 @@ for gg = 1:nFiles
 %
     newInd = newInd+1;
 
-    % group 3
-%     smoothed3 = smooth(g3Mean);
-%     [minValue3,minInd] = nanmin(smoothed3(rt>0));
-%     minInd3 = searchInd(minInd);
-%     [maxValue3,maxInd] = nanmax(smoothed3(rt>0));
-%     maxInd3 = searchInd(maxInd);
-%     rHPeakT = [rHPeakT, rt(maxInd3)];
-%     rLPeakT = [rLPeakT, rt(minInd3)];
+
     oriGroup = [oriGroup,3];
-    % fit for tau
-    %     if maxInd3<length(rt)
-    %         f3 = fit(rt(maxInd3:end),smoothed3(maxInd3:end),'exp1');
-    %         rDecayTau = [rDecayTau, f3.b];
-    %     else
-    %         f3 = [];
-    %         rDecayTau = [rDecayTau,NaN];
-    %     end
+
     rCoeff_new{newInd} = rCoeff{gg}(rClust{gg}==3,:);
      rSes = [rSes,gg];
      cCoeff_new{newInd} = choiceCoeff{gg}(rOriID{gg}(rClust{gg}==3),:);
@@ -460,11 +421,6 @@ for gg = 1:nFiles
     dqisSig{newInd} = dQSig;
     dkisSig{newInd} = dKSig;
     ckeisSig{newInd} = CKESig;
-
-%      cCoeff_Sig{newInd} = choiceCoeff{gg}(group3Sig & choiceisSig{gg},:);
-%      xCoeff_Sig{newInd} = xnCoeff{gg}(group3Sig & xnisSig{gg},:);
-%      posRPECoeff_Sig{newInd} = posRPECoeff{gg}(group3Sig & posRPEisSig{gg},:);
-%      negRPECoeff_Sig{newInd} = negRPECoeff{gg}(group3Sig & negRPEisSig{gg},:);
 %
     newInd = newInd+1;
 
@@ -476,6 +432,25 @@ for gg = 1:nFiles
 
 
 end
+
+
+%% plot outcome coefficient for ROI that is significant for both choice and outcome
+% plot choice coefficient for ROIs that is signficant for choice but not
+% outcom 
+tlabel = 'choice-nR';
+% sort
+g1.coeff=cCoeff_nR;g1.t = rt;
+g1sortOrd = coeff_sort(g1,[0,3]);
+temp1 = cCoeff_nR(g1sortOrd,:); cCoeff_nR= temp1;
+plot_groupSummary(cCoeff_nR,[], [], rt, tlabel,savesumfigpath)
+
+tlabel = 'outcome-choice';
+% sort
+g1.coeff=rCoeff_C;g1.t = rt;
+g1sortOrd = coeff_sort(g1,[0,3]);
+temp1 = rCoeff_C(g1sortOrd,:); rCoeff_C= temp1;
+plot_groupSummary(rCoeff_C,[], [], rt, tlabel,savesumfigpath)
+
 
 % regroup with criteria *area under curve
 group1 = []; group2 = []; group3 = []; %group4 = [];

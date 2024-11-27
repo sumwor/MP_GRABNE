@@ -1,4 +1,4 @@
-function MP_GRAB_MLR_acrossSessions(dataIndex, savefigpath)
+function MP_GRAB_MLR_switch_acrossSessions(dataIndex, savefigpath)
 
 %% reference to Sul et al.2011
 % averaged within subject
@@ -13,13 +13,21 @@ animalList = unique(dataIndex.Animal);
 all_coeff_future = [];
 all_pval_future = [];
 
+
+% all_coeff_iti_1 = [];
+% all_pval_iti_1 = [];
+% all_coeff_iti_2 = [];
+% all_pval_iti_2 = [];
+% all_coeff_iti_3 = [];
+% all_pval_iti_3 = [];
+
 for ii = 1:nFiles
     savematpath = fullfile(dataIndex.BehPath{ii},'analysis-fluo');
     % load behavior files
        fn_beh = dir(fullfile(dataIndex.BehPath{ii},'beh_cut.mat'));
     
      %saveRegName = fullfile(savematpath,'regCR_norm.mat');  % regression for fluo change
-    saveRegName = fullfile(savematpath,'regCR_norm.mat');
+    saveRegName = fullfile(savematpath,'regCR_norm_switch.mat');
     if exist(saveRegName)
         load(saveRegName)
         % get subject mask
@@ -265,13 +273,12 @@ reg_cr_all.pvalThresh= 0.01;
 % ylabel('Coefficients (a.u.)');
 % title('Coefficient for pupil change - choice and reward');
 xtitle='Time from cue (s)';
- tlabel={'c(n+1)','c(n)','c(n-1)','c(n-2)','r(n+1)','r(n)', 'r(n-1)','r(n-2)',...
-        'c(n+1)*r(n+1)','c(n)*r(n)','c(n-1)*r(n-1)','c(n-2)*r(n-2)','Reward Rate','Cumulative Reward', 'lick'};
+ tlabel={'s(n)','r(n)','s(n)*r(n)','Reward Rate','Cumulative Reward', 'lick'};
 pvalThresh=0.01;
 MP_plot_regrcoef_fluo(reg_cr_all,pvalThresh,tlabel,xtitle);
-print(gcf,'-dpng','MLR-norm-choiceoutcome_future_averageSession');    %png format
-saveas(gcf, 'MLR-norm-choiceoutcome_future_averageSession', 'fig');
-saveas(gcf, 'MLR-norm-choiceoutcome_future_averageSession','svg');
+print(gcf,'-dpng','MLR-norm-switch_future_averageSession');    %png format
+saveas(gcf, 'MLR-norm-switch_future_averageSession', 'fig');
+saveas(gcf, 'MLR-norm-switch_future_averageSession','svg');
 
 % plot the figure as number of session that is significant
 reg_sig.coeff = all_coeff_future;
@@ -294,16 +301,16 @@ if exist('all_pval_future_ctrl')
 else
     MP_plot_regr_fluo(reg_sig,[], reg_sig.pvalThresh,tlabel,xtitle);
 end
-print(gcf,'-dpng','MLR-norm-choiceoutcome_future_lick_sigSession');    %png format
-saveas(gcf, 'MLR-norm-choiceoutcome_future_lick_sigSession', 'fig');
-saveas(gcf, 'MLR-norm-choiceoutcome_future_lick_sigSession','svg');
+print(gcf,'-dpng','MLR-norm-switch_future_lick_sigSession');    %png format
+saveas(gcf, 'MLR-norm-switch_future_lick_sigSession', 'fig');
+saveas(gcf, 'MLR-norm-switch_future_lick_sigSession','svg');
 
 % save the analysis
 savematpath = fullfile(savefigpath,'Result');
 if ~exist(savematpath)
     mkdir(savematpath);
 end
-save(fullfile(savematpath,'regression1Sum'),'reg_cr_all','reg_sig');
+save(fullfile(savematpath,'regression1Sum_switch'),'reg_cr_all','reg_sig');
 %%
 close all
 
