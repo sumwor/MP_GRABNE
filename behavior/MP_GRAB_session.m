@@ -21,19 +21,21 @@ disp(['Loading ' LogFileName]);
 load(fullfile(BehPath,[LogFileName(1:end-4),'_beh.mat']));
 
 % Get trial information
-if trialData.cutPoint ~= 0
-    % only save the after cut data in beh_cut.mat
-    trials = MP_getTrialMasks(trialData);
-    fn = fieldnames(trials);
-    for tt = 1:length(fn)
-        trials.(fn{tt}) = trials.(fn{tt})(1:trialData.cutPoint);
-    end
-    stats = MP_getTrialStats(trials);
-    
-    fn2 = fieldnames(trialData);
-    for tt = 1:length(fn2)
-        if length(trialData.(fn2{tt})) > 1
-            trialData.(fn2{tt}) = trialData.(fn2{tt})(1:trialData.cutPoint);
+if isfield('cutPoint',trialData)
+    if trialData.cutPoint ~= 0
+        % only save the after cut data in beh_cut.mat
+        trials = MP_getTrialMasks(trialData);
+        fn = fieldnames(trials);
+        for tt = 1:length(fn)
+            trials.(fn{tt}) = trials.(fn{tt})(1:trialData.cutPoint);
+        end
+        stats = MP_getTrialStats(trials);
+
+        fn2 = fieldnames(trialData);
+        for tt = 1:length(fn2)
+            if length(trialData.(fn2{tt})) > 1
+                trialData.(fn2{tt}) = trialData.(fn2{tt})(1:trialData.cutPoint);
+            end
         end
     end
 else
@@ -103,16 +105,16 @@ end
     x=1;    %analyze player 1
 
     %regressors = rewarded choice, unrewarded choice
-    [lregRCUC_output, ~, ~, ~]=logreg_RCUC(stats,x,num_regressor);
-    plot_logreg(lregRCUC_output,tlabel);
-    print(gcf,'-dpng','logregRCUC');    %png format
-    saveas(gcf, 'logregRCUC', 'fig');
-    
+%     [lregRCUC_output, ~, ~, ~]=logreg_RCUC(stats,x,num_regressor);
+%     plot_logreg(lregRCUC_output,tlabel);
+%     print(gcf,'-dpng','logregRCUC');    %png format
+%     saveas(gcf, 'logregRCUC', 'fig');
+%     
     %regressors = choice, choice x reward (equivalent to computer's choice)
-    [lregCRInt_output, ~, ~, ~]=logreg_CRInt(stats,x,num_regressor);
-    plot_logreg(lregCRInt_output,tlabel);
-    print(gcf,'-dpng','logregCRInt');    %png format
-    saveas(gcf, 'logregCRInt', 'fig');
+%     [lregCRInt_output, ~, ~, ~]=logreg_CRInt(stats,x,num_regressor);
+%     plot_logreg(lregCRInt_output,tlabel);
+%     print(gcf,'-dpng','logregCRInt');    %png format
+%     saveas(gcf, 'logregCRInt', 'fig');
   
     %% fit to WSLS and Q-learning algorithms
     % normalized likelihood (Ito and Doya, PLoS Comp Biol, 2015)
@@ -173,15 +175,15 @@ end
     %% compare simulated choice behavior to actual choice behavior
     % without cross-validation, this plot may suffer from over-fitting
     
-    player1.label='algo_logreg_CRInt';
-    player1.params.bias=lregCRInt_output.b_bias;
-    player1.params.Ch=lregCRInt_output.b_coeff(:,1);
-    player1.params.RC=lregCRInt_output.b_coeff(:,2);
-
-    stats_sim=predictAgent(player1,stats);
-    
-    plot_session_PrL(stats,stats_sim,sessionData.nTrials,tlabel);
-    
+%     player1.label='algo_logreg_CRInt';
+%     player1.params.bias=lregCRInt_output.b_bias;
+%     player1.params.Ch=lregCRInt_output.b_coeff(:,1);
+%     player1.params.RC=lregCRInt_output.b_coeff(:,2);
+% 
+%     stats_sim=predictAgent(player1,stats);
+%     
+%     plot_session_PrL(stats,stats_sim,sessionData.nTrials,tlabel);
+%     
     %% calculate entropy
     
     % the possible choice combinations
@@ -227,18 +229,21 @@ end
     saveas(gcf, 'session-entropy', 'fig');
     saveas(gcf, 'sesson-entropy','svg');
     p = cumuoccur(:,end)/sum(cumuoccur(:,end));
-    entro = -1*sum(p.*log2(p));
-    
+    entro = 0; % in case of p = 0
+    for pp = 1:length(p)
+        if p(pp) ~= 0 
+            entro = entro-p(pp)*log2(p(pp));
+        end
+    end
     
     %%
     save(fullfile(savematpath,'beh_cut.mat'),...
             'trialData','sessionData','logfileData','trials',...
-            'lregRCUC_output','lregCRInt_output',...
             'lick_trType','iti_trType','respTime_trType',...
             'fitpar','bic','nlike',...
             'entro',...
             'stats');
-
+            %'lregRCUC_output','lregCRInt_output',...
     close all;
     clearvars -except i dirs expData;
 
